@@ -17,6 +17,11 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('role')->default('user');
+            $table->string('plan')->default('free');
+            $table->string('status')->default('active');
+            $table->string('google_id')->nullable()->unique();
+            $table->foreignId('avatar_id')->constrained('imgs');
             $table->rememberToken();
             $table->timestamps();
         });

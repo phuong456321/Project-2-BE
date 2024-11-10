@@ -4,8 +4,9 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Hash;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -21,6 +22,12 @@ class LoginController extends Controller
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
+        // Check if the user is verified
+        if (!$user->hasVerifiedEmail()) {
+            Auth::logout(); // Log the user out
+            return response()->json(['message' => 'Your email address is not verified. Please check your email for the verification link.'], 403);
+        }
+
         //generate token
         $accessToken = $user->createtoken('access_token')->plainTextToken;
 
@@ -29,5 +36,11 @@ class LoginController extends Controller
             'token' => $accessToken,
             'token_type' => 'Bearer'
         ], 200);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+        return response()->json(['message' => 'Logged out successfully'], 200);
     }
 }
