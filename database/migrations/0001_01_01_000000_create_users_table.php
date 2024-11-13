@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('plan')->default('free');
             $table->string('status')->default('active');
             $table->string('google_id')->nullable()->unique();
-            $table->foreignId('avatar_id')->constrained('imgs');
+            $table->foreignId('avatar_id')->constrained('imgs')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
