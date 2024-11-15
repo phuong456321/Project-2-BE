@@ -4,27 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-class area extends Model
+class image extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'parents_id',
+        'img_name',
+        'img_path',
+        'category',
     ];
 
-    public function parents()
+    public function users()
     {
-        return $this->belongsTo(area::class, 'parents_id');
+        return $this->hasMany(User::class, 'avatar_id');
     }
 
     public function authors()
     {
-        return $this->hasMany(author::class);
+        return $this->hasMany(author::class, 'img_id');
     }
 
     public function songs()
     {
-        return $this->hasMany(song::class);
+        return $this->hasMany(song::class, 'img_id');
     }
 }

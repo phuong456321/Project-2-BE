@@ -17,13 +17,14 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('role')->default('user');
+            $table->enum('role', ['admin', 'user'])->default('user');
             $table->string('plan')->default('free');
-            $table->string('status')->default('active');
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->string('google_id')->nullable()->unique();
-            $table->foreignId('avatar_id')->constrained('imgs');
+            $table->unsignedBigInteger('avatar_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->foreign('avatar_id')->references('img_id')->on('images');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

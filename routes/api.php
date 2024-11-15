@@ -2,9 +2,15 @@
 
 use App\Http\Controllers\User\LoginController;
 use App\Http\Controllers\User\RegisterController;
+use App\Http\Controllers\User\ResetPasswordController;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Illuminate\Auth\Events\PasswordReset;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -29,4 +35,5 @@ Route::get('email/verification-notification', [RegisterController::class, 'sendV
     ->name('verification.send')
     ->middleware(['auth:sanctum']);
 
-
+Route::post('/forgot-password', [ResetPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::post('/reset-password/{token}', [ResetPasswordController::class, 'reset'])->name('password.reset');

@@ -2,20 +2,31 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-class Author extends Model
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+class author extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'author_name',
         'bio',
-        'image',
+        'img_id',
+        'area_id',
     ];
-    
-    function musics(){
-        return $this->hasMany(music::class);
+
+    public function image()
+    {
+        return $this->belongsTo(image::class, 'img_id');
+    }
+
+    public function area()
+    {
+        return $this->belongsTo(area::class, 'area_id');
+    }
+
+    public function songs()
+    {
+        return $this->hasMany(song::class);
     }
 }
