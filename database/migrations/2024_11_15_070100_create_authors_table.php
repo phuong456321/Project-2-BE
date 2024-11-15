@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('authors', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('bio');
-            $table->string('image');
+            $table->string("author_name");
+            $table->string("bio");
+            $table->unsignedBigInteger('img_id');
+            $table->unsignedBigInteger("area_id");
             $table->timestamps();
+            $table->foreign('img_id')->references('img_id')->on('images');
+            $table->foreign('area_id')->references('id')->on('areas');
         });
     }
 

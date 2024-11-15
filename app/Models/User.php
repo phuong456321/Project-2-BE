@@ -30,6 +30,36 @@ class User extends Authenticatable implements MustVerifyEmailContract
         'avatar_id'
     ];
 
+    public function avatar()
+    {
+        return $this->belongsTo(image::class, 'avatar_id');
+    }
+
+    public function playlists()
+    {
+        return $this->hasMany(playlist::class);
+    }
+
+    public function recentlyPlayed()
+    {
+        return $this->hasMany(recently_played::class);
+    }
+
+    public function searchHistories()
+    {
+        return $this->hasMany(search_history::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(comment::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(payment::class);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
