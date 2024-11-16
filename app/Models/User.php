@@ -60,6 +60,11 @@ class User extends Authenticatable implements MustVerifyEmailContract
         return $this->hasMany(payment::class);
     }
 
+    public function author()
+    {
+        return $this->hasOne(author::class);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
