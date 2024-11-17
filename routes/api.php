@@ -4,6 +4,8 @@ use App\Http\Controllers\User\LoginController;
 use App\Http\Controllers\User\LoginGoogleController;
 use App\Http\Controllers\User\RegisterController;
 use App\Http\Controllers\User\ResetPasswordController;
+use App\Http\Controllers\Song\SongController;
+
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -44,6 +46,8 @@ Route::get('email/verification-notification', [RegisterController::class, 'sendV
 Route::post('/forgot-password', [ResetPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::post('/reset-password/{token}', [ResetPasswordController::class, 'reset'])->name('password.reset');
 
+
 Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.request');
-
-
+//Music
+Route::post('upload-song', [SongController::class, 'uploadSong']);
+Route::get('get-song/{id}', [SongController::class, 'getSong']);

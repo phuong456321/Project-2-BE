@@ -12,10 +12,11 @@ class RegisterController extends Controller
 {
     public function register(Request $request)
     {
+
         try {
             $request->validate([
                 'name' => 'required',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email|unique:users|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3,}$/',
             'password' => 'required|min:6'
         ]);
         $user = User::create([

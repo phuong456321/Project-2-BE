@@ -12,6 +12,7 @@ class author extends Model
         'author_name',
         'bio',
         'img_id',
+        'user_id',
         'area_id',
     ];
 
@@ -23,6 +24,11 @@ class author extends Model
     public function area()
     {
         return $this->belongsTo(area::class, 'area_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function songs()

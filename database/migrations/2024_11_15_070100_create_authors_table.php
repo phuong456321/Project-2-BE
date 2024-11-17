@@ -15,11 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string("author_name");
             $table->string("bio");
+            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('img_id');
             $table->unsignedBigInteger("area_id");
             $table->timestamps();
             $table->foreign('img_id')->references('img_id')->on('images');
             $table->foreign('area_id')->references('id')->on('areas');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
