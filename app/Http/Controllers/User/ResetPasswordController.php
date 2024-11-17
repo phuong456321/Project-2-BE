@@ -13,11 +13,15 @@ class ResetPasswordController extends Controller
 {
     function sendResetLinkEmail(Request $request)
     {
-        $request->validate(['email' => 'required|email']);
-        $status = Password::sendResetLink($request->only('email'));
-        return $status === Password::RESET_LINK_SENT
+        try {
+            $request->validate(['email' => 'required|email']);
+            $status = Password::sendResetLink($request->only('email'));
+            return $status === Password::RESET_LINK_SENT
             ? response()->json(['message' => 'Password reset link sent.'], 200)
-            : response()->json(['message' => 'Failed to send password reset link.'], 500);
+                : response()->json(['message' => 'Failed to send password reset link.'], 500);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 
     function reset(Request $request, $token)
@@ -39,8 +43,13 @@ class ResetPasswordController extends Controller
             return $status === Password::PASSWORD_RESET
                 ? response()->json(['message' => 'Password reset successful.'], 200)
                 : response()->json(['message' => 'Password reset failed.'], 500);
-        }catch(Exception $e){
+        } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
-        };
+        }
+    }
+
+    function showResetForm($token)
+    {
+        return response()->json(['token' => $token], 200);
     }
 }

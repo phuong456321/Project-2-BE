@@ -12,8 +12,9 @@ class RegisterController extends Controller
 {
     public function register(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
+        try {
+            $request->validate([
+                'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6'
         ]);
@@ -25,7 +26,10 @@ class RegisterController extends Controller
             'verified' => true,
         ]);
         $user->sendEmailVerificationNotification();
-        return response()->json(['message' => 'User registered successfully'], 201);
+            return response()->json(['message' => 'User registered successfully'], 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 
     public function sendVerificationEmail(Request $request)
