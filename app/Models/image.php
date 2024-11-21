@@ -21,7 +21,7 @@ class image extends Model
 
     public function authors()
     {
-        return $this->hasMany(author::class, 'img_id');
+        return $this->hasMany(Author::class, 'img_id');
     }
 
     public function songs()
