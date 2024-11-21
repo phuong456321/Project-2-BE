@@ -1,0 +1,76 @@
+.now-playing {
+    width: 20%;
+    background-color: #1a1a1a; /* Màu nền cho sidebar */
+    color: #fff; /* Màu chữ */
+    padding: 20px; /* Padding cho bên trong */
+    display: flex; 
+    flex-direction: column; 
+    height: auto; /* Chiều cao tự động */
+    overflow-y: auto; /* Cho phép cuộn dọc */
+}
+
+.user-profile {
+    display: flex; /* Sử dụng Flexbox để căn chỉnh các phần tử trong cùng một dòng */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: flex-end; /* Dồn về bên phải */
+    margin-bottom: 20px; /* Khoảng cách giữa tên và danh sách phát */
+    width: 100%; /* Đảm bảo chiếm toàn bộ chiều rộng */
+}
+
+.avatar {
+    width: 40px; /* Chiều rộng của hình ảnh */
+    height: 40px; /* Chiều cao của hình ảnh */
+    border-radius: 50%; /* Bo tròn hình ảnh để tạo hình tròn */
+    margin-left: 10px; /* Khoảng cách giữa tên và hình ảnh */
+}
+
+
+.now-playing-list {
+    flex-grow: 1; /* Cho phép mở rộng không gian */
+}
+
+.now-playing-list h3 {
+    margin-bottom: 10px; /* Khoảng cách dưới tiêu đề */
+}
+
+.now-playing-list ul {
+    list-style-type: none; /* Xóa dấu chấm đầu dòng */
+    padding: 0; /* Xóa padding */
+    margin: 0; /* Xóa margin */
+}
+
+.now-playing-list ul li {
+    padding: 10px; /* Padding cho các mục */
+    border-bottom: 1px solid #333; /* Đường kẻ ngăn cách các mục */
+    cursor: pointer; /* Hiển thị tay khi di chuột */
+    transition: background-color 0.3s ease; /* Hiệu ứng khi hover */
+}
+
+.now-playing-list ul li:hover {
+    background-color: #333; /* Màu nền khi hover */
+}
+
+.player-controls {
+    text-align: center; /* Căn giữa nội dung */
+    margin-top: 20px; /* Khoảng cách trên */
+    border-top: 1px solid #333; /* Đường kẻ ngăn cách trên */
+    padding-top: 10px; /* Padding trên */
+}
+
+.song-image {
+    width: 30px; /* Chiều rộng của hình ảnh */
+    height: 30px; /* Chiều cao của hình ảnh */
+    border-radius: 5px; /* Đường viền bo tròn nếu cần */
+    margin-right: 10px; /* Khoảng cách giữa hình ảnh và tên bài hát */
+    vertical-align: middle; /* Căn giữa hình ảnh với nội dung */
+    display: inline-block; /* Hiển thị theo dòng */
+}
+
+.now-playing-list ul li {
+    display: flex; /* Đặt flex để sắp xếp hình ảnh và tên bài hát */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    padding: 10px; /* Padding cho các mục */
+    border-bottom: 1px solid #333; /* Đường kẻ ngăn cách các mục */
+    cursor: pointer; /* Hiển thị tay khi di chuột */
+    transition: background-color 0.3s ease; /* Hiệu ứng khi hover */
+}
