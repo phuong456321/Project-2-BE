@@ -26,9 +26,6 @@
             document.getElementById("loginOverlay").style.display = "none"; // Ẩn form login
             document.getElementById("registerOverlay").style.display = "flex";
         }
-        function redirectToLoginGoogle() {
-            window.location.href = "{{ route('login-google') }}"; // Chuyển hướng đến route login-google
-        }
 
         function closeOverlay() {
             document.getElementById("overlay").style.display = "none"; // Ẩn overlay
@@ -259,7 +256,7 @@
                         <img
                             src="{{ asset('images/song/Obito.jpg') }}" class="song-image">
                         <span class="song-duration"></span>
-                    </li>
+                    </li> 
                     <li>
                         <img src="{{ asset('images/song/drt.jpg') }}" class="song-image">
                       
@@ -321,23 +318,24 @@
     <!-- Overlay Login Form -->
     <div id="loginOverlay" class="overlay">
         <div class="login-form">
-            <h2>Welcome Back</h2>
+            <h2>Welcome</h2>
             <p>Login into your account</p>
 
-            <img class="gg-btn" src="{{ asset('images/profile/gg.png') }}" onclick="redirectToLoginGoogle()" alt="gg">
+            <img class="gg-btn" src="{{ asset('images/profile/gg.png') }}" onclick="" alt="gg">
 
             <div class="separator">
                 <hr> <span>Or continue with</span>
                 <hr>
             </div>
 
-            <form action="{{ route('login') }}" method="post">
-                <input type="email" placeholder="Email" required>
-                <input type="password" placeholder="Password" required>
+            <form action="" method="POST">
+                @csrf
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
 
                 <div class="options">
                     <label>
-                        <input type="checkbox"> Remember me
+                        <input type="checkbox" name="remember"> Remember me
                     </label>
                     <a href="#" class="recover-password">Forgot Password?</a>
                 </div>
@@ -353,25 +351,46 @@
         <div class="form-container">
             <h2>Create Account</h2>
             <p>Register a new account</p>
-            <img class="gg-btn" src="{{ asset('images/profile/gg.png') }}" onclick="redirectToLoginGoogle()" alt="gg">
+            <img class="gg-btn" src="{{ asset('images/profile/gg.png') }}" onclick="" alt="gg">
 
             <div class="separator">
                 <hr> <span>Or continue with</span>
                 <hr>
             </div>
-            <form action="{{ route('register') }}" method="post">
-                <input type="email" placeholder="Email" required>
-                <input type="password" placeholder="Password" required>
-                <input type="password" placeholder="Confirm Password" required>
+
+            <!-- Form đăng ký -->
+            <form action="{{ route('register') }}" method="POST">
+                @csrf
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <input type="password" name="password_confirmation" placeholder="Confirm Password" required>
 
                 <button class="action-btn" type="submit">Register</button>
             </form>
+
             <p>
                 Already have an account?
                 <a href="javascript:void(0)" onclick="showLoginForm()">Login</a>
             </p>
         </div>
     </div>
+
+    <div class="container mt-3">
+        @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Thành công!</strong> {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+
+        @if (session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Lỗi!</strong> {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+    </div>
+
 
 </body>
 
