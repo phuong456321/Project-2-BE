@@ -43,26 +43,23 @@
     padding: 5px 70px;
 }
 
-
 .menu-icon {
     width: 20px;
-    height: 20px; 
-    margin-right: 10px; 
+    height: 20px;
+    margin-right: 10px;
     vertical-align: middle;
-    display: inline-block; 
+    display: inline-block;
 }
 .menu ul li a {
     text-decoration: none;
     color: #fff;
 }
 
-
 .menu ul li:hover {
     background-color: #333;
 }
 
 /* Định dạng cho phần tạo playlist */
-
 
 .my-music button {
     width: 100%;
