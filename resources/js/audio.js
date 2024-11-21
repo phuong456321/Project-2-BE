@@ -127,12 +127,12 @@ audio.addEventListener('ended', () => {
 function toggleMusicPlayer() {
   var musicPlayer = document.getElementById('musicPlayer');
   var audioPlayer = document.getElementById('audioPlayer');
-  
+
   // Nếu nhạc đang phát, hiển thị thanh nhạc
   if (!audioPlayer.paused) {
-      musicPlayer.classList.add('active');
+    musicPlayer.classList.add('active');
   } else {
-      musicPlayer.classList.remove('active');
+    musicPlayer.classList.remove('active');
   }
 }
 

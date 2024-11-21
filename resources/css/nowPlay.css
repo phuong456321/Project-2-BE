@@ -3,8 +3,8 @@
     background-color: #1a1a1a; /* Màu nền cho sidebar */
     color: #fff; /* Màu chữ */
     padding: 20px; /* Padding cho bên trong */
-    display: flex; 
-    flex-direction: column; 
+    display: flex;
+    flex-direction: column;
     height: auto; /* Chiều cao tự động */
     overflow-y: auto; /* Cho phép cuộn dọc */
 }
@@ -23,7 +23,6 @@
     border-radius: 50%; /* Bo tròn hình ảnh để tạo hình tròn */
     margin-left: 10px; /* Khoảng cách giữa tên và hình ảnh */
 }
-
 
 .now-playing-list {
     flex-grow: 1; /* Cho phép mở rộng không gian */

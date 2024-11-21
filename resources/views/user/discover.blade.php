@@ -4,18 +4,18 @@
 
 
 @section('content')
-<div class="discover">
-    <h1>Discover Music</h1>
-    <p>Explore new music and playlists.</p>
-    <p>Explore new music and playlists.</p>
-    <p>Explore new music and playlists.</p>
-    <p>Explore new music and playlists.</p>
-    <p>Explore new music and playlists.</p>
-    <p>Explore new music and playlists.</p>
-    <p>Explore new music and playlists.</p>
-    <p>Explore new music and playlists.</p>
-    <p>Explore new music and playlists.</p>
-    <p>Explore new music and playlists.</p>
-    <p>Explore new music and playlists.</p>
-</div>
+    <div class="discover">
+        <h1>Discover Music</h1>
+        <p>Explore new music and playlists.</p>
+        <p>Explore new music and playlists.</p>
+        <p>Explore new music and playlists.</p>
+        <p>Explore new music and playlists.</p>
+        <p>Explore new music and playlists.</p>
+        <p>Explore new music and playlists.</p>
+        <p>Explore new music and playlists.</p>
+        <p>Explore new music and playlists.</p>
+        <p>Explore new music and playlists.</p>
+        <p>Explore new music and playlists.</p>
+        <p>Explore new music and playlists.</p>
+    </div>
 @endsection

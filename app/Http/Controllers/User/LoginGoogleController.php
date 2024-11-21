@@ -27,7 +27,7 @@ class LoginGoogleController extends Controller
             ]);
             Auth::login($newUser);
         }
-        return redirect()->intended('home');
+        return redirect()->intended('/');
     }
 
     public function linkGoogleAccount(){

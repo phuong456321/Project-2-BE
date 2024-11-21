@@ -1,12 +1,11 @@
-  /* Tổng thể */
-  .library {
+/* Tổng thể */
+.library {
     padding: 20px;
     background-color: #534d4d;
     color: #e4e1e1;
     font-size: x-large;
     font-style: normal;
 }
-
 
 .library h2 {
     font-size: 28px;
