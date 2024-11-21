@@ -1,3 +1,13 @@
+// resources/js/library.js
+
+document.getElementById('library-button').addEventListener('click', function () {
+    fetch('/api/library-content') // Gửi yêu cầu AJAX đến API để lấy nội dung
+        .then((response) => response.text()) // Nhận HTML từ server
+        .then((html) => {
+            document.getElementById('content').innerHTML = html; // Thay thế nội dung của #content
+        })
+        .catch((error) => console.error('Error loading library content:', error));
+});
 import './bootstrap';
 
 // public/js/app.js

@@ -17,7 +17,6 @@ class LoginController extends Controller
                 'email' => 'required|email',
                 'password' => 'required'
             ]);
-
             $user = User::where('email', '=', $request->email)->first();
             if (!$user || !Hash::check($request->password, $user->password)) {
                 return response()->json(['message' => 'Email or Password is incorrect'], 401);

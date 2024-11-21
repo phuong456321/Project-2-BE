@@ -1,0 +1,121 @@
+/* Định dạng chung cho sidebar */
+.sidebar {
+    width: 20%;
+    background-color: #1a1a1a;
+    color: #fff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: auto;
+}
+
+/* Định dạng logo */
+.logo h2 {
+    color: #00b4d8;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Định dạng menu */
+.menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu ul li {
+    margin: 5px 0;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+.menu li {
+    color: #333;
+}
+
+.menu ul li.active a {
+    color: #fff;
+    background-color: #3c4c5c; /* Màu nổi bật */
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 5px 70px;
+}
+
+.menu-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    vertical-align: middle;
+    display: inline-block;
+}
+.menu ul li a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.menu ul li:hover {
+    background-color: #333;
+}
+
+/* Định dạng cho phần tạo playlist */
+
+.my-music button {
+    width: 100%;
+    padding: 10px;
+    background-color: #00b4d8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.my-music button:hover {
+    background-color: #00a0c8;
+}
+
+/* Định dạng các playlist */
+.my-music ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.my-music ul li {
+    margin: 5px 0;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.my-music ul li:hover {
+    background-color: #333;
+}
+
+/* Định dạng đường kẻ ngăn cách */
+hr {
+    border: 1px solid #333;
+}
+
+/* Định dạng cho phần settings */
+.settings ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.settings ul li {
+    margin: 10px 0;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.settings ul li:hover {
+    background-color: #333;
+}

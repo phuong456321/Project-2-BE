@@ -20,7 +20,7 @@ class area extends Model
 
     public function authors()
     {
-        return $this->hasMany(author::class);
+        return $this->hasMany(Author::class);
     }
 
     public function songs()

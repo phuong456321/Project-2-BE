@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Author;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -16,17 +17,17 @@ class RegisterController extends Controller
         try {
             $request->validate([
                 'name' => 'required',
-            'email' => 'required|email|unique:users|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3,}$/',
-            'password' => 'required|min:6'
-        ]);
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'avatar_id' => 1,
-            'verified' => true,
-        ]);
-        $user->sendEmailVerificationNotification();
+                'email' => 'required|email|unique:users|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3,}$/',
+                'password' => 'required|min:6'
+            ]);
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'avatar_id' => 1,
+                'verified' => true,
+            ]);
+            $user->sendEmailVerificationNotification();
             return response()->json(['message' => 'User registered successfully'], 201);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -42,7 +43,8 @@ class RegisterController extends Controller
 
     public function verify(Request $request, $id, $hash)
     {
-        $user = User::findOrFail($id); // Find the user by ID
+        try {
+            $user = User::findOrFail($id); // Find the user by ID
 
         // Check if the hash matches
         if (!hash_equals($hash, sha1($user->getEmailForVerification()))) {
@@ -53,6 +55,9 @@ class RegisterController extends Controller
         $user->markEmailAsVerified();
 
         return response()->json(['message' => 'Email verified successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 
 }
