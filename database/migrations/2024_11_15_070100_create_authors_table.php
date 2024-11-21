@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("author_name");
             $table->string("bio");
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('img_id');
             $table->unsignedBigInteger("area_id");
             $table->timestamps();

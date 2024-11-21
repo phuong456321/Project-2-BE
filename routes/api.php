@@ -5,6 +5,7 @@ use App\Http\Controllers\User\LoginGoogleController;
 use App\Http\Controllers\User\RegisterController;
 use App\Http\Controllers\User\ResetPasswordController;
 use App\Http\Controllers\Song\SongController;
+use App\Http\Controllers\Playlist\PlaylistController;
 
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -32,6 +33,17 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('check', function (Request $request) {
         return response()->json(Auth::user(), 200);
     });
+    
+    //Playlist
+    Route::post('create-playlist', [PlaylistController::class, 'createPlaylist']);
+    Route::get('get-playlist/{user_id}', [PlaylistController::class, 'getPlaylist']);
+    Route::post('create-like-playlist', [PlaylistController::class, 'createLikePlaylist']);
+    Route::post('add-song-to-playlist', [PlaylistController::class, 'addSongToPlaylist']);
+    Route::get('get-song-in-playlist/{playlist_id}', [PlaylistController::class, 'getSongInPlaylist']);
+    Route::post('delete-song-in-playlist', [PlaylistController::class, 'removeSongFromPlaylist']);
+    Route::post('delete-playlist/{playlist_id}', [PlaylistController::class, 'deletePlaylist']);
+
+
 });
 
 // Email verification routes
@@ -48,6 +60,14 @@ Route::post('/reset-password/{token}', [ResetPasswordController::class, 'reset']
 
 
 Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.request');
-//Music
+
+
+//Song
 Route::post('upload-song', [SongController::class, 'uploadSong']);
 Route::get('get-song/{id}', [SongController::class, 'getSong']);
+
+    //index test
+    Route::get('/music', function () {
+        return view('Music'); 
+    });
+    Route::get('/stream-audio/{id}', [SongController::class, 'streamAudio']);

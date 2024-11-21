@@ -14,7 +14,7 @@ return new class extends Migration
     {
         DB::table('images')->insert([
             'img_name' => 'avatar_image.png',
-            'img_path' => file_get_contents('public/img/avatar.jpg'),
+            'img_path' => file_get_contents('storage/app/public/img/avatar.jpg'),
             'category' => 'avatar',
         ]);
 
