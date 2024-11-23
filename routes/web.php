@@ -31,10 +31,12 @@ Route::get('/profile', function () {
 Route::get('/library', function () {
     return view('user/library'); 
 });
-
-Route::get('/discover', function () {
-    return view('user/discover');
-})->name('discover');
+Route::get('/likesong', function () {
+    return view('user/likesong');
+})->name('likesong');
+Route::get('/playist', function () {
+    return view('user/playist');
+})->name('playist');
 
 
 
