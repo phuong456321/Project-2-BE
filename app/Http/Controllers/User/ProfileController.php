@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Author;
+use App\Models\image;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -14,14 +15,20 @@ class ProfileController extends Controller
         // Lấy thông tin profile của user theo ID
         $user = User::findOrFail($id);
         $author = Author::where('user_id', $id)->first();
-        return response()->json([
+
+        // Fetch the image path based on avatar_id
+        $image = image::where('img_id', $user->avatar_id)->first(); // Assuming avatar_id is the ID of the image
+        $imgPath = $image ? $image->img_path : null; // Get img_path or null if not found
+
+        $information = [
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
-            'avatar_id' => $user->avatar_id,
+            'img' => $imgPath,
             'bio' => $author->bio,
             'area_id' => $author->area_id,
-        ]);
+        ];
+        return view('user/profile', compact('information'));
     }
 
     public function editProfile(Request $request, $id)

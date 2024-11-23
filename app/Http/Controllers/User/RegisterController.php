@@ -28,7 +28,7 @@ class RegisterController extends Controller
                 'verified' => true,
             ]);
             $user->sendEmailVerificationNotification();
-            return response()->json(['message' => 'User registered successfully'], 201);
+            return redirect()->route('login')->with('message', 'User registered successfully');
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }

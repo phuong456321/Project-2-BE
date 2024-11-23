@@ -282,9 +282,9 @@
 
             <!-- Nút quay về trang Home --> <a href="{{ route('home') }}" class="back-to-home-btn">Home</a>
 
-            <img src="{{ asset('images/song/drt.jpg') }}" alt="User Avatar">
-            <h2>User Name</h2>
-            <p>Email: user@example.com</p>
+            <img src="data:image/jepg;base64,{{$information['img']}}" alt="User Avatar">
+            <h2>{{ $information['name'] }}</h2>
+            <p>Email: {{ $information['email'] }}</p>
 
             <!-- Nút Đăng ký Premium -->
             <button class="premium-btn"><a class="premium-btn" href="/premium"> Đăng ký Premium </a></button>

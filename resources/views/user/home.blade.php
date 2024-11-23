@@ -332,8 +332,9 @@
             </div>
 
             <form action="{{ route('login') }}" method="post">
-                <input type="email" placeholder="Email" required>
-                <input type="password" placeholder="Password" required>
+                @csrf
+                <input type="email" placeholder="Email" required name="email" value="{{ old('email') }}">
+                <input type="password" placeholder="Password" required name="password" value="{{ old('password') }}">
 
                 <div class="options">
                     <label>
@@ -342,11 +343,12 @@
                     <a href="#" class="recover-password">Forgot Password?</a>
                 </div>
                 <button class="action-btn" type="submit">Log In</button>
+            </form>
                 <p>
                     Don't have an account yet?
                     <a href="javascript:void(0)" onclick="showRegisterForm()">Register</a>
                 </p>
-            </form>
+            
         </div>
     </div>
     <div id="registerOverlay" class="overlay">

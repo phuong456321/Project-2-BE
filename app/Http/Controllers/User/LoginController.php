@@ -29,14 +29,9 @@ class LoginController extends Controller
             }
 
             Auth::login($user);
-            //generate token
-            $accessToken = $user->createtoken('access_token')->plainTextToken;
+            //generate cookie
             $cookie = cookie('session_id', session()->getId(), 60); // 60 phút
-            return response()->json([
-                'message' => 'Logged in successfully',
-                'token' => $accessToken,
-                    'token_type' => 'Bearer'
-                ], 200)->withCookie($cookie);
+            return redirect()->intended('/')->withCookie($cookie);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
