@@ -280,7 +280,7 @@
 
             <button onclick="showChangePasswordForm()" class="edit-btn">Đổi mật khẩu</button>
 
-            <!-- Nút quay về trang Home --> <a href="{{ route('home') }}" class="back-to-home-btn">Home</a>
+            <!-- Nút quay về trang Home --> <a href="{{ route('home') }}" class="back-to-home-btn">Trở về</a>
 
             <img src="data:image/jepg;base64,{{$information['img']}}" alt="User Avatar">
             <h2>{{ $information['name'] }}</h2>
@@ -359,7 +359,7 @@
             <input type="password" name="new_password_confirmation" placeholder="Xác nhận mật khẩu" required>
 
             <!-- Nút Submit -->
-            <button type="submit">Đổi mật khẩu</button>
+            <button class="bg-info text-white" type="submit">Đổi mật khẩu</button>
 
             <!-- Nút Đóng -->
             <button type="button" onclick="hideChangePasswordForm()">Đóng</button>
