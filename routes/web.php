@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Middleware\EnsureEmailIsVerified;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\LoginController;
@@ -43,24 +45,20 @@ Route::get('/playist', function () {
     return view('user/playist');
 })->name('playist');
 
-
-
-
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
-
+//Route Login
+Route::get('login', [LoginController::class, 'index'])->name('login');
 Route::post('login', [LoginController::class, 'login'])->name('login');
+
 Route::post('register', [RegisterController::class, 'register'])->name('register');
 Route::get('login-google', [LoginGoogleController::class, 'redirectToGoogle'])->name('login-google');
 Route::get('login-google/callback', [LoginGoogleController::class, 'handleGoogleCallBack']);
 
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // Define your protected routes here
-    Route::post('logout', [LoginController::class, 'logout']);
+    Route::post('logout', [LoginController::class, 'logout'])->name('logout');
     Route::middleware(['web'])->group(function () {
-        Route::get('link-google', [LoginGoogleController::class, 'linkGoogleAccount']);
+        Route::get('link-google', [LoginGoogleController::class, 'linkGoogleAccount'])->name('link-google');
         Route::get('link-google/callback', [LoginGoogleController::class, 'handleLinkGoogleCallback']);
     });
     Route::get('check', function (Request $request) {
@@ -69,17 +67,21 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('upload-song', [SongController::class, 'uploadSong']);
 
     Route::get('profile/{id}', [ProfileController::class, 'showProfile']);
-    Route::post('profile', [ProfileController::class, 'updateProfile']);
+    Route::post('profile/{id}', [ProfileController::class, 'updateProfile']);
 });
 
 // Email verification routes
-Route::get('email/verify/{id}/{hash}', [RegisterController::class, 'verify'])
-    ->name('verification.verify')
-    ->middleware(['signed']); // Ensure the route is signed
+// Trang yêu cầu xác thực email
+Route::get('/email/verify', function () {
+    return view('emails.verify-email');
+})->middleware('auth:sanctum')->name('verification.notice');
+Route::get('email/verify/{token}', [RegisterController::class, 'verify'])
+    ->name('verification.verify');
 
-Route::get('email/verification-notification', [RegisterController::class, 'sendVerificationEmail'])
-    ->name('verification.send')
-    ->middleware(['auth:sanctum']);
+// Gửi lại email xác thực
+Route::post('/email/verification-notification', [RegisterController::class, 'resendVerificationEmail'])
+    ->middleware(['auth:sanctum', 'throttle:6,1'])
+    ->name('verification.send');
 
 Route::post('/forgot-password', [ResetPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::post('/reset-password/{token}', [ResetPasswordController::class, 'reset'])->name('password.reset');
@@ -93,3 +95,5 @@ Route::get('getsong/{id}', function ($id) {
     $song = Song::find($id);
     return '<audio controls><source src="' . Storage::url($song->audio_path) . '" type="audio/mpeg">Your browser does not support the audio element.</audio>';
 });
+
+Route::get('/admin', [AdminController::class, 'dashboard']);

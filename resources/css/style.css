@@ -293,7 +293,8 @@ body {
 
 /* Trường nhập liệu */
 .login-form input[type="email"],
-.login-form input[type="password"] {
+.login-form input[type="password"],
+.login-form input[type="text"] {
     width: 70%;
     background: #2c2c2e;
     color: rgb(241, 235, 235);
@@ -305,7 +306,8 @@ body {
 }
 
 .login-form input[type="email"]:focus,
-.login-form input[type="password"]:focus {
+.login-form input[type="password"]:focus,
+.login-form input[type="text"]:focus {
     border-color: #6c63ff;
     outline: none;
 }
@@ -470,7 +472,8 @@ input[type="password"] {
 }
 
 .form-container input[type="email"]:focus,
-.form-container input[type="password"]:focus {
+.form-container input[type="password"]:focus,
+.form-container input[type="text"]:focus {
     border-color: #6c63ff;
     outline: none;
 }

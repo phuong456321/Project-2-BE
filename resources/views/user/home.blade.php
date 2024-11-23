@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Music</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     @vite('resources/css/style.css')
@@ -98,35 +99,34 @@
         <div class="header">
             <input placeholder="Bạn đang tìm kiếm gì?" type="text" />
 
-            @if(Auth::check())
-            {{-- Nếu người dùng đã đăng nhập --}}
-            <div id="avatar" class="user" onclick="Popup()">
-                <span>{{ Auth::user()->name }}</span>
-                <img alt="User Avatar" class="rounded-full"
-                    height="40"
-                    src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('images/default-avatar.jpg') }}"
-                    width="40" />
-            </div>
+            @if (Auth::check())
+                {{-- Nếu người dùng đã đăng nhập --}}
+                <div id="avatar" class="user" onclick="togglePopup()">
+                    <span>{{ Auth::user()->name }}</span>
+                    <img alt="User Avatar" class="rounded-full" height="40"
+                        src="data:image/jepg;base64,{{ Auth::user()->avatar_id ? App\Models\Image::where('img_id', Auth::user()->avatar_id)->first()->img_path ?? asset('images/default-avatar.jpg') : asset('images/default-avatar.jpg') }}"
+                        width="40" />
+                </div>
 
-            <!-- Popup Profile / Logout -->
-            <div id="popup" class="avatar-popup hidden">
-                <ul>
-                    <li><a href="{{ route('profile') }}">Profile</a></li>
-                    <li>
-                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                            @csrf
-                            <button type="submit" class="logout-btn">Logout</button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
+                <!-- Popup Profile / Logout -->
+                <div id="popup" class="avatar-popup hidden">
+                    <ul>
+                        <li><a href="/profile/{{ Auth::user()->id }}">Profile</a></li>
+                        <li>
+                            <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                                @csrf
+                                <button type="submit" class="logout-btn">Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
             @else
-            {{-- Nếu người dùng chưa đăng nhập --}}
-            <div class="auth-links">
-                <a href="javascript:void(0)" onclick="showLoginForm()" class="login-link">Login</a>
-                <span class="separator">/</span>
-                <a href="javascript:void(0)" onclick="showRegisterForm()" class="register-link">Register</a>
-            </div>
+                {{-- Nếu người dùng chưa đăng nhập --}}
+                <div class="auth-links">
+                    <a href="javascript:void(0)" onclick="showLoginForm()" class="login-link">Login</a>
+                    <span class="separator">/</span>
+                    <a href="javascript:void(0)" onclick="showRegisterForm()" class="register-link">Register</a>
+                </div>
             @endif
         </div>
 
@@ -187,7 +187,9 @@
         </h3>
         <div class="recently-played">
             <div class="song">
-                <img alt="Chàng Là Gì" height="50" src="https://storage.googleapis.com/a1aa/image/w9GelBJsr7TcVC4Gt32nlfpDmNMDUTffbeeijznpSo6Mll28E.jpg" width="50" />
+                <img alt="Chàng Là Gì" height="50"
+                    src="https://storage.googleapis.com/a1aa/image/w9GelBJsr7TcVC4Gt32nlfpDmNMDUTffbeeijznpSo6Mll28E.jpg"
+                    width="50" />
                 <div class="info">
                     <p>
                         Chàng Là Gì
@@ -198,7 +200,9 @@
                 </div>
             </div>
             <div class="song">
-                <img alt="Cố mày" height="50" src="https://storage.googleapis.com/a1aa/image/u1cuhTDSc4p3PxpvihE1zsBGmNVafHgQTu6vjZCZKL08Kt5JA.jpg" width="50" />
+                <img alt="Cố mày" height="50"
+                    src="https://storage.googleapis.com/a1aa/image/u1cuhTDSc4p3PxpvihE1zsBGmNVafHgQTu6vjZCZKL08Kt5JA.jpg"
+                    width="50" />
                 <div class="info">
                     <p>
                         Cố mày
@@ -209,7 +213,9 @@
                 </div>
             </div>
             <div class="song">
-                <img alt="Sorry" height="50" src="https://storage.googleapis.com/a1aa/image/85FHVu7VkMaEKxyHJXfZAWtfCO8oa4U3zO8ZYcN2bnK2VazTA.jpg" width="50" />
+                <img alt="Sorry" height="50"
+                    src="https://storage.googleapis.com/a1aa/image/85FHVu7VkMaEKxyHJXfZAWtfCO8oa4U3zO8ZYcN2bnK2VazTA.jpg"
+                    width="50" />
                 <div class="info">
                     <p>
                         Sorry
@@ -220,7 +226,9 @@
                 </div>
             </div>
             <div class="song">
-                <img alt="Chàng Là Gì" height="50" src="https://storage.googleapis.com/a1aa/image/w9GelBJsr7TcVC4Gt32nlfpDmNMDUTffbeeijznpSo6Mll28E.jpg" width="50" />
+                <img alt="Chàng Là Gì" height="50"
+                    src="https://storage.googleapis.com/a1aa/image/w9GelBJsr7TcVC4Gt32nlfpDmNMDUTffbeeijznpSo6Mll28E.jpg"
+                    width="50" />
                 <div class="info">
                     <p>
                         Chàng Là Gì
@@ -231,7 +239,9 @@
                 </div>
             </div>
             <div class="song">
-                <img alt="MD Anniversary" height="50" src="https://storage.googleapis.com/a1aa/image/hqu0x1hNYE7fAajwuhkYn0k8ddL8NS95FFFuY6lksQaFLt5JA.jpg" width="50" />
+                <img alt="MD Anniversary" height="50"
+                    src="https://storage.googleapis.com/a1aa/image/hqu0x1hNYE7fAajwuhkYn0k8ddL8NS95FFFuY6lksQaFLt5JA.jpg"
+                    width="50" />
                 <div class="info">
                     <p>
                         MD Anniversary
@@ -242,7 +252,9 @@
                 </div>
             </div>
             <div class="song">
-                <img alt="Để quên em" height="50" src="https://storage.googleapis.com/a1aa/image/M1MCH07tEs5jJBn6NY8vajU6xBzlGx00FG0auFbVmk6gl28E.jpg" width="50" />
+                <img alt="Để quên em" height="50"
+                    src="https://storage.googleapis.com/a1aa/image/M1MCH07tEs5jJBn6NY8vajU6xBzlGx00FG0auFbVmk6gl28E.jpg"
+                    width="50" />
                 <div class="info">
                     <p>
                         Để quên em
@@ -253,7 +265,9 @@
                 </div>
             </div>
             <div class="song">
-                <img alt="Sỉ mê" height="50" src="https://storage.googleapis.com/a1aa/image/3uVV6yKHNRJvN16MZozsRfelbDnnqe6QJMkENxooFMocs0mnA.jpg" width="50" />
+                <img alt="Sỉ mê" height="50"
+                    src="https://storage.googleapis.com/a1aa/image/3uVV6yKHNRJvN16MZozsRfelbDnnqe6QJMkENxooFMocs0mnA.jpg"
+                    width="50" />
                 <div class="info">
                     <p>
                         Sỉ mê
@@ -264,7 +278,9 @@
                 </div>
             </div>
             <div class="song">
-                <img alt="1/2" height="50" src="https://storage.googleapis.com/a1aa/image/0VULnDrNTF4UEF4FSiuHXUrbKsIJacZkKLkpozelj9KDLt5JA.jpg" width="50" />
+                <img alt="1/2" height="50"
+                    src="https://storage.googleapis.com/a1aa/image/0VULnDrNTF4UEF4FSiuHXUrbKsIJacZkKLkpozelj9KDLt5JA.jpg"
+                    width="50" />
                 <div class="info">
                     <p>
                         1/2
@@ -275,7 +291,9 @@
                 </div>
             </div>
             <div class="song">
-                <img alt="CANXA" height="50" src="https://storage.googleapis.com/a1aa/image/hLmf1wjGeGkzG0060NcXyrENM3NicbA7hzhblrfUViwCs0mnA.jpg" width="50" />
+                <img alt="CANXA" height="50"
+                    src="https://storage.googleapis.com/a1aa/image/hLmf1wjGeGkzG0060NcXyrENM3NicbA7hzhblrfUViwCs0mnA.jpg"
+                    width="50" />
                 <div class="info">
                     <p>
                         CANXA
@@ -286,7 +304,9 @@
                 </div>
             </div>
             <div class="song">
-                <img alt="1000 Ánh Mắt" height="50" src="https://storage.googleapis.com/a1aa/image/6bxvUtb3y2ZCOJovrYZYo1JUEuOsKQDFVHkDPoPxXJhkl28E.jpg" width="50" />
+                <img alt="1000 Ánh Mắt" height="50"
+                    src="https://storage.googleapis.com/a1aa/image/6bxvUtb3y2ZCOJovrYZYo1JUEuOsKQDFVHkDPoPxXJhkl28E.jpg"
+                    width="50" />
                 <div class="info">
                     <p>
                         1000 Ánh Mắt
@@ -302,7 +322,9 @@
                 Trending Music
             </h3>
             <div class="music">
-                <img alt="Hip Hop &amp; Rap" height="150" src="https://storage.googleapis.com/a1aa/image/BZJVjfNwCDUXeUwS6MqCRnWtnKIiYWybAdo1FgkLRHnFWazTA.jpg" width="150" />
+                <img alt="Hip Hop &amp; Rap" height="150"
+                    src="https://storage.googleapis.com/a1aa/image/BZJVjfNwCDUXeUwS6MqCRnWtnKIiYWybAdo1FgkLRHnFWazTA.jpg"
+                    width="150" />
                 <p>
                     Hip Hop &amp; Rap
                 </p>
@@ -311,7 +333,9 @@
                 </p>
             </div>
             <div class="music">
-                <img alt="Jazz" height="150" src="https://storage.googleapis.com/a1aa/image/qB8Kzw1Wvio8BdAkP3GkPvejNGEr1Jdk1GS1JJyiOe9XWazTA.jpg" width="150" />
+                <img alt="Jazz" height="150"
+                    src="https://storage.googleapis.com/a1aa/image/qB8Kzw1Wvio8BdAkP3GkPvejNGEr1Jdk1GS1JJyiOe9XWazTA.jpg"
+                    width="150" />
                 <p>
                     Jazz
                 </p>
@@ -320,7 +344,9 @@
                 </p>
             </div>
             <div class="music">
-                <img alt="R&amp;B" height="150" src="https://storage.googleapis.com/a1aa/image/pqJCawbHDPoyAJrjvOT5jNzmTWKbzWpij759ll0JexdLLt5JA.jpg" width="150" />
+                <img alt="R&amp;B" height="150"
+                    src="https://storage.googleapis.com/a1aa/image/pqJCawbHDPoyAJrjvOT5jNzmTWKbzWpij759ll0JexdLLt5JA.jpg"
+                    width="150" />
                 <p>
                     R&amp;B
                 </p>
@@ -329,7 +355,9 @@
                 </p>
             </div>
             <div class="music">
-                <img alt="Chill" height="150" src="https://storage.googleapis.com/a1aa/image/BaJhoZpKJcIWIBTeNo8julXWiwTtRM691vpWSIqgtx6fVazTA.jpg" width="150" />
+                <img alt="Chill" height="150"
+                    src="https://storage.googleapis.com/a1aa/image/BaJhoZpKJcIWIBTeNo8julXWiwTtRM691vpWSIqgtx6fVazTA.jpg"
+                    width="150" />
                 <p>
                     Chill
                 </p>
@@ -377,21 +405,49 @@
     <!-- Overlay Login Form -->
     <div id="loginOverlay" class="overlay">
         <div class="login-form">
-            <span onclick="closeOverlay()" style="cursor: pointer; position: absolute; top: 10px; right: 10px; font-size: 20px;">&times;</span>
+            <span onclick="closeOverlay()"
+                style="cursor: pointer; position: absolute; top: 10px; right: 10px; font-size: 20px;">&times;</span>
             <h2>Welcome</h2>
-            <p>Login into your account</p>
+            <h3>Login into your account</h3>
 
-            <img class="gg-btn" src="{{ asset('images/profile/gg.png') }}" onclick="" alt="gg">
+            <img class="gg-btn" src="{{ asset('images/profile/gg.png') }}"
+                onclick="window.location.href='{{ route('login-google') }}'" alt="gg">
 
             <div class="separator">
                 <hr> <span>Or continue with</span>
                 <hr>
             </div>
-
-            <form action="" method="POST">
+            @if (session('message'))
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        showLoginForm(); // Hiển thị form đăng nhập
+                    });
+                </script>
+                <div class="alert alert-danger" id="login-message">{{ session('message') }}</div>
+            @endif
+            <form id="login-form" action="{{ route('login') }}" method="POST">
                 @csrf
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="password" name="password" placeholder="Password" required>
+                <input type="text" placeholder="Email" @error('email') is-invalid @enderror" id="email"
+                    name="email" value="{{ old('email') }}">
+                @error('email')
+                    <p class="invalid-feedback">{{ $message }}</p>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showLoginForm(); // Hiển thị form đăng nhập
+                        });
+                    </script>
+                @enderror
+                <input type="password" placeholder="Password" @error('password') is-invalid @enderror" id="password"
+                    name="password" value="{{ old('password') }}">
+                @error('password')
+                    <p class="invalid-feedback">{{ $message }}</p>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showLoginForm(); // Hiển thị form đăng nhập
+                        });
+                    </script>
+                @enderror
+
 
                 <div class="options">
                     <label>
@@ -400,17 +456,19 @@
                     <a href="#" class="recover-password">Forgot Password?</a>
                 </div>
                 <button class="action-btn" type="submit">Log In</button>
-                <p>
-                    Don't have an account yet?
-                    <a href="javascript:void(0)" onclick="showRegisterForm()">Register</a>
-                </p>
             </form>
+            <p>
+                Don't have an account yet?
+                <a href="javascript:void(0)" onclick="showRegisterForm()">Register</a>
+            </p>
+
         </div>
     </div>
     <div id="registerOverlay" class="overlay">
 
         <div class="form-container">
-            <span onclick="closeOverlay()" style="cursor: pointer; position: absolute; top: 10px; right: 10px; font-size: 20px;">&times;</span>
+            <span onclick="closeOverlay()"
+                style="cursor: pointer; position: absolute; top: 10px; right: 10px; font-size: 20px;">&times;</span>
             <h2>Create Account</h2>
             <p>Register a new account</p>
             <img class="gg-btn" src="{{ asset('images/profile/gg.png') }}" onclick="" alt="gg">
@@ -433,7 +491,7 @@
 
             <p>
                 Already have an account?
-                <a href="javascript:void(0)" onclick="showLoginForm()">Login</a>
+                <a onclick="showLoginForm()">Login</a>
             </p>
         </div>
     </div>

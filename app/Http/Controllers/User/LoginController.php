@@ -7,48 +7,52 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Validator;
 class LoginController extends Controller
 {
+    public function index()
+    {
+        return redirect()->route('home');
+    }
     public function login(Request $request)
     {
         try {
-            $request->validate([
-                'email' => 'required|email',
-                'password' => 'required'
+            $validator = Validator::make($request->all(), [
+                'email' => ['required', 'email'],
+                'password' => ['required']
             ]);
-            $user = User::where('email', '=', $request->email)->first();
-            if (!$user || !Hash::check($request->password, $user->password)) {
-                return response()->json(['message' => 'Email or Password is incorrect'], 401);
+            if (!$validator->passes()) {
+                return redirect()->back()->withErrors($validator)->withInput();
             }
 
+            // Thử đăng nhập
+            if (!Auth::attempt($request->only('email', 'password'))) {
+                flash()->option('timeout', 2000)->error('Email or Password is incorrect');
+                return redirect()->back()->with('message', 'Email or Password is incorrect')->withInput();
+            }
+            $user = User::where('email', $request->email)->first();
+            Auth::login($user);
             // Check if the user is verified
             if (!$user->hasVerifiedEmail()) {
-                Auth::logout(); // Log the user out
-                return response()->json(['message' => 'Your email address is not verified. Please check your email for the verification link.'], 403);
+                return redirect()->with('error', 'Your email address is not verified. Please check your email for the verification link.');
             }
-
-            Auth::login($user);
-            //generate token
-            $accessToken = $user->createtoken('access_token')->plainTextToken;
-            $cookie = cookie('session_id', session()->getId(), 60); // 60 phút
-            return response()->json([
-                'message' => 'Logged in successfully',
-                'token' => $accessToken,
-                    'token_type' => 'Bearer'
-                ], 200)->withCookie($cookie);
+            flash()->option('timeout', 2000)->success('Logged in successfully');
+            return redirect()->route('home');
         } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 500);
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
     public function logout(Request $request)
     {
         try {
-            $request->user()->tokens()->delete();
-            return response()->json(['message' => 'Logged out successfully'], 200);
+            $request->session()->forget('session_id');
+            $request->session()->flush();
+            Auth::guard('web')->logout();
+            flash()->option('timeout', 2000)->success('Logged out successfully');
+            return redirect()->route('home');
         } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 500);
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 }
