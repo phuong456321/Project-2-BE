@@ -291,7 +291,7 @@
 
             <div class="container mt-2 ">
                 <!-- Nút Đăng nhập bằng Google với thiết kế giống nút Premium -->
-                <button class="google-login-btn mx-auto">
+                <button class="google-login-btn mx-auto" href="{{ route('link-google') }}">
                     <i class="fa-brands fa-google"></i>
                     Đăng nhập bằng Google
                 </button>
