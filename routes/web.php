@@ -15,6 +15,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
+    return view('welcome');
+});
+
+
+Route::get('/home', function () {
     return view('user/home'); // Hoặc trả về view trang chủ của bạn
 })->name('home');
 

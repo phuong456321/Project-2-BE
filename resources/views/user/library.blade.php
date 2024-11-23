@@ -80,7 +80,4 @@
     </div>
 </body>
 
-
-
-
 @endsection

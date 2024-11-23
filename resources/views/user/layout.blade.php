@@ -50,6 +50,7 @@
 </head>
 
 <body>
+    
     <div class="sidebar">
         <a class="no-hover" href="{{ route('home') }}">
             <img alt="Logo" height="100" src="images/profile/logo-home.png" width="100" />

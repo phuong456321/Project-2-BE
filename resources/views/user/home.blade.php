@@ -100,7 +100,7 @@
 
             @if(Auth::check())
             {{-- Nếu người dùng đã đăng nhập --}}
-            <div id="avatar" class="user" onclick="togglePopup()">
+            <div id="avatar" class="user" onclick="Popup()">
                 <span>{{ Auth::user()->name }}</span>
                 <img alt="User Avatar" class="rounded-full"
                     height="40"
@@ -340,7 +340,9 @@
         </div>
     </div>
     <div class="footer">
+        <img src="" alt="">
         <div class="controls">
+
             <i class="fas fa-step-backward">
             </i>
             <i class="fas fa-play">
@@ -350,13 +352,16 @@
         </div>
         <div class="progress">
             <input max="100" min="0" type="range" value="30" />
+            <p>
+                3:39 / 4:10
+            </p>
         </div>
         <div class="current-song">
             <p>
                 CANXA
             </p>
             <p>
-                1DEE và FEEZY - 3:39
+                1DEE và FEEZY
             </p>
         </div>
         <div class="actions">
@@ -418,6 +423,7 @@
             <!-- Form đăng ký -->
             <form action="{{ route('register') }}" method="POST">
                 @csrf
+                <input type="text" name="name" placeholder="Name" required>
                 <input type="email" name="email" placeholder="Email" required>
                 <input type="password" name="password" placeholder="Password" required>
                 <input type="password" name="password_confirmation" placeholder="Confirm Password" required>

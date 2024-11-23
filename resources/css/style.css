@@ -197,6 +197,8 @@ body {
     flex-grow: 1;
     margin: 10px 10rem;
     padding-left: 1rem;
+    display: flex;
+    justify-content: space-around;
 }
 
 .footer .progress input {
@@ -372,6 +374,7 @@ body {
 
 /* Input fields */
 input[type="text"],
+input[type="name"],
 input[type="email"],
 input[type="password"] {
     width: 39%;
@@ -454,7 +457,8 @@ input[type="password"] {
 
 /* Trường nhập liệu */
 .form-container input[type="email"],
-.form-container input[type="password"] {
+.form-container input[type="password"],
+.form-container input[type="text"] {
     width: 70%;
     background: #2c2c2e;
     color: white;
