@@ -83,27 +83,6 @@
     <div class="main-content">
         @yield('content')
     </div>
-
-    <!-- Add JavaScript here -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Toggle the popup when clicking on avatar
-            const avatar = document.getElementById('avatar');
-            const popup = document.getElementById('popup');
-
-            avatar.addEventListener('click', function() {
-                // Toggle visibility of the popup
-                popup.classList.toggle('hidden');
-            });
-
-            // Close popup if clicking outside
-            document.addEventListener('click', function(event) {
-                if (!avatar.contains(event.target) && !popup.contains(event.target)) {
-                    popup.classList.add('hidden');
-                }
-            });
-        });
-    </script>
 </body>
 
 </html>

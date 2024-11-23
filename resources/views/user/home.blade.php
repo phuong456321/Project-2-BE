@@ -97,29 +97,39 @@
     <div class="main-content">
         <div class="header">
             <input placeholder="Bạn đang tìm kiếm gì?" type="text" />
+
+            @if(Auth::check())
+            {{-- Nếu người dùng đã đăng nhập --}}
+            <div id="avatar" class="user" onclick="togglePopup()">
+                <span>{{ Auth::user()->name }}</span>
+                <img alt="User Avatar" class="rounded-full"
+                    height="40"
+                    src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('images/default-avatar.jpg') }}"
+                    width="40" />
+            </div>
+
+            <!-- Popup Profile / Logout -->
+            <div id="popup" class="avatar-popup hidden">
+                <ul>
+                    <li><a href="{{ route('profile') }}">Profile</a></li>
+                    <li>
+                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                            @csrf
+                            <button type="submit" class="logout-btn">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            @else
+            {{-- Nếu người dùng chưa đăng nhập --}}
             <div class="auth-links">
                 <a href="javascript:void(0)" onclick="showLoginForm()" class="login-link">Login</a>
                 <span class="separator">/</span>
                 <a href="javascript:void(0)" onclick="showRegisterForm()" class="register-link">Register</a>
             </div>
-            <div id="avatar" class="user">
-                <span>
-                    User
-                </span>
-                <img alt="User Avatar" class="rounded-full" height="40" src="images/profile/hinh tao.jpg" width="40" />
-            </div>
-            <!-- Avatar Section -->
-
-            <!-- Popup Profile / Logout -->
-            <div id="popup" class="avatar-popup hidden">
-                <ul>
-                    <li><a href="/profile">Profile</a></li>
-                    <li><a href="/logout">Logout</a></li>
-                </ul>
-            </div>
-
-
+            @endif
         </div>
+
         <div class="prevalent">
             <div class="info">
                 <h2>
