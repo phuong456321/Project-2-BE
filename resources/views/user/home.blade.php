@@ -4,377 +4,492 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Music</title>
-    @vite('resources/css/style.css')
-    @vite('resources/css/nowPlay.css')
-    @vite('resources/css/sideBarStyle.css')
-    @vite('resources/css/audio.css')
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <script src=""></script>
-
-
-
+    @vite('resources/css/style.css')
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Đảm bảo cả hai overlay đều ẩn khi tải trang
+            document.getElementById("loginOverlay").style.display = "none";
+            document.getElementById("registerOverlay").style.display = "none";
+        });
+
         function showLoginForm() {
-            document.getElementById("registerOverlay").style.display = "none"; // Ẩn form register
-            document.getElementById("loginOverlay").style.display = "flex";
+            document.getElementById("registerOverlay").style.display = "none"; // Ẩn form đăng ký
+            document.getElementById("loginOverlay").style.display = "flex"; // Hiển thị form đăng nhập
         }
 
         function showRegisterForm() {
-            // console.log("showRegisterForm called");
-            document.getElementById("loginOverlay").style.display = "none"; // Ẩn form login
-            document.getElementById("registerOverlay").style.display = "flex";
-        }
-        function redirectToLoginGoogle() {
-            window.location.href = "{{ route('login-google') }}"; // Chuyển hướng đến route login-google
+            document.getElementById("loginOverlay").style.display = "none"; // Ẩn form đăng nhập
+            document.getElementById("registerOverlay").style.display = "flex"; // Hiển thị form đăng ký
         }
 
         function closeOverlay() {
-            document.getElementById("overlay").style.display = "none"; // Ẩn overlay
+            // Đóng tất cả overlay
+            document.getElementById("loginOverlay").style.display = "none";
+            document.getElementById("registerOverlay").style.display = "none";
         }
-
-        function showLoginOverlay() {
-            document.getElementById("overlay").style.display = "flex";
-            showLoginForm(); // Mặc định hiển thị form login
-        }
-
 
         // Đóng form khi nhấn ra ngoài
         window.onclick = function(event) {
-            const overlay = document.getElementById("loginOverlay");
-            if (event.target === overlay) {
-                overlay.style.display = "none";
+            if (event.target === document.getElementById("loginOverlay")) {
+                closeOverlay();
             } else if (event.target === document.getElementById("registerOverlay")) {
-                document.getElementById("registerOverlay").style.display = "none";
+                closeOverlay();
             }
         };
-        document.addEventListener('DOMContentLoaded', () => {
-            const nowPlaying = document.querySelector('.now-playing');
+        document.addEventListener('DOMContentLoaded', function() {
+            const avatar = document.querySelector('#avatar'); // Lấy phần tử #avatar
+            const popup = document.querySelector('.avatar-popup'); // Lấy phần tử pop-up
 
-            const toggleBtn = document.createElement('div');
+            if (!avatar || !popup) return;
 
-            // Tạo nút toggle
-            toggleBtn.className = 'toggle-btn';
-            toggleBtn.innerHTML = '<span>&#x25C0;</span>'; // Mũi tên
-            nowPlaying.parentElement.appendChild(toggleBtn);
+            // Mở popup khi nhấn vào avatar
+            avatar.addEventListener('click', function(e) {
+                e.stopPropagation(); // Ngăn chặn sự kiện ngoài từ việc ẩn pop-up
+                popup.classList.toggle('block'); // Thêm hoặc xóa class 'block' cho popup
+            });
 
-            // Xử lý sự kiện click
-            toggleBtn.addEventListener('click', () => {
-                nowPlaying.classList.toggle('active'); // Thêm/xóa lớp active
-                const arrow = toggleBtn.querySelector('span');
-                if (nowPlaying.classList.contains('active')) {
-                    arrow.innerHTML = '&#x25C0;'; // Mũi tên sang trái
-                } else {
-                    arrow.innerHTML = '&#x25B6;'; // Mũi tên sang phải
+            // Ẩn popup khi click ra ngoài
+            document.addEventListener('click', function(e) {
+                if (!popup.contains(e.target) && !avatar.contains(e.target)) {
+                    popup.classList.remove('block'); // Ẩn pop-up
                 }
             });
+
+            // Ngăn pop-up bị tắt khi click bên trong
+            popup.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
         });
-        // const toggleButton = document.querySelector('.arrow-toggle');
-        // toggleButton.addEventListener('click', () => {
-        //     nowPlaying.classList.toggle('hidden'); // Ẩn/Hiện thẻ now-playing
-        // });
     </script>
 
 </head>
 
 <body>
-    <div class="container">
-        <aside class="sidebar">
-            <div class="logo">
-                <img src="{{ asset('images/profile/logo-home.png') }}" alt="Logo">
-
-            </div>
-            <nav class="menu">
-                <ul>
-                    <li class="{{ request()->is('home') ? 'active' : '' }}">
-                        <img src="{{ asset('icon/home-svgrepo-com.svg') }}" class="menu-icon">
-                        <a href="{{ route('home') }}" id="home"> Home </a>
-                    </li>
-                    <li class="{{ request()->is('library') ? 'active' : '' }}">
-                        <img src="{{ asset('icon/discover-home.svg') }}" class="menu-icon">
-                        <a href="/discover" id="Discover"> Discover </a>
-                    </li>
-                    <li>
-                        <img src="{{ asset('icon/library-home.svg') }}" class="menu-icon">
-                        <a href="/library" id="Librarys"> Librarys </a>
-                    </li>
-                    <li>
-                        <img src="icon/profile-home.svg" class="menu-icon">
-                        <a href="/profile" id="profile" class="profile-btn w3-magin-bottom"> Profile </a>
-                    </li>
-                </ul>
-            </nav>
-
-
-            <hr>
-
-            <div class="my-music">
-                <Button>Create playlist</Button>
-                <!-- <ul>
-                    <li>Liked songs</li>
-                    <li>Albums</li>
-                    <li>Playlists1</li>
-                    <li>Playlists2</li>
-                </ul> -->
-            </div>
-            <div class="settings">
-                <ul>
-                    <li>Setting</li>
-                    <li>Log out</li>
-                </ul>
-            </div>
-        </aside>
-
-        <main class="content">
-            <div class="search-section">
-
-                <div class="search-container">
-                    <input type="text" placeholder="Search..." class="search-input">
-                </div>
-            </div>
-
-            <div class="auth-links">
-                <a href="javascript:void(0)" onclick="showLoginForm()" class="login-link">Login</a>
-                <span class="separator">/</span>
-                <a href="javascript:void(0)" onclick="showRegisterForm()" class="register-link">Register</a>
-            </div>
-
-
-
-            <div class="main-section">
-                <h1>Prevalent</h1>
-                <div class="featured-artist">
-                    <div class="featured-info">
-                        <h2>HIEUTHUHAI</h>
-                            <p>Ai Cũng Bắt Đầu Từ Đâu Đó!!</p>
-                            <button>Listen now</button>
-                    </div>
-                    <div class="featured-image">
-                        <img src="{{ asset('images/song/Hht.png') }}" alt="HIEUTHUHAI">
-                    </div>
-                </div>
-
-                <div class="playlists">
-                    <h3>Playlists for you</h3>
-                    <!-- <div class="playlist-grid">
-                        <div class="playlist-card">Obito</div>
-                        <div class="playlist-card">DRT</div>
-                        <div class="playlist-card">Tlinh</div>
-                        <div class="playlist-card">VŨ</div>
-                        <div class="playlist-card">WN</div>
-                    </div> -->
-                </div>
-
-
-                <div id="recently">
-                    <h3>Recently played</h3>
-                </div>
-                <div class="music-list">
-
-                    <div class="music-item">
-                        <img src="{{ asset('images/song/2340.jpg') }}" alt="23:40">
-                        <div class="song-info">
-                            <p class="song-title">23:40</p>
-                            <p class="artist">Hào • 23:40</p>
-                        </div>
-                    </div>
-
-                    <div class="music-item">
-                        <img src="{{ asset('images/song/bầu trời.jpg') }}" alt="Bầu trời mới">
-                        <div class="song-info">
-                            <p class="song-title">Bầu Trời Mới (cùng với Minh Tốc & Lam)</p>
-                            <p class="artist">Da LAB • Bầu Trời Mới</p>
-                        </div>
-                    </div>
-
-                    <div class="music-item">
-                        <img src="{{ asset('images/song/dấu chân.jpg') }}" alt="Dấu chân">
-                        <div class="song-info">
-                            <p class="song-title">Dấu chân (cùng với LePhuong)</p>
-                            <p class="artist">Maize • Dấu chân</p>
-                        </div>
-                    </div>
-
-                    <div class="music-item">
-                        <img src="{{ asset('images/song/4getu.jpg') }}" alt="4getu">
-                        <div class="song-info">
-                            <p class="song-title">4GetU (Remake)</p>
-                            <p class="artist">PC và Specter • 4GetU</p>
-                        </div>
-                    </div>
-
-                    <div class="music-item">
-                        <img src="{{ asset('images/song/exit.jpg') }}" alt="Exit Sign">
-                        <div class="song-info">
-                            <p class="song-title">Exit Sign</p>
-                            <p class="artist">HIEUTHUHAI • Exit Sign</p>
-                        </div>
-                    </div>
-
-                    <div class="music-item">
-                        <img src="{{ asset('images/song/vết thương.jpg') }}" alt="Vết thương">
-                        <div class="song-info">
-                            <p class="song-title">Vết thương</p>
-                            <p class="artist">Fishy • Vết thương</p>
-                        </div>
-                    </div>
-
-                    <div class="music-item">
-                        <img src="{{ asset('images/song/sóng.jpg') }}" alt="Sóng">
-                        <div class="song-info">
-                            <p class="song-title">Sóng</p>
-                            <p class="artist">NGUYENN • Sóng</p>
-                        </div>
-                    </div>
-
-                    <div class="music-item">
-                        <img src="{{ asset('images/song/tiec') }}" alt="Tiếc làm chi">
-                        <div class="song-info">
-                            <p class="song-title">TIẾC LÀM GÌ?</p>
-                            <p class="artist">PARYS • TIẾC LÀM GÌ?</p>
-                        </div>
-                    </div>
-
-                    <div class="music-item">
-                        <img src="{{ asset('images/song/GIẢ VỜ') }}" alt="Giả vờ">
-                        <div class="song-info">
-                            <p class="song-title">Giả vờ</p>
-                            <p class="artist">DuongG • Giả vờ</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <aside class="now-playing">
-            <div class="user-profile">
-                <span>Nhóm 2</span>
-                <img src="{{ asset('images/song/drt.jpg') }}" alt="Avatar" class="avatar">
-            </div>
-            <div class="now-playing-list">
-                <h3>Now Playing</h3>
-                <!-- <ul>
-                    <li>
-                        <img
-                            src="{{ asset('images/song/Obito.jpg') }}" class="song-image">
-                        <span class="song-duration"></span>
-                    </li>
-                    <li>
-                        <img src="{{ asset('images/song/drt.jpg') }}" class="song-image">
-                      
-                        <span class="song-duration"></span>
-                    </li>
-                    <li>
-                        <img src="./img/images/song/exit.jpg" class="song-image">
-                      
-                        <span class="song-duration"></span>
-                    </li>
-                    <li>
-                        <img src="./img/images/song/exit.jpg" class="song-image">
-                     
-                        <span class="song-duration"></span>
-                    </li>
-                    <li>
-                        <img src="./img/images/song/exit.jpg" class="song-image">
-                        
-                        <span class="song-duration"></span>
-                    </li>
-                    <li>
-                        <img src="./img/images/song/exit.jpg" class="song-image">
-                      
-                        <span class="song-duration"></span>
-                    </li>
-
-                </ul> -->
-            </div>
-        </aside>
-        <span class="toggle-btn">&#x25C0;</span>
+    <div class="sidebar">
+        <a class="no-hover" href="{{ route('home') }}">
+            <img alt="Logo" height="100" src="images/profile/logo-home.png" width="100" />
+        </a>
+        <a href="{{ route('home') }}" id="home" class="{{ request()->is('home') ? 'active' : '' }}">
+            Home
+        </a>
+        <a href="/library" id="librarys">
+            Library
+        </a>
+        <a href="/playist" id="playist">
+            Playist
+        </a>
+        <div class="create-playlist">
+            + Create playlist
+        </div>
+        <a href="/likesong" id="likesong">
+            Like songs
+        </a>
+        <a href="/albums" id="librarys">
+            My Album
+        </a>
+        <a href="/playist" id="playist">
+            Playlist 1
+        </a>
     </div>
-    <div class="music-player">
-        <div class="player-controls">
-            <!-- Các nút chức năng -->
-            <div class="controls">
-                <button class="control-btn"><i class="fas fa-sync-alt"></i></button> <!-- Lặp lại -->
-                <button class="control-btn"><i class="fas fa-step-backward"></i></button> <!-- Bài trước -->
-                <button class="control-btn play-pause"><i class="fas fa-play"></i></button> <!-- Phát/Tạm dừng -->
-                <button class="control-btn"><i class="fas fa-step-forward"></i></button> <!-- Bài sau -->
-                <button class="control-btn"><i class="fas fa-random"></i></button> <!-- Phát ngẫu nhiên -->
-            </div>
+    <div class="main-content">
+        <div class="header">
+            <input placeholder="Bạn đang tìm kiếm gì?" type="text" />
 
-            <!-- Thanh tiến trình -->
-            <div class="progress-bar">
-                <span class="current-time">0:00</span>
-                <input type="range" class="seek-bar" value="0" max="100" />
-                <span class="total-time">3:41</span>
-            </div>
+            @if (Auth::check())
+                {{-- Nếu người dùng đã đăng nhập --}}
+                <div id="avatar" class="user" onclick="togglePopup()">
+                    <span>{{ Auth::user()->name }}</span>
+                    <img alt="User Avatar" class="rounded-full" height="40"
+                        src="data:image/jepg;base64,{{ Auth::user()->avatar_id ? App\Models\Image::where('img_id', Auth::user()->avatar_id)->first()->img_path ?? asset('images/default-avatar.jpg') : asset('images/default-avatar.jpg') }}"
+                        width="40" />
+                </div>
+
+                <!-- Popup Profile / Logout -->
+                <div id="popup" class="avatar-popup hidden">
+                    <ul>
+                        <li><a href="/profile/{{ Auth::user()->id }}">Profile</a></li>
+                        <li>
+                            <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                                @csrf
+                                <button type="submit" class="logout-btn">Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            @else
+                {{-- Nếu người dùng chưa đăng nhập --}}
+                <div class="auth-links">
+                    <a href="javascript:void(0)" onclick="showLoginForm()" class="login-link">Login</a>
+                    <span class="separator">/</span>
+                    <a href="javascript:void(0)" onclick="showRegisterForm()" class="register-link">Register</a>
+                </div>
+            @endif
         </div>
 
-        <!-- Âm lượng -->
-        <div class="volume">
-            <i class="fas fa-volume-up"></i>
-            <input type="range" class="volume-bar" value="80" max="100" />
+        <div class="prevalent">
+            <div class="info">
+                <h2>
+                    Prevalent
+                </h2>
+                <p>
+                    Dangrangto
+                </p>
+                <p>
+                    AKA Trần Lá Lướt
+                </p>
+                <button>
+                    Listen now
+                </button>
+            </div>
+            <img alt="Prevalent artist" height="150" src="images/song/exit.jpg" width="150" />
+        </div>
+        <div class="playlists">
+            <h3>
+                Playlists for you
+            </h3>
+            <div class="playlist">
+                <img alt="Obito" height="150" src="images/song/Obito.jpg" width="150" />
+                <p>
+                    Obito
+                </p>
+            </div>
+            <div class="playlist">
+                <img alt="Tlinh" height="150" src="images/song/tlinh.jpg" width="150" />
+                <p>
+                    Tlinh
+                </p>
+            </div>
+            <div class="playlist">
+                <img alt="Gill" height="150" src="images/song/drt.jpg" width="150" />
+                <p>
+                    Gill
+                </p>
+            </div>
+            <div class="playlist">
+                <img alt="HurtyKng" height="150" src="images/song/tiec.jpg" width="150" />
+                <p>
+                    HurtyKng
+                </p>
+            </div>
+            <div class="playlist">
+                <img alt="HIEUTHUHAI" height="150" src="images/song/wn.jpg" width="150" />
+                <p>
+                    HIEUTHUHAI
+                </p>
+            </div>
+        </div>
+        <h3>
+            Recently played
+        </h3>
+        <div class="recently-played">
+            <div class="song">
+                <img alt="Chàng Là Gì" height="50"
+                    src="https://storage.googleapis.com/a1aa/image/w9GelBJsr7TcVC4Gt32nlfpDmNMDUTffbeeijznpSo6Mll28E.jpg"
+                    width="50" />
+                <div class="info">
+                    <p>
+                        Chàng Là Gì
+                    </p>
+                    <p>
+                        SVAN - 3:39
+                    </p>
+                </div>
+            </div>
+            <div class="song">
+                <img alt="Cố mày" height="50"
+                    src="https://storage.googleapis.com/a1aa/image/u1cuhTDSc4p3PxpvihE1zsBGmNVafHgQTu6vjZCZKL08Kt5JA.jpg"
+                    width="50" />
+                <div class="info">
+                    <p>
+                        Cố mày
+                    </p>
+                    <p>
+                        Hào - 3:39
+                    </p>
+                </div>
+            </div>
+            <div class="song">
+                <img alt="Sorry" height="50"
+                    src="https://storage.googleapis.com/a1aa/image/85FHVu7VkMaEKxyHJXfZAWtfCO8oa4U3zO8ZYcN2bnK2VazTA.jpg"
+                    width="50" />
+                <div class="info">
+                    <p>
+                        Sorry
+                    </p>
+                    <p>
+                        Milly và Passed - 3:39
+                    </p>
+                </div>
+            </div>
+            <div class="song">
+                <img alt="Chàng Là Gì" height="50"
+                    src="https://storage.googleapis.com/a1aa/image/w9GelBJsr7TcVC4Gt32nlfpDmNMDUTffbeeijznpSo6Mll28E.jpg"
+                    width="50" />
+                <div class="info">
+                    <p>
+                        Chàng Là Gì
+                    </p>
+                    <p>
+                        SVAN - 3:39
+                    </p>
+                </div>
+            </div>
+            <div class="song">
+                <img alt="MD Anniversary" height="50"
+                    src="https://storage.googleapis.com/a1aa/image/hqu0x1hNYE7fAajwuhkYn0k8ddL8NS95FFFuY6lksQaFLt5JA.jpg"
+                    width="50" />
+                <div class="info">
+                    <p>
+                        MD Anniversary
+                    </p>
+                    <p>
+                        BAN và Coolkid - 3:39
+                    </p>
+                </div>
+            </div>
+            <div class="song">
+                <img alt="Để quên em" height="50"
+                    src="https://storage.googleapis.com/a1aa/image/M1MCH07tEs5jJBn6NY8vajU6xBzlGx00FG0auFbVmk6gl28E.jpg"
+                    width="50" />
+                <div class="info">
+                    <p>
+                        Để quên em
+                    </p>
+                    <p>
+                        Flaky - 3:39
+                    </p>
+                </div>
+            </div>
+            <div class="song">
+                <img alt="Sỉ mê" height="50"
+                    src="https://storage.googleapis.com/a1aa/image/3uVV6yKHNRJvN16MZozsRfelbDnnqe6QJMkENxooFMocs0mnA.jpg"
+                    width="50" />
+                <div class="info">
+                    <p>
+                        Sỉ mê
+                    </p>
+                    <p>
+                        TLR - 3:39
+                    </p>
+                </div>
+            </div>
+            <div class="song">
+                <img alt="1/2" height="50"
+                    src="https://storage.googleapis.com/a1aa/image/0VULnDrNTF4UEF4FSiuHXUrbKsIJacZkKLkpozelj9KDLt5JA.jpg"
+                    width="50" />
+                <div class="info">
+                    <p>
+                        1/2
+                    </p>
+                    <p>
+                        DangRangTo - 3:39
+                    </p>
+                </div>
+            </div>
+            <div class="song">
+                <img alt="CANXA" height="50"
+                    src="https://storage.googleapis.com/a1aa/image/hLmf1wjGeGkzG0060NcXyrENM3NicbA7hzhblrfUViwCs0mnA.jpg"
+                    width="50" />
+                <div class="info">
+                    <p>
+                        CANXA
+                    </p>
+                    <p>
+                        1DEE và FEEZY - 3:39
+                    </p>
+                </div>
+            </div>
+            <div class="song">
+                <img alt="1000 Ánh Mắt" height="50"
+                    src="https://storage.googleapis.com/a1aa/image/6bxvUtb3y2ZCOJovrYZYo1JUEuOsKQDFVHkDPoPxXJhkl28E.jpg"
+                    width="50" />
+                <div class="info">
+                    <p>
+                        1000 Ánh Mắt
+                    </p>
+                    <p>
+                        Shiki và Obito - 3:39
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="trending-music">
+            <h3>
+                Trending Music
+            </h3>
+            <div class="music">
+                <img alt="Hip Hop &amp; Rap" height="150"
+                    src="https://storage.googleapis.com/a1aa/image/BZJVjfNwCDUXeUwS6MqCRnWtnKIiYWybAdo1FgkLRHnFWazTA.jpg"
+                    width="150" />
+                <p>
+                    Hip Hop &amp; Rap
+                </p>
+                <p>
+                    Trending Music
+                </p>
+            </div>
+            <div class="music">
+                <img alt="Jazz" height="150"
+                    src="https://storage.googleapis.com/a1aa/image/qB8Kzw1Wvio8BdAkP3GkPvejNGEr1Jdk1GS1JJyiOe9XWazTA.jpg"
+                    width="150" />
+                <p>
+                    Jazz
+                </p>
+                <p>
+                    Trending Music
+                </p>
+            </div>
+            <div class="music">
+                <img alt="R&amp;B" height="150"
+                    src="https://storage.googleapis.com/a1aa/image/pqJCawbHDPoyAJrjvOT5jNzmTWKbzWpij759ll0JexdLLt5JA.jpg"
+                    width="150" />
+                <p>
+                    R&amp;B
+                </p>
+                <p>
+                    Trending Music
+                </p>
+            </div>
+            <div class="music">
+                <img alt="Chill" height="150"
+                    src="https://storage.googleapis.com/a1aa/image/BaJhoZpKJcIWIBTeNo8julXWiwTtRM691vpWSIqgtx6fVazTA.jpg"
+                    width="150" />
+                <p>
+                    Chill
+                </p>
+                <p>
+                    Trending Music
+                </p>
+            </div>
         </div>
     </div>
-
+    <div class="footer">
+        <div class="controls">
+            <i class="fas fa-step-backward">
+            </i>
+            <i class="fas fa-play">
+            </i>
+            <i class="fas fa-step-forward">
+            </i>
+        </div>
+        <div class="progress">
+            <input max="100" min="0" type="range" value="30" />
+        </div>
+        <div class="current-song">
+            <p>
+                CANXA
+            </p>
+            <p>
+                1DEE và FEEZY - 3:39
+            </p>
+        </div>
+        <div class="actions">
+            <i class="fas fa-heart">
+            </i>
+            <i class="fas fa-random">
+            </i>
+            <i class="fas fa-volume-up">
+            </i>
+        </div>
+    </div>
 
     <!-- Overlay Login Form -->
     <div id="loginOverlay" class="overlay">
         <div class="login-form">
-            <h2>Welcome Back</h2>
-            <p>Login into your account</p>
+            <span onclick="closeOverlay()"
+                style="cursor: pointer; position: absolute; top: 10px; right: 10px; font-size: 20px;">&times;</span>
+            <h2>Welcome</h2>
+            <h3>Login into your account</h3>
 
-            <img class="gg-btn" src="{{ asset('images/profile/gg.png') }}" onclick="redirectToLoginGoogle()" alt="gg">
+            <img class="gg-btn" src="{{ asset('images/profile/gg.png') }}"
+                onclick="window.location.href='{{ route('login-google') }}'" alt="gg">
 
             <div class="separator">
                 <hr> <span>Or continue with</span>
                 <hr>
             </div>
-
-            <form action="{{ route('login') }}" method="post">
+            @if (session('message'))
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        showLoginForm(); // Hiển thị form đăng nhập
+                    });
+                </script>
+                <div class="alert alert-danger" id="login-message">{{ session('message') }}</div>
+            @endif
+            <form id="login-form" action="{{ route('login') }}" method="POST">
                 @csrf
-                <input type="email" placeholder="Email" required name="email" value="{{ old('email') }}">
-                <input type="password" placeholder="Password" required name="password" value="{{ old('password') }}">
+                <input type="text" placeholder="Email" @error('email') is-invalid @enderror" id="email"
+                    name="email" value="{{ old('email') }}">
+                @error('email')
+                    <p class="invalid-feedback">{{ $message }}</p>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showLoginForm(); // Hiển thị form đăng nhập
+                        });
+                    </script>
+                @enderror
+                <input type="password" placeholder="Password" @error('password') is-invalid @enderror" id="password"
+                    name="password" value="{{ old('password') }}">
+                @error('password')
+                    <p class="invalid-feedback">{{ $message }}</p>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showLoginForm(); // Hiển thị form đăng nhập
+                        });
+                    </script>
+                @enderror
+
 
                 <div class="options">
                     <label>
-                        <input type="checkbox"> Remember me
+                        <input type="checkbox" name="remember"> Remember me
                     </label>
                     <a href="#" class="recover-password">Forgot Password?</a>
                 </div>
                 <button class="action-btn" type="submit">Log In</button>
             </form>
-                <p>
-                    Don't have an account yet?
-                    <a href="javascript:void(0)" onclick="showRegisterForm()">Register</a>
-                </p>
-            
+            <p>
+                Don't have an account yet?
+                <a href="javascript:void(0)" onclick="showRegisterForm()">Register</a>
+            </p>
+
         </div>
     </div>
     <div id="registerOverlay" class="overlay">
+
         <div class="form-container">
+            <span onclick="closeOverlay()"
+                style="cursor: pointer; position: absolute; top: 10px; right: 10px; font-size: 20px;">&times;</span>
             <h2>Create Account</h2>
             <p>Register a new account</p>
-            <img class="gg-btn" src="{{ asset('images/profile/gg.png') }}" onclick="redirectToLoginGoogle()" alt="gg">
+            <img class="gg-btn" src="{{ asset('images/profile/gg.png') }}" onclick="" alt="gg">
 
             <div class="separator">
                 <hr> <span>Or continue with</span>
                 <hr>
             </div>
-            <form action="{{ route('register') }}" method="post">
-                <input type="email" placeholder="Email" required>
-                <input type="password" placeholder="Password" required>
-                <input type="password" placeholder="Confirm Password" required>
+
+            <!-- Form đăng ký -->
+            <form action="{{ route('register') }}" method="POST">
+                @csrf
+                <input type="text" name="name" placeholder="Name" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <input type="password" name="password_confirmation" placeholder="Confirm Password" required>
 
                 <button class="action-btn" type="submit">Register</button>
             </form>
+
             <p>
                 Already have an account?
-                <a href="javascript:void(0)" onclick="showLoginForm()">Login</a>
+                <a onclick="showLoginForm()">Login</a>
             </p>
         </div>
     </div>
-
 </body>
 
 </html>

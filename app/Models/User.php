@@ -27,8 +27,15 @@ class User extends Authenticatable implements MustVerifyEmailContract
         'plan',
         'status',
         'google_id',
-        'avatar_id'
+        'avatar_id',
+        'email_verification_token',
+        'email_verification_sent_at',
     ];
+
+    protected $casts = [
+        'email_verification_sent_at' => 'datetime',
+    ];
+    
 
     public function avatar()
     {

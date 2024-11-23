@@ -8,8 +8,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #333;
+            background-color: #061223;
             color: #fff;
+            background-image: url('/images/profile/background.png');
         }
 
         .pricing-header {
@@ -17,9 +18,18 @@
             margin-bottom: 2rem;
         }
 
+        .pricing-header img {
+            width: 162px;
+            height: 108px;
+            position: absolute;
+            top: 6px;
+            left: 13px;
+        }
+
         .pricing-header h1 {
             font-size: 2.5rem;
             font-weight: bold;
+            padding-bottom: 3rem;
         }
 
         .card {
@@ -60,17 +70,21 @@
             text-decoration: line-through;
             color: #999;
         }
+        .custom-pt{
+            padding-bottom: 14rem! important;
+            padding-top: 9rem!important;
+        }
     </style>
 </head>
 
 <body>
-    <div class="container py-5">
-        <div class="pricing-header mb-5">
-            <img src="{{ asset('images/profile/logo-home.png') }}" alt="Logo" width="200">
+    <div class="custom-pt">
+        <div class="pricing-header mb-7">
+            <a href="{{ route('home') }}" id="home">
+                <img src="{{ asset('images/profile/logo-home.png') }}" alt="Logo" width="200">
+            </a>
             <h1>Go Premium for Ad-Free Music and More!</h1>
-            <p>Cancel anytime - you're in control! By signing up for Premium, you agree to our <a href="#"
-                    class="text-decoration-underline">Terms of Service</a> and <a href="#"
-                    class="text-decoration-underline">Privacy Policy</a>.</p>
+            <p>Cancel anytime - you're in control! By signing up for Premium, you agree to our <a href="#" class="text-decoration-underline">Terms of Service</a> and <a href="#" class="text-decoration-underline">Privacy Policy</a>.</p>
         </div>
 
         <div class="row justify-content-center">

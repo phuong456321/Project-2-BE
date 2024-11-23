@@ -1,57 +1,86 @@
-@extends('user/layout')
+@extends('user.layout')
 
 @section('title', 'Library')
 
 @push('styles')
-    @vite('resources/css/library.css')
+@vite('resources/css/library.css')
 @endpush
 
 
 @section('content')
-    <div class="library">
-        <section class="playlist-section">
-            <h3>Playlists</h3>
-            <div class="playlists">
-                <div class="playlist-card">
-                    <img src="{{ asset('images/song/exit.jpg') }}" alt="Playlist 1" class="playlist-img">
-                    <div class="playlist-info">
-                        <p class="playlist-name">Ikon</p>
-                        <span class="playlist-creator">Quốc Đạt</span>
-                    </div>
-                </div>
-                <div class="playlist-card">
-                    <img src="{{ asset('images/song/Obito.jpg') }}" alt="Playlist 2" class="playlist-img">
-                    <div class="playlist-info">
-                        <p class="playlist-name">ダット</p>
-                        <span class="playlist-creator">Quốc Đạt</span>
-                    </div>
-                </div>
-                <!-- Thêm các playlist khác ở đây -->
-            </div>
-        </section>
 
-        <!-- TABS -->
-        <div class="tabs">
-            <button class="tab-btn" data-tab="songs">Bài Hát</button>
-            <button class="tab-btn" data-tab="albums">Album</button>
-            <button class="tab-btn" data-tab="mv">MV</button>
+<body class="bg-gray-800 text-white">
+    <div class="header">
+        <input placeholder="Bạn đang tìm kiếm gì?" type="text" />
+        <div class="user">
+            <span>
+                User
+            </span>
+            <img alt="User" height="40" src="images/profile/hinh tao.jpg" width="40" />
         </div>
-
-        <!-- Tab Content -->
-        <div class="tab-content">
-            <div id="songs" class="tab active">
-                <p>Danh sách bài hát...</p>
+    </div>
+    <div class="p-4">
+        <h2 class="text-3xl font-bold mb-4">
+            Librarys
+        </h2>
+        <div class="grid grid-cols-4 gap-4">
+            <div class="flex flex-col items-center">
+                <img alt="Liked music icon" class="w-24 h-24 rounded-lg cursor-pointer" height="100" src="https://storage.googleapis.com/a1aa/image/1WXOj4TWAUI0LJcJdK3fUOms0x8phjxkvb5qpFaIcJN4Zw5JA.jpg" width="100" />
+                <span class="mt-2 cursor-pointer">
+                    Liked music
+                </span>
+                <span class="text-gray-400">
+                    Auto List
+                </span>
             </div>
-            <div id="albums" class="tab">
-                <div class="album-card">
-                    <img src="{{ asset('images/album1.jpg') }}" alt="Album 1" class="album-img">
-                    <p class="album-name">Album 1</p>
-                    <span class="album-artist">Ca sĩ A</span>
-                </div>
-                <!-- Thêm album ở đây -->
+            <div class="flex flex-col items-center cursor-pointer">
+                <img alt="Rap playlist cover" class="w-24 h-24 rounded-lg cursor-pointer" height="100" src="https://storage.googleapis.com/a1aa/image/9qspU7uk9yqCJ5dWUy5geXbUOz5novf4SoEcAR6lBaVxzgzTA.jpg" width="100" />
+                <span class="mt-2 cursor-pointer">
+                    Rap
+                </span>
+                <span class="text-gray-400">
+                    Playlist
+                </span>
             </div>
-            <div id="mv" class="tab">
+            <div class="flex flex-col items-center">
+                <img alt="My playlist cover" class="w-24 h-24 rounded-lg cursor-pointer" height="100" src="https://storage.googleapis.com/a1aa/image/UcVJG0Kxs8qcNBfegD9W4JkrTQVF0tNfzLgkqITlIPHVnBnnA.jpg" width="100" />
+                <span class="mt-2 cursor-pointer">
+                    My playlist
+                </span>
+                <span class="text-gray-400">
+                    Playlist
+                </span>
+            </div>
+            <div class="flex flex-col items-center cursor-pointer">
+                <i class="fas fa-filter text-2xl">
+                </i>
+                <span class="mt-2 cursor-pointer">
+                    Filter
+                </span>
+            </div>
+            <div class="flex flex-col items-center cursor-pointer">
+                <img alt="Artist HIEUTHUHAI" class="w-24 h-24 rounded-full cursor-pointer" height="100" src="https://storage.googleapis.com/a1aa/image/Fx1eHLTcZ1WgQq9RbfMCEtH0xysQNaNZchah7dgGaryuzgzTA.jpg" width="100" />
+                <span class="mt-2 cursor-pointer">
+                    HIEUTHUHAI
+                </span>
+                <span class="text-gray-400">
+                    Artist
+                </span>
+            </div>
+            <div class="flex flex-col items-center cursor-pointer">
+                <img alt="Artist Sơn Tùng M-TP" class="w-24 h-24 rounded-full cursor-pointer" height="100" src="https://storage.googleapis.com/a1aa/image/awPf6CSlJkXyfkqlXnEanf2aDeZcuZSc6zk9WnZ3XT3yODOPB.jpg" width="100" />
+                <span class="mt-2 cursor-pointer">
+                    Sơn Tùng M-TP
+                </span>
+                <span class="text-gray-400">
+                    Artist
+                </span>
             </div>
         </div>
     </div>
+</body>
+
+
+
+
 @endsection

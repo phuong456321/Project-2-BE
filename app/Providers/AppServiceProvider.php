@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\RateLimiter;
 class AppServiceProvider extends ServiceProvider
 {
 
-    // public const HOME = '/home';
+    public const HOME = '/';
     
     // protected function configureRateLimiting(){
     //     RateLimiter::for('api', function(Request $request){

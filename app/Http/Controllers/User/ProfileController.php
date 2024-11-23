@@ -19,14 +19,15 @@ class ProfileController extends Controller
         // Fetch the image path based on avatar_id
         $image = image::where('img_id', $user->avatar_id)->first(); // Assuming avatar_id is the ID of the image
         $imgPath = $image ? $image->img_path : null; // Get img_path or null if not found
-
+        $bio = $author ? $author->bio : null;
+        $area_id = $author ? $author->area_id : null;
         $information = [
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
             'img' => $imgPath,
-            'bio' => $author->bio,
-            'area_id' => $author->area_id,
+            'bio' => $bio,
+            'area_id' => $area_id,
         ];
         return view('user/profile', compact('information'));
     }
