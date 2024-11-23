@@ -1,4 +1,4 @@
-@extends('layout') <!-- Kế thừa từ layout chính -->
+@extends('user/layout') <!-- Kế thừa từ layout chính -->
 
 @section('title', 'Discover') <!-- Tiêu đề động -->
 

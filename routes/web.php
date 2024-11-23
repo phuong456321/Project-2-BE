@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\LoginController;
@@ -61,7 +62,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('upload-song', [SongController::class, 'uploadSong']);
 
     Route::get('profile/{id}', [ProfileController::class, 'showProfile']);
-    Route::post('profile', [ProfileController::class, 'updateProfile']);
+    Route::post('profile/{id}', [ProfileController::class, 'updateProfile']);
 });
 
 // Email verification routes
@@ -85,3 +86,5 @@ Route::get('getsong/{id}', function ($id) {
     $song = Song::find($id);
     return '<audio controls><source src="' . Storage::url($song->audio_path) . '" type="audio/mpeg">Your browser does not support the audio element.</audio>';
 });
+
+Route::get('/admin', [AdminController::class, 'dashboard']);
