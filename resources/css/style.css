@@ -56,11 +56,35 @@ body {
 
 .search-song-icon i{
     position: absolute;
-    left: 50rem;
-    top: 57px;
+    left: 0.5rem;
+    top: 23px;
     font-size: 20px;
     color: #f5efef;
     cursor: pointer;
+}
+.search-song-icon{
+    width: 3rem;
+    height: 3rem;
+    background-color: rgb(255, 255, 255, 0);
+    border: none;
+    cursor: pointer;
+    position: relative;
+    left: -9rem;
+}
+.search-form{
+    position: relative;
+    width: 45rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-form input[type="text"]{
+    height: 1.5rem;
+    width: 100%;
+    font-size: 1.5rem;
+    padding: 10px 10px 10px 40px;
+    border-radius: 20px;
 }
 
 .main-content {

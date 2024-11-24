@@ -68,13 +68,26 @@
         <a href="/playist" class="{{ request()->is('playlist1') ? 'active' : '' }}">Playlist1</a>
     </div>
     
-
+     <!-- Avatar Section -->
+     <div class="relative">
+        <div id="popup" class="avatar-popup hidden">
+            <ul>
+                <li><a href="/profile" class="block px-4 py-2">Profile</a></li>
+                <li>
+                    <form method="POST" action="/logout">
+                        @csrf
+                        <button type="submit" class="block w-full text-left px-4 py-2">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
     <div class="main-content">
-        <div class="header">
+        {{-- <div class="header">
             <input id="searchInput" placeholder="Bạn đang tìm kiếm gì?" type="text" />
     
             @if (Auth::check())
-                {{-- Nếu người dùng đã đăng nhập --}}
+                <-- Nếu người dùng đã đăng nhập -->
                 <div id="avatar" class="user" onclick="togglePopup()">
                     <span>{{ Auth::user()->name }}</span>
                     <img alt="User Avatar" class="rounded-full" height="40"
@@ -95,14 +108,14 @@
                     </ul>
                 </div>
             @else
-                {{-- Nếu người dùng chưa đăng nhập --}}
+                <-- Nếu người dùng chưa đăng nhập -->
                 <div class="auth-links">
                     <a href="javascript:void(0)" onclick="showLoginForm()" class="login-link">Login</a>
                     <span class="separator">/</span>
                     <a href="javascript:void(0)" onclick="showRegisterForm()" class="register-link">Register</a>
                 </div>
             @endif
-        </div>
+        </div> --}}
         @yield('content')
     </div>
 </body>

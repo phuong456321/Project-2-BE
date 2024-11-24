@@ -40,10 +40,13 @@
     </div>
     <div class="main-content">
         <div class="header">
-            <input id="searchInput" placeholder="Bạn đang tìm kiếm gì?" type="text" />
-            <a class="search-song-icon" href="/searchsong">
+            <!-- Search -->
+            <form action="{{ route('searchsong') }}" method="get" class="search-form">
+            <input name="query" placeholder="Bạn đang tìm kiếm gì?" type="text" />
+            <button type="submit" class="search-song-icon">
                 <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-            </a>
+            </button>
+        </form>
             @if (Auth::check())
                 {{-- Nếu người dùng đã đăng nhập --}}
                 <div id="avatar" class="user" onclick="togglePopup()">
@@ -76,9 +79,9 @@
             @else
             {{-- Nếu người dùng chưa đăng nhập --}}
             <div class="auth-links">
-                <a href="javascript:void(0)" onclick="showLoginForm()" class="login-link">Login</a>
+                <a onclick="showLoginForm()" class="login-link">Login</a>
                 <span class="separator">/</span>
-                <a href="javascript:void(0)" onclick="showRegisterForm()" class="register-link">Register</a>
+                <a onclick="showRegisterForm()" class="register-link">Register</a>
             </div>
             @endif
         </div>
@@ -296,7 +299,7 @@
             </div>
         </div>
     </div>
-    <div class="footer">
+    {{-- <div class="footer">
         <img src="" alt="">
         <div class="controls">
 
@@ -330,7 +333,7 @@
         <!-- Audio element -->
         <audio id="audioPlayer" src="audio/music/W9TTtw6VsZJ7E1NiT9S0H9UxWXiKYXuHPVwAzqeo.mp3"
             preload="auto" style="display:none;" controls></audio>
-    </div>
+    </div> --}}
 
     <!-- Overlay Login Form -->
     <div id="loginOverlay" class="overlay" style="display: none">
@@ -528,30 +531,6 @@
     const progressPercent = (currentTime / duration) * 100 || 0;
     progressBar.value = progressPercent;
     });
-
-document.getElementById('searchInput').addEventListener('input', function() {
-    const query = this.value;
-    if (query.length > 2) {  // chỉ tìm khi có ít nhất 3 ký tự
-        fetch(`/search?query=${query}`)
-            .then(response => response.json())
-            .then(songs => {
-                console.log(songs);
-                const songList = document.getElementById('songList');
-                songList.innerHTML = ''; // Clear previous results
-
-                songs.forEach(song => {
-                    const li = document.createElement('li');
-                    li.textContent = song.song_name;
-                    li.onclick = () => {
-                        playAudio(song.audio_path); // Phát nhạc khi click vào bài hát
-                        document.getElementById('currentSongTitle').textContent = song.song_name;
-                        // document.getElementById('currentSongArtist').textContent = song.artist_name;
-                    };
-                    songList.appendChild(li);
-                });
-            });
-    }
-});
 
 function playAudio(filePath) {
     const audioPlayer = document.getElementById('audioPlayer');

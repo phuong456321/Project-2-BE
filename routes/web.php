@@ -59,7 +59,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('profile/{id}', [ProfileController::class, 'updateProfile']);
 
     Route::get('/library', function () {
-        return view('user/library'); 
+        return view('user/library');
     });
     Route::get('/likesong', function () {
         return view('user/likesong');
@@ -69,20 +69,20 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     })->name('playist');
 });
 
-Route::middleware(['auth:sanctum'])->group(function(){
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
     // Trang yêu cầu xác thực email
-Route::get('/email/verify', function () {
-    return view('emails.verify-email');
-})->middleware('auth:sanctum')->name('verification.notice');
-// Xác thực email
-Route::get('email/verify/{token}', [RegisterController::class, 'verify'])
-    ->name('verification.verify');
+    Route::get('/email/verify', function () {
+        return view('emails.verify-email');
+    })->middleware('auth:sanctum')->name('verification.notice');
+    // Xác thực email
+    Route::get('email/verify/{token}', [RegisterController::class, 'verify'])
+        ->name('verification.verify');
 
-// Gửi lại email xác thực
-Route::post('/email/verification-notification', [RegisterController::class, 'resendVerificationEmail'])
-    ->middleware(['auth:sanctum', 'throttle:6,1'])
-    ->name('verification.send');
+    // Gửi lại email xác thực
+    Route::post('/email/verification-notification', [RegisterController::class, 'resendVerificationEmail'])
+        ->middleware(['auth:sanctum', 'throttle:6,1'])
+        ->name('verification.send');
 });
 
 Route::post('/forgot-password', [ResetPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
@@ -93,20 +93,20 @@ Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showRese
 //Music
 Route::get('get-song/{id}', [SongController::class, 'getSong']);
 
-Route::get('/search', [SongController::class, 'searchSong']);
+Route::get('/search', [SongController::class, 'searchSong'])->name('searchsong');
 
 Route::get('/admin', [AdminController::class, 'dashboard']);
 
 Route::get('/audio/music/{filePath}', [AudioController::class, 'streamAudio']);
 
 
-    // Route gửi liên kết đặt lại mật khẩu đến email của người dùng
-    Route::post('email', [ResetPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+// Route gửi liên kết đặt lại mật khẩu đến email của người dùng
+Route::post('email', [ResetPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 
-    // Route hiển thị form đặt lại mật khẩu (nếu bạn sử dụng giao diện)
-    Route::get('reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset.form');
+// Route hiển thị form đặt lại mật khẩu (nếu bạn sử dụng giao diện)
+Route::get('reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset.form');
 
-    // Route thực hiện đặt lại mật khẩu
-    Route::post('reset/{token}', [ResetPasswordController::class, 'reset'])->name('password.reset');
+// Route thực hiện đặt lại mật khẩu
+Route::post('reset/{token}', [ResetPasswordController::class, 'reset'])->name('password.reset');
 
-    Route::get('image/{id}', [ProfileController::class, 'showImage']);
+Route::get('image/{id}', [ProfileController::class, 'showImage']);
