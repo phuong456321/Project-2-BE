@@ -278,7 +278,7 @@ body {
       max-width: 400px;
       width: 90%;
       text-align: center;
-      display: none;
+     
   }
 
   .login-form h2 {
@@ -615,6 +615,8 @@ aside.now-playing {
     border-radius: 32px;
     margin-bottom: 21px;
     font-size: 14px;
+    position: relative;
+    left: 0rem;
 }
 
 .login-form input[type="email"]:focus,
@@ -708,7 +710,7 @@ input[type="password"] {
 
 /* register */
 .overlay {
-    display: none;
+    display:none;
     position: fixed;
     top: 0;
     left: 0;
@@ -733,7 +735,8 @@ input[type="password"] {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
     text-align: center;
     font-family: 'Arial', sans-serif;
-    display: none;
+ 
+   
 }
 
 .form-container h2 {
@@ -787,6 +790,8 @@ input[type="password"] {
     border-radius: 32px;
     margin-bottom: 21px;
     font-size: 14px;
+    position: relative;
+    left: 0rem;
 }
 
 .form-container input[type="email"]:focus,
@@ -826,6 +831,7 @@ input[type="password"] {
     color: #6c63ff;
     text-decoration: none;
     font-size: medium;
+    cursor: pointer;
 }
 
 .form-container a:hover {
