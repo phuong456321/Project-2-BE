@@ -58,7 +58,7 @@
             <img alt="Logo" height="100" src="images/profile/logo-home.png" width="100" />
         </a>
         <a href="{{ route('home') }}" id="home" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
-        <a href="/library" id="librarys" class="{{ request()->is('library') ? 'active' : '' }}">Library</a>
+        <a href="{{route('library')}}" id="librarys" class="{{ request()->is('library') ? 'active' : '' }}">Library</a>
         <a href="/playist" id="playist" class="{{ request()->is('playist') ? 'active' : '' }}">Playlist</a>
         <div class="create-playlist">
             + Create playlist

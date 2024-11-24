@@ -14,6 +14,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
         ]);
+        $middleware->validateCsrfTokens(except: [ //Tạm thời bỏ qua CSRF token
+            '/create-playlist',
+            'upload-song',
+            'add-song-to-playlist',
+        ]);
+
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

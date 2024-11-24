@@ -58,63 +58,38 @@
                 <h3>
                     Sắp xếp
                 </h3>
+                @if (count($songs) == 0)
+                    <p>
+                        Không có bài hát nào trong danh sách phát này
+                    </p>
+                @else
+                @foreach ($songs as $song)
                 <div class="song-item">
                     <div class="song-info">
-                        <img alt="Song cover 1" height="50" src="https://storage.googleapis.com/a1aa/image/FhKf4cHofBlLPkrexkwfC0AliLDLOyBQk7IBmUMTMWMIjTOPB.jpg" width="50" />
+                        <!-- Hiển thị ảnh bìa bài hát -->
+                        <img alt="{{ $song->song_name }} cover" height="50" src="https://storage.googleapis.com/a1aa/image/EfZvf2K5ZQlCdkOeZ51UWtSqHzJWjJAUXTvaZICHcfVsjTOPB.jpg" width="50" />
+
                         <div>
-                            <p>
-                                Hit Em Up (cùng với Outlawz)
-                            </p>
-                            <p>
-                                2Pac • Death Row Greatest Hits
-                            </p>
+                            <!-- Hiển thị tên bài hát và nghệ sĩ -->
+                            <p>{{ $song->song_name }}</p>
+                            <p>{{ $song->author_name }}</p>  <!-- Bạn có thể thay đổi cách lấy tên nghệ sĩ theo cách bạn lưu trữ trong cơ sở dữ liệu -->
                         </div>
                     </div>
                     <div class="song-actions">
-                        <p>
-                            5:16
-                        </p>
-                    </div>
-                </div>
-                <div class="song-item">
-                    <div class="song-info">
-                        <img alt="Song cover 2" height="50" src="https://storage.googleapis.com/a1aa/image/EfZvf2K5ZQlCdkOeZ51UWtSqHzJWjJAUXTvaZICHcfVsjTOPB.jpg" width="50" />
-                        <div>
-                            <p>
-                                CUTE DEPRESSED
-                            </p>
-                            <p>
-                                Dyan Dxddy • CUTE DEPRESSED
-                            </p>
-                        </div>
-                    </div>
-                    <div class="song-actions">
-                        <p>
-                            1:37
-                        </p>
-                    </div>
-                </div>
-                <div class="song-item">
-                    <div class="song-info">
-                        <img alt="Song cover 3" height="50" src="https://storage.googleapis.com/a1aa/image/jh9BtNvfDu16WafJD2eEcVZHbDg2Tc8zh9isqPGTysYqxJnnA.jpg" width="50" />
-                        <div>
-                            <p>
-                                Răng Khôn (cùng với DREAMeR và RIN9)
-                            </p>
-                            <p>
-                                Phí Phương Anh
-                            </p>
-                        </div>
-                    </div>
-                    <div class="song-actions">
-                        <p>
-                            4:25
-                        </p>
+                        <!-- Hiển thị thời gian bài hát -->
+                        <p>{{ $song->duration }}</p>  <!-- Cần thay thế $song->duration bằng thời gian thực tế nếu có -->
                         <i class="fas fa-thumbs-up">
                         </i>
                     </div>
+                    
                 </div>
+            @endforeach
+                @endif
+                
+
             </div>
+
+            {{-- Đề xuất --}}
             <div class="song-list">
                 <h3>
                     Đề xuất

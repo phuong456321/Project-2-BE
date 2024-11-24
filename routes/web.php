@@ -11,12 +11,13 @@ use App\Http\Controllers\User\RegisterController;
 use App\Http\Controllers\User\ResetPasswordController;
 use App\Http\Controllers\Song\SongController;
 use App\Http\Controllers\User\ProfileController;
-use App\Models\Author;
+use App\Http\Controllers\Playlist\PlaylistController;
 use App\Models\Song;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Author;
 
 Route::get('/', function () {
     $authors = Author::inRandomOrder()->take(9)->get();
@@ -33,7 +34,6 @@ Route::get('/albums', function () {
 Route::get('/profile', function () {
     return view('user/profile'); // Trang profile
 });
-
 
 //Route Login
 Route::get('login', [LoginController::class, 'index'])->name('login');
@@ -55,6 +55,18 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     });
     Route::post('upload-song', [SongController::class, 'uploadSong']);
 
+    //Playlist
+    Route::get('get-playlist', [PlaylistController::class, 'getPlaylist'])->name('library');
+    Route::get('get-song-in-playlist/{playlist_id}', [PlaylistController::class, 'getSongInPlaylist'])->name('playlist');
+
+    Route::post('create-like-playlist', [PlaylistController::class, 'createLikePlaylist']);
+    Route::post('create-playlist', [PlaylistController::class, 'createPlaylist']);
+    Route::post('add-song-to-playlist', [PlaylistController::class, 'addSongToPlaylist']);
+    Route::post('delete-song-in-playlist', [PlaylistController::class, 'removeSongFromPlaylist']);
+    Route::post('delete-playlist/{playlist_id}', [PlaylistController::class, 'deletePlaylist']);
+
+
+    //Profile
     Route::get('profile/{id}', [ProfileController::class, 'showProfile']);
     Route::post('profile/{id}', [ProfileController::class, 'updateProfile']);
 

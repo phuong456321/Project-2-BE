@@ -8,6 +8,15 @@ class InPlaylist extends Model
 {
     use HasFactory;
 
+    public $timestamps = false; // Tắt cả created_at và updated_at
+
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            $model->created_at = now(); // Chỉ tự động set created_at
+        });
+    }
+
     protected $fillable = [
         'playlist_id',
         'song_id',

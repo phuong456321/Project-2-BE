@@ -19,7 +19,7 @@
         <a href="{{ route('home') }}" id="home" class="{{ request()->is('home') ? 'active' : '' }}">
             Home
         </a>
-        <a href="/library" id="librarys">
+        <a href="{{route('library')}}" id="librarys">
             Library
         </a>
         <a href="/playist" id="playist">

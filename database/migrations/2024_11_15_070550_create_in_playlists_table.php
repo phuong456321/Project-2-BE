@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('playlist_id');
             $table->unsignedBigInteger('song_id');
-            $table->timestamp('played_at');
+            $table->timestamp('created_at')->useCurrent();
             $table->foreign('playlist_id')->references('id')->on('playlists');
             $table->foreign('song_id')->references('id')->on('songs');
         });
