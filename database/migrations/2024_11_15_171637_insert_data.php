@@ -15,25 +15,8 @@ return new class extends Migration
     {
         DB::table('images')->insert([
             'img_name' => 'avatar_image.png',
-            'img_path' => base64_encode(file_get_contents('public/img/avatar.jpg')),
+            'img_path' => file_get_contents('public/img/avatar.jpg'),
             'category' => 'avatar',
-        ]);
-
-        DB::table('areas')->insert([
-            'name' => 'VietNam',
-            'parents_id' => null,
-        ]);
-
-        DB::table('genres')->insert([
-            'name' => 'Rap',
-            'parents_id' => null,
-        ]);
-
-        DB::table('authors')->insert([
-            'author_name' => 'John Doe',
-            'bio' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus eget sapien.',
-            'img_id' => 1,
-            'area_id' => 1,
         ]);
     }
 
@@ -43,8 +26,5 @@ return new class extends Migration
     public function down(): void
     {
         DB::table('images')->truncate();
-        DB::table('areas')->truncate();
-        DB::table('genres')->truncate();
-        DB::table('authors')->truncate();
     }
 };

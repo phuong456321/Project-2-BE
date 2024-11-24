@@ -18,12 +18,12 @@ class Author extends Model
 
     public function image()
     {
-        return $this->belongsTo(image::class, 'img_id');
+        return $this->belongsTo(Image::class, 'img_id');
     }
 
     public function area()
     {
-        return $this->belongsTo(area::class, 'area_id');
+        return $this->belongsTo(Area::class, 'area_id');
     }
 
     public function user()
@@ -33,6 +33,6 @@ class Author extends Model
 
     public function songs()
     {
-        return $this->hasMany(song::class);
+        return $this->hasMany(Song::class);
     }
 }

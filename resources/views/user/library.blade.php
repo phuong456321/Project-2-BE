@@ -10,15 +10,6 @@
 @section('content')
 
 <body class="bg-gray-800 text-white">
-    <div class="header">
-        <input placeholder="Bạn đang tìm kiếm gì?" type="text" />
-        <div class="user">
-            <span>
-                User
-            </span>
-            <img alt="User" height="40" src="images/profile/hinh tao.jpg" width="40" />
-        </div>
-    </div>
     <div class="p-4">
         <h2 class="text-3xl font-bold mb-4">
             Librarys

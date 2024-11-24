@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Profile Page</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -257,17 +258,6 @@
             /* Màu nền khi hover */
         }
     </style>
-    <script>
-        // Mở form đổi mật khẩu
-        function showChangePasswordForm() {
-            document.getElementById('change-password-form').style.display = 'block';
-        }
-
-        // Đóng form đổi mật khẩu
-        function hideChangePasswordForm() {
-            document.getElementById('change-password-form').style.display = 'none';
-        }
-    </script>
 </head>
 
 <body>
@@ -277,12 +267,15 @@
     <div class="container">
         <!-- Profile Header -->
         <div class="profile-header">
-
-            <button onclick="showChangePasswordForm()" class="edit-btn">Đổi mật khẩu</button>
+            <form action="{{ route('password.email') }}" method="POST">
+                @csrf
+                <input type="hidden" name="email" value="{{ $information['email'] }}">
+                <button class="edit-btn" type="submit">Đổi mật khẩu</button>
+            </form>
 
             <!-- Nút quay về trang Home --> <a href="{{ route('home') }}" class="back-to-home-btn">Trở về</a>
 
-            <img src="data:image/jepg;base64,{{$information['img']}}" alt="User Avatar">
+            <img src="{{ url('image/' . $information['img']) }}" alt="User Avatar">
             <h2>{{ $information['name'] }}</h2>
             <p>Email: {{ $information['email'] }}</p>
 
@@ -346,34 +339,6 @@
             </div>
         </div>
     </div>
-    <!-- Form Đổi Mật Khẩu (Pop-up) -->
-    <div id="change-password-form" style="display: none;">
-        <form action="" method="POST">
-            @csrf
-            <h2>Đổi Mật Khẩu</h2>
-
-            <!-- Mật khẩu mới -->
-            <input type="password" name="new_password" placeholder="Mật khẩu mới" required>
-
-            <!-- Xác nhận mật khẩu -->
-            <input type="password" name="new_password_confirmation" placeholder="Xác nhận mật khẩu" required>
-
-            <!-- Nút Submit -->
-            <button class="bg-info text-white" type="submit">Đổi mật khẩu</button>
-
-            <!-- Nút Đóng -->
-            <button type="button" onclick="hideChangePasswordForm()">Đóng</button>
-        </form>
-
-
-
-
-
-
-        <!-- Google Sign-In API -->
-        <script src="https://accounts.google.com/gsi/client" async defer></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="../js/gg.js"></script>
 </body>
 
 </html>

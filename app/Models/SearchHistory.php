@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-class search_history extends Model
+class SearchHistory extends Model
 {
     use HasFactory;
 

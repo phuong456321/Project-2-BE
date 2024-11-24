@@ -8,64 +8,6 @@
     <title>Music</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     @vite('resources/css/style.css')
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Đảm bảo cả hai overlay đều ẩn khi tải trang
-            document.getElementById("loginOverlay").style.display = "none";
-            document.getElementById("registerOverlay").style.display = "none";
-        });
-
-        function showLoginForm() {
-            document.getElementById("registerOverlay").style.display = "none"; // Ẩn form đăng ký
-            document.getElementById("loginOverlay").style.display = "flex"; // Hiển thị form đăng nhập
-        }
-
-        function showRegisterForm() {
-            document.getElementById("loginOverlay").style.display = "none"; // Ẩn form đăng nhập
-            document.getElementById("registerOverlay").style.display = "flex"; // Hiển thị form đăng ký
-        }
-
-        function closeOverlay() {
-            // Đóng tất cả overlay
-            document.getElementById("loginOverlay").style.display = "none";
-            document.getElementById("registerOverlay").style.display = "none";
-        }
-
-        // Đóng form khi nhấn ra ngoài
-        window.onclick = function(event) {
-            if (event.target === document.getElementById("loginOverlay")) {
-                closeOverlay();
-            } else if (event.target === document.getElementById("registerOverlay")) {
-                closeOverlay();
-            }
-        };
-        document.addEventListener('DOMContentLoaded', function() {
-            const avatar = document.querySelector('#avatar'); // Lấy phần tử #avatar
-            const popup = document.querySelector('.avatar-popup'); // Lấy phần tử pop-up
-
-            if (!avatar || !popup) return;
-
-            // Mở popup khi nhấn vào avatar
-            avatar.addEventListener('click', function(e) {
-                e.stopPropagation(); // Ngăn chặn sự kiện ngoài từ việc ẩn pop-up
-                popup.classList.toggle('block'); // Thêm hoặc xóa class 'block' cho popup
-            });
-
-            // Ẩn popup khi click ra ngoài
-            document.addEventListener('click', function(e) {
-                if (!popup.contains(e.target) && !avatar.contains(e.target)) {
-                    popup.classList.remove('block'); // Ẩn pop-up
-                }
-            });
-
-            // Ngăn pop-up bị tắt khi click bên trong
-            popup.addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
-        });
-    </script>
-
 </head>
 
 <body>
@@ -97,14 +39,14 @@
     </div>
     <div class="main-content">
         <div class="header">
-            <input placeholder="Bạn đang tìm kiếm gì?" type="text" />
+            <input id="searchInput" placeholder="Bạn đang tìm kiếm gì?" type="text" />
 
             @if (Auth::check())
                 {{-- Nếu người dùng đã đăng nhập --}}
                 <div id="avatar" class="user" onclick="togglePopup()">
                     <span>{{ Auth::user()->name }}</span>
                     <img alt="User Avatar" class="rounded-full" height="40"
-                        src="data:image/jepg;base64,{{ Auth::user()->avatar_id ? App\Models\Image::where('img_id', Auth::user()->avatar_id)->first()->img_path ?? asset('images/default-avatar.jpg') : asset('images/default-avatar.jpg') }}"
+                        src="{{ url('image/' . Auth::user()->avatar_id) }}"
                         width="40" />
                 </div>
 
@@ -129,7 +71,7 @@
                 </div>
             @endif
         </div>
-
+        <ul id="songList"></ul>
         <div class="prevalent">
             <div class="info">
                 <h2>
@@ -151,36 +93,12 @@
             <h3>
                 Playlists for you
             </h3>
-            <div class="playlist">
-                <img alt="Obito" height="150" src="images/song/Obito.jpg" width="150" />
-                <p>
-                    Obito
-                </p>
-            </div>
-            <div class="playlist">
-                <img alt="Tlinh" height="150" src="images/song/tlinh.jpg" width="150" />
-                <p>
-                    Tlinh
-                </p>
-            </div>
-            <div class="playlist">
-                <img alt="Gill" height="150" src="images/song/drt.jpg" width="150" />
-                <p>
-                    Gill
-                </p>
-            </div>
-            <div class="playlist">
-                <img alt="HurtyKng" height="150" src="images/song/tiec.jpg" width="150" />
-                <p>
-                    HurtyKng
-                </p>
-            </div>
-            <div class="playlist">
-                <img alt="HIEUTHUHAI" height="150" src="images/song/wn.jpg" width="150" />
-                <p>
-                    HIEUTHUHAI
-                </p>
-            </div>
+            @foreach ($authors as $author)
+                <div class="playlist">
+                    <img src="{{ url('image/' . $author->img_id) }}" alt="{{ App\Models\Image::where('img_id', $author->img_id)->first()->img_name }}" height="150" width="150">
+                    <p>{{ $author->author_name }}</p>
+                  </div>
+            @endforeach
         </div>
         <h3>
             Recently played
@@ -188,7 +106,7 @@
         <div class="recently-played">
             <div class="song">
                 <img alt="Chàng Là Gì" height="50"
-                    src="https://storage.googleapis.com/a1aa/image/w9GelBJsr7TcVC4Gt32nlfpDmNMDUTffbeeijznpSo6Mll28E.jpg"
+                    src="https://placehold.co/50x50"
                     width="50" />
                 <div class="info">
                     <p>
@@ -201,7 +119,7 @@
             </div>
             <div class="song">
                 <img alt="Cố mày" height="50"
-                    src="https://storage.googleapis.com/a1aa/image/u1cuhTDSc4p3PxpvihE1zsBGmNVafHgQTu6vjZCZKL08Kt5JA.jpg"
+                    src="https://placehold.co/50x50"
                     width="50" />
                 <div class="info">
                     <p>
@@ -214,7 +132,7 @@
             </div>
             <div class="song">
                 <img alt="Sorry" height="50"
-                    src="https://storage.googleapis.com/a1aa/image/85FHVu7VkMaEKxyHJXfZAWtfCO8oa4U3zO8ZYcN2bnK2VazTA.jpg"
+                    src="https://placehold.co/50x50"
                     width="50" />
                 <div class="info">
                     <p>
@@ -227,7 +145,7 @@
             </div>
             <div class="song">
                 <img alt="Chàng Là Gì" height="50"
-                    src="https://storage.googleapis.com/a1aa/image/w9GelBJsr7TcVC4Gt32nlfpDmNMDUTffbeeijznpSo6Mll28E.jpg"
+                    src="https://placehold.co/50x50"
                     width="50" />
                 <div class="info">
                     <p>
@@ -240,7 +158,7 @@
             </div>
             <div class="song">
                 <img alt="MD Anniversary" height="50"
-                    src="https://storage.googleapis.com/a1aa/image/hqu0x1hNYE7fAajwuhkYn0k8ddL8NS95FFFuY6lksQaFLt5JA.jpg"
+                    src="https://placehold.co/50x50"
                     width="50" />
                 <div class="info">
                     <p>
@@ -253,7 +171,7 @@
             </div>
             <div class="song">
                 <img alt="Để quên em" height="50"
-                    src="https://storage.googleapis.com/a1aa/image/M1MCH07tEs5jJBn6NY8vajU6xBzlGx00FG0auFbVmk6gl28E.jpg"
+                    src="https://placehold.co/50x50"
                     width="50" />
                 <div class="info">
                     <p>
@@ -266,7 +184,7 @@
             </div>
             <div class="song">
                 <img alt="Sỉ mê" height="50"
-                    src="https://storage.googleapis.com/a1aa/image/3uVV6yKHNRJvN16MZozsRfelbDnnqe6QJMkENxooFMocs0mnA.jpg"
+                    src="https://placehold.co/50x50"
                     width="50" />
                 <div class="info">
                     <p>
@@ -279,7 +197,7 @@
             </div>
             <div class="song">
                 <img alt="1/2" height="50"
-                    src="https://storage.googleapis.com/a1aa/image/0VULnDrNTF4UEF4FSiuHXUrbKsIJacZkKLkpozelj9KDLt5JA.jpg"
+                    src="https://placehold.co/50x50"
                     width="50" />
                 <div class="info">
                     <p>
@@ -292,7 +210,7 @@
             </div>
             <div class="song">
                 <img alt="CANXA" height="50"
-                    src="https://storage.googleapis.com/a1aa/image/hLmf1wjGeGkzG0060NcXyrENM3NicbA7hzhblrfUViwCs0mnA.jpg"
+                    src="https://placehold.co/50x50"
                     width="50" />
                 <div class="info">
                     <p>
@@ -305,7 +223,7 @@
             </div>
             <div class="song">
                 <img alt="1000 Ánh Mắt" height="50"
-                    src="https://storage.googleapis.com/a1aa/image/6bxvUtb3y2ZCOJovrYZYo1JUEuOsKQDFVHkDPoPxXJhkl28E.jpg"
+                    src="https://placehold.co/50x50"
                     width="50" />
                 <div class="info">
                     <p>
@@ -323,7 +241,7 @@
             </h3>
             <div class="music">
                 <img alt="Hip Hop &amp; Rap" height="150"
-                    src="https://storage.googleapis.com/a1aa/image/BZJVjfNwCDUXeUwS6MqCRnWtnKIiYWybAdo1FgkLRHnFWazTA.jpg"
+                    src="https://placehold.co/150x150"
                     width="150" />
                 <p>
                     Hip Hop &amp; Rap
@@ -334,7 +252,7 @@
             </div>
             <div class="music">
                 <img alt="Jazz" height="150"
-                    src="https://storage.googleapis.com/a1aa/image/qB8Kzw1Wvio8BdAkP3GkPvejNGEr1Jdk1GS1JJyiOe9XWazTA.jpg"
+                    src="https://placehold.co/150x150"
                     width="150" />
                 <p>
                     Jazz
@@ -345,7 +263,7 @@
             </div>
             <div class="music">
                 <img alt="R&amp;B" height="150"
-                    src="https://storage.googleapis.com/a1aa/image/pqJCawbHDPoyAJrjvOT5jNzmTWKbzWpij759ll0JexdLLt5JA.jpg"
+                    src="https://placehold.co/150x150"
                     width="150" />
                 <p>
                     R&amp;B
@@ -356,7 +274,7 @@
             </div>
             <div class="music">
                 <img alt="Chill" height="150"
-                    src="https://storage.googleapis.com/a1aa/image/BaJhoZpKJcIWIBTeNo8julXWiwTtRM691vpWSIqgtx6fVazTA.jpg"
+                    src="https://placehold.co/150x150"
                     width="150" />
                 <p>
                     Chill
@@ -371,21 +289,22 @@
         <div class="controls">
             <i class="fas fa-step-backward">
             </i>
-            <i class="fas fa-play">
+            <i class="fas fa-play" onclick="togglePlay()">
             </i>
             <i class="fas fa-step-forward">
             </i>
         </div>
+        <!-- Display Current Time -->
+    <div class="current-time">
+        <span id="currentTime">0:00</span> / <span id="totalTime">0:00</span>
+    </div>
         <div class="progress">
-            <input max="100" min="0" type="range" value="30" />
+            <input type="range" id="progressBar" max="100" min="0" value="0"
+                oninput="changeProgress(this)" />
         </div>
         <div class="current-song">
-            <p>
-                CANXA
-            </p>
-            <p>
-                1DEE và FEEZY - 3:39
-            </p>
+            <p id="currentSongTitle">CANXA</p>
+            <p id="currentSongArtist">1DEE và FEEZY - 3:39</p>
         </div>
         <div class="actions">
             <i class="fas fa-heart">
@@ -395,10 +314,13 @@
             <i class="fas fa-volume-up">
             </i>
         </div>
+        <!-- Audio element -->
+        <audio id="audioPlayer" src="audio/music/W9TTtw6VsZJ7E1NiT9S0H9UxWXiKYXuHPVwAzqeo.mp3"
+            preload="auto" style="display:none;" controls></audio>
     </div>
 
     <!-- Overlay Login Form -->
-    <div id="loginOverlay" class="overlay">
+    <div id="loginOverlay" class="overlay" style="display: none">
         <div class="login-form">
             <span onclick="closeOverlay()"
                 style="cursor: pointer; position: absolute; top: 10px; right: 10px; font-size: 20px;">&times;</span>
@@ -459,7 +381,7 @@
 
         </div>
     </div>
-    <div id="registerOverlay" class="overlay">
+    <div id="registerOverlay" class="overlay" style="display: none">
 
         <div class="form-container">
             <span onclick="closeOverlay()"
@@ -491,5 +413,142 @@
         </div>
     </div>
 </body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Đảm bảo cả hai overlay đều ẩn khi tải trang
+        document.getElementById("loginOverlay").style.display = "none";
+        document.getElementById("registerOverlay").style.display = "none";
+
+        // Xử lý avatar popup
+        const avatar = document.querySelector('#avatar');
+        const popup = document.querySelector('.avatar-popup');
+        if (avatar && popup) {
+            avatar.addEventListener('click', function(e) {
+                e.stopPropagation(); // Ngăn chặn sự kiện ngoài để popup không đóng
+                popup.classList.toggle('block');
+            });
+
+            // Ẩn popup khi click bên ngoài
+            document.addEventListener('click', function(e) {
+                if (!popup.contains(e.target) && !avatar.contains(e.target)) {
+                    popup.classList.remove('block');
+                }
+            });
+
+            popup.addEventListener('click', function(e) {
+                e.stopPropagation(); // Ngăn chặn sự kiện bên trong popup
+            });
+        }
+    });
+
+    // Hiển thị form đăng nhập
+    function showLoginForm() {
+        document.getElementById("registerOverlay").style.display = "none"; // Ẩn form đăng ký
+        document.getElementById("loginOverlay").style.display = "flex"; // Hiển thị form đăng nhập
+    }
+
+    // Hiển thị form đăng ký
+    function showRegisterForm() {
+        document.getElementById("loginOverlay").style.display = "none"; // Ẩn form đăng nhập
+        document.getElementById("registerOverlay").style.display = "flex"; // Hiển thị form đăng ký
+    }
+
+    // Đóng các overlay
+    function closeOverlay() {
+        document.getElementById("loginOverlay").style.display = "none";
+        document.getElementById("registerOverlay").style.display = "none";
+    }
+
+    // Đóng overlay khi nhấn ra ngoài
+    window.onclick = function(event) {
+        if (event.target === document.getElementById("loginOverlay") || event.target === document.getElementById(
+                "registerOverlay")) {
+            closeOverlay();
+        }
+    };
+
+    // Lấy đối tượng audio và thanh tiến trình
+    const audioPlayer = document.getElementById('audioPlayer');
+    const progressBar = document.getElementById('progressBar');
+    const currentTimeDisplay = document.getElementById('currentTime');
+    const totalTimeDisplay = document.getElementById('totalTime');
+    // Điều khiển phát/tạm dừng
+    function togglePlay() {
+        if (audioPlayer.paused) {
+            audioPlayer.play(); // Phát nhạc
+            document.querySelector('.fa-play').classList.replace('fa-play', 'fa-pause'); // Thay đổi biểu tượng
+        } else {
+            audioPlayer.pause(); // Tạm dừng nhạc
+            document.querySelector('.fa-pause').classList.replace('fa-pause', 'fa-play'); // Thay đổi biểu tượng
+        }
+    }
+
+    // Thay đổi tiến trình phát nhạc khi người dùng kéo thanh tiến trình
+    function changeProgress(progressBar) {
+        if (!audioPlayer.readyState) {
+        alert('Tệp âm thanh chưa được tải đủ để tua. Vui lòng thử lại!');
+            return;
+        }
+        const newTime = (progressBar.value / 100) * audioPlayer.duration;
+        audioPlayer.currentTime = newTime; // Thay đổi currentTime trực tiếp
+    }
+
+    // Cập nhật tiến trình phát nhạc
+    audioPlayer.addEventListener('timeupdate', () => {
+         // Tính thời gian hiện tại và thời gian tổng
+    const currentTime = audioPlayer.currentTime;
+    const duration = audioPlayer.duration;
+
+    // Chuyển thời gian từ giây sang phút:giây (ví dụ: 2:15)
+    const formatTime = (timeInSeconds) => {
+        const minutes = Math.floor(timeInSeconds / 60);
+        const seconds = Math.floor(timeInSeconds % 60);
+        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    };
+
+    // Cập nhật thời gian hiện tại và tổng thời gian
+    currentTimeDisplay.textContent = formatTime(currentTime);
+    totalTimeDisplay.textContent = formatTime(duration);
+
+    // Cập nhật thanh tiến trình
+    const progressPercent = (currentTime / duration) * 100 || 0;
+    progressBar.value = progressPercent;
+    });
+
+document.getElementById('searchInput').addEventListener('input', function() {
+    const query = this.value;
+    if (query.length > 2) {  // chỉ tìm khi có ít nhất 3 ký tự
+        fetch(`/search?query=${query}`)
+            .then(response => response.json())
+            .then(songs => {
+                console.log(songs);
+                const songList = document.getElementById('songList');
+                songList.innerHTML = ''; // Clear previous results
+
+                songs.forEach(song => {
+                    const li = document.createElement('li');
+                    li.textContent = song.song_name;
+                    li.onclick = () => {
+                        playAudio(song.audio_path); // Phát nhạc khi click vào bài hát
+                        document.getElementById('currentSongTitle').textContent = song.song_name;
+                        // document.getElementById('currentSongArtist').textContent = song.artist_name;
+                    };
+                    songList.appendChild(li);
+                });
+            });
+    }
+});
+
+function playAudio(filePath) {
+    const audioPlayer = document.getElementById('audioPlayer');
+    audioPlayer.src = `/audio/${filePath}`;
+    audioPlayer.play();
+}
+
+
+
+
+</script>
 
 </html>

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\image;
+use App\Models\Image;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -14,6 +14,5 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        image::factory()->create();
     }
 }

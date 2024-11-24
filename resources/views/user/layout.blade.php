@@ -63,24 +63,43 @@
         <a href="/likesong" class="{{ request()->is('likesong') ? 'active' : '' }}">Like songs</a>
         <a href="#" class="{{ request()->is('') ? 'active' : '' }}">My Album</a>
         <a href="/playist" class="{{ request()->is('playlist1') ? 'active' : '' }}">Playlist1</a>
-
-        <!-- Avatar Section -->
-        <div class="relative">
-            <div id="popup" class="avatar-popup hidden">
-                <ul>
-                    <li><a href="/profile" class="block px-4 py-2">Profile</a></li>
-                    <li>
-                        <form method="POST" action="/logout">
-                            @csrf
-                            <button type="submit" class="block w-full text-left px-4 py-2">Logout</button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-        </div>
     </div>
+    
 
     <div class="main-content">
+        <div class="header">
+            <input id="searchInput" placeholder="Bạn đang tìm kiếm gì?" type="text" />
+    
+            @if (Auth::check())
+                {{-- Nếu người dùng đã đăng nhập --}}
+                <div id="avatar" class="user" onclick="togglePopup()">
+                    <span>{{ Auth::user()->name }}</span>
+                    <img alt="User Avatar" class="rounded-full" height="40"
+                        src="data:image/jepg;base64,{{ Auth::user()->avatar_id ? App\Models\Image::where('img_id', Auth::user()->avatar_id)->first()->img_path ?? asset('images/default-avatar.jpg') : asset('images/default-avatar.jpg') }}"
+                        width="40" />
+                </div>
+    
+                <!-- Popup Profile / Logout -->
+                <div id="popup" class="avatar-popup hidden">
+                    <ul>
+                        <li><a href="/profile/{{ Auth::user()->id }}">Profile</a></li>
+                        <li>
+                            <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                                @csrf
+                                <button type="submit" class="logout-btn">Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            @else
+                {{-- Nếu người dùng chưa đăng nhập --}}
+                <div class="auth-links">
+                    <a href="javascript:void(0)" onclick="showLoginForm()" class="login-link">Login</a>
+                    <span class="separator">/</span>
+                    <a href="javascript:void(0)" onclick="showRegisterForm()" class="register-link">Register</a>
+                </div>
+            @endif
+        </div>
         @yield('content')
     </div>
 </body>

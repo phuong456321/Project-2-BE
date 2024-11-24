@@ -39,37 +39,42 @@ class User extends Authenticatable implements MustVerifyEmailContract
 
     public function avatar()
     {
-        return $this->belongsTo(image::class, 'avatar_id');
+        return $this->belongsTo(Image::class, 'avatar_id');
+    }
+
+    public function googleAccount()
+    {
+        return $this->hasOne(GoogleAccount::class, 'google_id');
     }
 
     public function playlists()
     {
-        return $this->hasMany(playlist::class);
+        return $this->hasMany(Playlist::class);
     }
 
     public function recentlyPlayed()
     {
-        return $this->hasMany(recently_played::class);
+        return $this->hasMany(RecentlyPlayed::class);
     }
 
     public function searchHistories()
     {
-        return $this->hasMany(search_history::class);
+        return $this->hasMany(SearchHistory::class);
     }
 
     public function comments()
     {
-        return $this->hasMany(comment::class);
+        return $this->hasMany(Comment::class);
     }
 
     public function payments()
     {
-        return $this->hasMany(payment::class);
+        return $this->hasMany(Payment::class);
     }
 
     public function author()
     {
-        return $this->hasOne(author::class);
+        return $this->hasOne(Author::class);
     }
 
     /**

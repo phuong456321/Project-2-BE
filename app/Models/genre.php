@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-class genre extends Model
+class Genre extends Model
 {
     use HasFactory;
 
@@ -15,11 +15,11 @@ class genre extends Model
 
     public function parents()
     {
-        return $this->belongsTo(genre::class, 'parents_id');
+        return $this->belongsTo(Genre::class, 'parents_id');
     }
 
     public function songs()
     {
-        return $this->hasMany(song::class);
+        return $this->hasMany(Song::class);
     }
 }

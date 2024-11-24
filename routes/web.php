@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Song\AudioController;
 use App\Http\Middleware\EnsureEmailIsVerified;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
@@ -10,6 +11,7 @@ use App\Http\Controllers\User\RegisterController;
 use App\Http\Controllers\User\ResetPasswordController;
 use App\Http\Controllers\Song\SongController;
 use App\Http\Controllers\User\ProfileController;
+use App\Models\Author;
 use App\Models\Song;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,7 +19,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
-    return view('user/home'); // Hoặc trả về view trang chủ của bạn
+    $authors = Author::inRandomOrder()->take(9)->get();
+    return view('user/home', compact('authors')); // Hoặc trả về view trang chủ của bạn
 })->name('home');
 
 Route::get('/premium', function () {
@@ -30,15 +33,7 @@ Route::get('/albums', function () {
 Route::get('/profile', function () {
     return view('user/profile'); // Trang profile
 });
-Route::get('/library', function () {
-    return view('user/library'); 
-});
-Route::get('/likesong', function () {
-    return view('user/likesong');
-})->name('likesong');
-Route::get('/playist', function () {
-    return view('user/playist');
-})->name('playist');
+
 
 //Route Login
 Route::get('login', [LoginController::class, 'index'])->name('login');
@@ -51,7 +46,6 @@ Route::get('login-google/callback', [LoginGoogleController::class, 'handleGoogle
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // Define your protected routes here
-    Route::post('logout', [LoginController::class, 'logout'])->name('logout');
     Route::middleware(['web'])->group(function () {
         Route::get('link-google', [LoginGoogleController::class, 'linkGoogleAccount'])->name('link-google');
         Route::get('link-google/callback', [LoginGoogleController::class, 'handleLinkGoogleCallback']);
@@ -63,13 +57,25 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::get('profile/{id}', [ProfileController::class, 'showProfile']);
     Route::post('profile/{id}', [ProfileController::class, 'updateProfile']);
+
+    Route::get('/library', function () {
+        return view('user/library'); 
+    });
+    Route::get('/likesong', function () {
+        return view('user/likesong');
+    })->name('likesong');
+    Route::get('/playist', function () {
+        return view('user/playist');
+    })->name('playist');
 });
 
-// Email verification routes
-// Trang yêu cầu xác thực email
+Route::middleware(['auth:sanctum'])->group(function(){
+    Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+    // Trang yêu cầu xác thực email
 Route::get('/email/verify', function () {
     return view('emails.verify-email');
 })->middleware('auth:sanctum')->name('verification.notice');
+// Xác thực email
 Route::get('email/verify/{token}', [RegisterController::class, 'verify'])
     ->name('verification.verify');
 
@@ -77,18 +83,30 @@ Route::get('email/verify/{token}', [RegisterController::class, 'verify'])
 Route::post('/email/verification-notification', [RegisterController::class, 'resendVerificationEmail'])
     ->middleware(['auth:sanctum', 'throttle:6,1'])
     ->name('verification.send');
+});
 
 Route::post('/forgot-password', [ResetPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
-Route::post('/reset-password/{token}', [ResetPasswordController::class, 'reset'])->name('password.reset');
+
 
 
 Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.request');
 //Music
 Route::get('get-song/{id}', [SongController::class, 'getSong']);
 
-Route::get('getsong/{id}', function ($id) {
-    $song = Song::find($id);
-    return '<audio controls><source src="' . Storage::url($song->audio_path) . '" type="audio/mpeg">Your browser does not support the audio element.</audio>';
-});
+Route::get('/search', [SongController::class, 'searchSong']);
 
 Route::get('/admin', [AdminController::class, 'dashboard']);
+
+Route::get('/audio/music/{filePath}', [AudioController::class, 'streamAudio']);
+
+
+    // Route gửi liên kết đặt lại mật khẩu đến email của người dùng
+    Route::post('email', [ResetPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+
+    // Route hiển thị form đặt lại mật khẩu (nếu bạn sử dụng giao diện)
+    Route::get('reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset.form');
+
+    // Route thực hiện đặt lại mật khẩu
+    Route::post('reset/{token}', [ResetPasswordController::class, 'reset'])->name('password.reset');
+
+    Route::get('image/{id}', [ProfileController::class, 'showImage']);

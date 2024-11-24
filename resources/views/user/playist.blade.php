@@ -11,12 +11,6 @@
 @section('content')
 
 <body>
-    <div class="user">
-        <span>
-            User
-        </span>
-        <img alt="User" height="40" src="images/profile/hinh tao.jpg" width="40" />
-    </div>
     <div class="container">
         <div class="left-panel">
             <div class="album-cover">

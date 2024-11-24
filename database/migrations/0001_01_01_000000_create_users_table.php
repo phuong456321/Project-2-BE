@@ -20,11 +20,12 @@ return new class extends Migration
             $table->enum('role', ['admin', 'user'])->default('user');
             $table->string('plan')->default('free');
             $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->string('google_id')->nullable()->unique();
+            $table->string('google_id')->nullable();
             $table->unsignedBigInteger('avatar_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->foreign('avatar_id')->references('img_id')->on('images');
+            $table->foreign('google_id')->references('google_id')->on('google_accounts');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

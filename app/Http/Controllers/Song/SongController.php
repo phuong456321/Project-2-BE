@@ -66,4 +66,11 @@ class SongController extends Controller
             return response()->json(['message' => 'Song not found'], 404);
         }
     }
+
+    public function searchSong(Request $request)
+    {
+        $query = $request->input('query');
+        $songs = Song::where('song_name', 'like', '%' . $query . '%')->orWhere('author_name', 'like', '%' . $query . '%')->get();
+        return response()->json($songs, 200);
+    }
 }

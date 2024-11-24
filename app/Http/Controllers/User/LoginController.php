@@ -12,6 +12,7 @@ class LoginController extends Controller
 {
     public function index()
     {
+        flash()->option('timeout', 1000)->warning('Please login to continue');
         return redirect()->route('home');
     }
     public function login(Request $request)

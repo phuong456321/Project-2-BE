@@ -90,14 +90,14 @@ class RegisterController extends Controller
             $hashedToken = hash('sha256', $token);
             $user = User::where('email_verification_token', $hashedToken)->first();
 
-            // Check if the token has expired
-            if ($user->email_verification_sent_at->addMinutes(60)->isPast()) {
-                return redirect()->route('home')->with('error', 'The verification link has expired. Please request to resend.');
-            }
-
             // Check if the email has been verified
             if ($user->hasVerifiedEmail()) {
                 return redirect()->route('home')->with('info', 'Email has been verified.');
+            }
+            
+            // Check if the token has expired
+            if ($user->email_verification_sent_at->addMinutes(60)->isPast()) {
+                return redirect()->route('home')->with('error', 'The verification link has expired. Please request to resend.');
             }
 
             // Mark the email as verified

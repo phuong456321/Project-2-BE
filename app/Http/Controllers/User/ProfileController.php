@@ -4,7 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Author;
-use App\Models\image;
+use App\Models\Image;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -16,16 +16,14 @@ class ProfileController extends Controller
         $user = User::findOrFail($id);
         $author = Author::where('user_id', $id)->first();
 
-        // Fetch the image path based on avatar_id
-        $image = image::where('img_id', $user->avatar_id)->first(); // Assuming avatar_id is the ID of the image
-        $imgPath = $image ? $image->img_path : null; // Get img_path or null if not found
+        
         $bio = $author ? $author->bio : null;
         $area_id = $author ? $author->area_id : null;
         $information = [
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
-            'img' => $imgPath,
+            'img' => $user->avatar_id,
             'bio' => $bio,
             'area_id' => $area_id,
         ];
@@ -50,5 +48,21 @@ class ProfileController extends Controller
         $author->update(['author_name' => $user->name, 'img_id' => $user->avatar_id]);
         $author->save();
         return response()->json($user);
+    }
+
+    public function showImage($id)
+{
+    // Truy vấn hình ảnh từ cơ sở dữ liệu
+    $image = Image::where('img_id', $id)->first();
+
+    // Kiểm tra nếu hình ảnh tồn tại
+    if ($image) {
+        // Trả về hình ảnh với header Content-Type đúng
+        return response($image->img_path)
+            ->header('Content-Type', 'image/jpeg');  // Hoặc loại MIME tương ứng với hình ảnh (PNG, JPG, GIF, ...)
+    }
+
+    // Nếu không tìm thấy hình ảnh
+        return abort(404, 'Image not found');
     }
 }

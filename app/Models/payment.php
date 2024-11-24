@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-class payment extends Model
+class Payment extends Model
 {
     use HasFactory;
 
@@ -24,6 +24,6 @@ class payment extends Model
 
     public function product()
     {
-        return $this->belongsTo(product::class);
+        return $this->belongsTo(Product::class);
     }
 }

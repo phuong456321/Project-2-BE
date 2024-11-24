@@ -4,23 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-class in_playlist extends Model
+class DetailsPlayed extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'playlist_id',
+        'recently_id',
         'song_id',
-        'played_at',
     ];
 
-    public function playlist()
+    public function recentlyPlayed()
     {
-        return $this->belongsTo(playlist::class);
+        return $this->belongsTo(RecentlyPlayed::class, 'recently_id');
     }
 
     public function song()
     {
-        return $this->belongsTo(song::class);
+        return $this->belongsTo(Song::class);
     }
 }

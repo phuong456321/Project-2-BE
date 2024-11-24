@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-class area extends Model
+class Area extends Model
 {
     use HasFactory;
+    public $timestamps = false;
 
     protected $fillable = [
         'name',
@@ -15,7 +16,7 @@ class area extends Model
 
     public function parents()
     {
-        return $this->belongsTo(area::class, 'parents_id');
+        return $this->belongsTo(Area::class, 'parents_id');
     }
 
     public function authors()
@@ -25,6 +26,6 @@ class area extends Model
 
     public function songs()
     {
-        return $this->hasMany(song::class);
+        return $this->hasMany(Song::class);
     }
 }
