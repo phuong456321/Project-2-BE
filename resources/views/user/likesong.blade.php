@@ -43,7 +43,6 @@
         </div>
     </div>
     <div class="likesong-main-content">
-        <input class="likesong-search-bar" placeholder="Tìm bài hát, đĩa nhạc, nghệ sĩ, podcast" type="text" />
         <ul class="likesong-song-list">
             <li class="likesong-song">
                 <div class="likesong-song-info">

@@ -1,4 +1,5 @@
 
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -53,6 +54,15 @@ body {
     cursor: pointer;
 }
 
+.search-song-icon i{
+    position: absolute;
+    left: 50rem;
+    top: 57px;
+    font-size: 20px;
+    color: #f5efef;
+    cursor: pointer;
+}
+
 .main-content {
     margin-left: 250px;
     padding: 20px;
@@ -71,6 +81,307 @@ body {
     border-radius: 20px;
     border: none;
     background-color: #000000;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+    color: white;
+}
+
+/* Thêm hiệu ứng hover */
+.playlist-card:hover {
+    transform: scale(1.05);
+}
+
+/* Thêm hình ảnh nền cho từng playlist-card */
+.playlist-card:nth-child(1) {
+    background-image: url('./img/images/Obito.jpg');
+}
+
+.playlist-card:nth-child(2) {
+    background-image: url('./img/images/drt.jpg');
+}
+
+.playlist-card:nth-child(3) {
+    background-image: url('./img/images/tlinh.jpg');
+}
+
+.playlist-card:nth-child(4) {
+    background-image: url('./img/images/vũ.jpg');
+}
+
+.playlist-card:nth-child(5) {
+    background-image: url('./img/images/wn.jpg');
+}
+
+
+
+#recently h3{
+    margin: 30px 0 15px 0;
+}
+
+.music-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 item mỗi hàng */
+    gap: 20px; /* Khoảng cách giữa các item */
+  }
+  
+  .music-item {
+    display: flex;
+    align-items: center;
+  }
+  
+  .music-item img {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  
+  .song-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .song-title {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  .artist {
+    color: #888;
+    font-size: 14px;
+  }
+
+  .auth-links {
+      display: flex;
+      align-items: center;
+      /* Căn giữa theo chiều dọc */
+      gap: 10px;
+      /* Khoảng cách giữa các phần tử */
+      font-size: 18px;
+      /* Kích thước chung */
+      /* position: relative; */
+      left: 80%;
+      bottom: 3rem;
+  }
+
+  .auth-links a {
+      text-decoration: none;
+      /* Xóa gạch chân mặc định */
+      font-weight: bold;
+      color: #fff;
+      /* Màu chữ mặc định */
+      transition: color 0.3s ease;
+      cursor: pointer;
+  }
+
+  .auth-links a.register-link:hover {
+      color: #00b4d8;
+      /* Màu xanh lá khi hover */
+      text-decoration: none;
+      /* Gạch chân khi hover */
+      font-style: italic;
+      /* Chữ nghiêng */
+  }
+
+
+
+  .auth-links a:hover {
+      color: #00b4d8;
+      /* Đổi màu khi hover */
+  }
+
+  .auth-links .separator {
+      color: #ccc;
+      /* Màu của dấu ngăn cách */
+      font-weight: normal;
+      /* Giảm độ đậm */
+  }
+
+  .underline {
+      text-decoration: none;
+      color: #fff;
+  }
+
+  .register-btn a {
+      text-decoration: none;
+  }
+
+  .register-btn {
+      background-color: #d9ecde;
+      color: #170202;
+      border: 1px solid #555;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+  }
+
+  .logo{
+   
+    width: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    color: white;
+    padding-left: 3rem;
+  }
+  .logo img{
+    width: 8rem;
+    height: 6rem;
+  }
+
+  .login-buttons button:hover {
+      background-color: #0c1d12;
+      color: #f6f4f4;
+
+
+  }
+
+  .gg-btn {
+      height: 2.5rem;
+      width: auto;
+      margin-top: 0.5rem;
+      cursor: pointer;
+  }
+
+  .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      backdrop-filter: blur(8px); /* Làm mờ nền phía sau */
+      background-color: rgba(0, 0, 0, 0.5); /* Thêm lớp phủ tối */
+  }
+
+  .form-container {
+      background-color: #1a1a1a;
+      color: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+  }
+
+  /* Login form container */
+  .login-form {
+      background-color: #1a1a1a;
+      color: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+     
+  }
+
+  .login-form h2 {
+      margin: 0 0 10px;
+  }
+
+  .google-btn {
+      background-color: #00b4d8;
+      color: #333333;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+
+  .google-btn img {
+      width: 20px;
+      margin-right: 8px;
+  }
+
+  .separator {
+      display: flex;
+      align-items: center;
+      color: #888888;
+      margin: 15px 0;
+  }
+
+  .separator hr {
+      flex-grow: 1;
+      border: 0;
+      border-top: 1px solid #444444;
+  }
+
+  .separator span {
+      margin: 0 10px;
+  }
+
+  input[type="email"],
+  input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #444444;
+      background-color: #333333;
+      color: #ffffff;
+  }
+
+  .options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      color: #888888;
+      margin: 10px 0;
+  }
+
+  .recover-password {
+      color: #ff4d4d;
+      text-decoration: none;
+  }
+
+  .recover-password:hover {
+      text-decoration: underline;
+  }
+
+  .action-btn {
+      background-color: #333333;
+      border: 1px solid #ffffff;
+      color: #ffffff;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 5px 0;
+      cursor: pointer;
+      width: 100%;
+  }
+
+  .action-btn:hover {
+      background-color: #555555;
+  }
+
+  a {
+      color: #00b4d8;
+      /* Màu mặc định */
+      text-decoration: underline;
+      /* Loại bỏ gạch chân */
+  }
+
+  /* CSS cơ bản */
+aside.now-playing {
+    width: 300px; /* Chiều rộng phần Now Playing */
+    background: #333;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    right: 0;
+    transition: transform 0.3s ease; /* Hiệu ứng trượt mượt */
+    transform: translateX(100%); /* Mặc định ẩn */
     color: white;
     
 }
@@ -197,6 +508,8 @@ body {
     flex-grow: 1;
     margin: 10px 10rem;
     padding-left: 1rem;
+    display: flex;
+    justify-content: space-around;
 }
 
 .footer .progress input {
@@ -292,7 +605,8 @@ body {
 /* Trường nhập liệu */
 .login-form input[type="email"],
 .login-form input[type="password"],
-.login-form input[type="text"] {
+.login-form input[type="text"] 
+{
     width: 70%;
     background: #2c2c2e;
     color: rgb(241, 235, 235);
@@ -301,11 +615,14 @@ body {
     border-radius: 32px;
     margin-bottom: 21px;
     font-size: 14px;
+    position: relative;
+    left: 0rem;
 }
 
 .login-form input[type="email"]:focus,
 .login-form input[type="password"]:focus,
-.login-form input[type="text"]:focus {
+.login-form input[type="text"]:focus 
+{
     border-color: #6c63ff;
     outline: none;
 }
@@ -374,14 +691,18 @@ body {
 
 /* Input fields */
 input[type="text"],
+input[type="name"],
 input[type="email"],
 input[type="password"] {
-    width: 39%;
-    padding: 0.8rem;
+    width: 40%;
+    padding: 0.5rem;
     margin: 0.5rem 0;
-    border-radius: 28px;
-    border: none;
+    border-radius: 40px;
+    border: revert-layer;
     outline: none;
+    position: relative;
+    right: 6rem;
+    text-align: left;
 }
 
 
@@ -389,7 +710,7 @@ input[type="password"] {
 
 /* register */
 .overlay {
-    display: none;
+    display:none;
     position: fixed;
     top: 0;
     left: 0;
@@ -414,6 +735,8 @@ input[type="password"] {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
     text-align: center;
     font-family: 'Arial', sans-serif;
+ 
+   
 }
 
 .form-container h2 {
@@ -457,7 +780,8 @@ input[type="password"] {
 /* Trường nhập liệu */
 .form-container input[type="email"],
 .form-container input[type="password"],
-.form-container input[type="text"] {
+.form-container input[type="text"] 
+{
     width: 70%;
     background: #2c2c2e;
     color: white;
@@ -466,11 +790,14 @@ input[type="password"] {
     border-radius: 32px;
     margin-bottom: 21px;
     font-size: 14px;
+    position: relative;
+    left: 0rem;
 }
 
 .form-container input[type="email"]:focus,
 .form-container input[type="password"]:focus,
-.form-container input[type="text"]:focus {
+.form-container input[type="text"]:focus 
+{
     border-color: #6c63ff;
     outline: none;
 }
@@ -504,6 +831,7 @@ input[type="password"] {
     color: #6c63ff;
     text-decoration: none;
     font-size: medium;
+    cursor: pointer;
 }
 
 .form-container a:hover {
@@ -545,24 +873,25 @@ input[type="password"] {
 
 /* Popup styles */
 .avatar-popup {
-    position: absolute;
-    top: 60px; /* Điều chỉnh khoảng cách */
-    right: 20px;
-    width: 150px;
+    width: 90px;
+    height: 80px;
     background-color: white;
     border: 1px solid #ddd;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    border-radius: 5px;
     z-index: 1000; /* Đảm bảo hiển thị trên các thành phần khác */
    /* Đặt trạng thái ban đầu */
    opacity: 0;
    transform: translateY(-20px); /* Di chuyển lên phía trên */
    animation: popupAnimation 0.3s ease-out forwards; /* Áp dụng animation */
+   position: absolute;
+   top: 5rem;
+   right: 13rem;
 }
 @keyframes popupAnimation {
     0% {
         opacity: 0;
-        transform: translateY(-20px);
+        transform: translateY(-50);
     }
     100% {
         opacity: 1;
@@ -573,6 +902,7 @@ input[type="password"] {
 .avatar-popup.block {
     /* Dùng animation khi popup hiển thị */
     animation: popupAnimation 0.3s ease-out forwards;
+
 }
 
 .avatar-popup ul {
@@ -581,16 +911,32 @@ input[type="password"] {
     margin: 0;
 }
 
+
 .avatar-popup ul li a {
     display: block;
-    padding: 8px 16px;
-    color: #333;
+    padding: 11px 25px;
+    color: rgb(223 216 216);
     text-decoration: none;
+    font-family:unset;
+    font-size: 16px;
+    position: relative;
+    left: 21px;
+}
+.avatar-popup ul li i{
+    position: absolute;
+    top: 11px;
+    left: 10px;
+}
+.icon-wrapper{
+    position: relative;
+    display: inline-block;
+    bottom: 1.5rem;
 }
 
-.avatar-popup ul li a:hover {
-    background-color: #f1f1f1;
-    border-radius: 10px;
+.avatar-popup ul li:hover {
+    background-color: #49494b;
+    border-radius: 2px;
+    width: 128px;
 }
 
 /* Class khi popup hiển thị */
@@ -600,8 +946,30 @@ input[type="password"] {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    background-color: #3e3e3f;
+    border: none;
+    width: 8rem;
+    position: absolute;
+    right: 10rem;
+    
+}
 
- 
+.logout-btn{
+    margin-top: 2px;
+    cursor: pointer;
+    width: 90px;
+    background-color: #3e3e3f;
+    border: none;
+    color: white;
+    font-family:inherit;
+    font-size: 15px;
+    position: relative;
+    left: 21px;
+}
+.logout-btn:hover{
+    background-color: #49494b;
+    height: 30px;
+  
 }
 
 /* Class khi popup ẩn đi */
