@@ -7,8 +7,10 @@
     <title>@yield('title', 'Default Title')</title>
     @vite('resources/css/style.css')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     @stack('styles')
+    <script src="https://cdn.tailwindcss.com">
+    </script>
     <style>
         .sidebar a.active {
             background-color: #444;
@@ -50,7 +52,7 @@
 </head>
 
 <body>
-    
+
     <div class="sidebar">
         <a class="no-hover" href="{{ route('home') }}">
             <img alt="Logo" height="100" src="images/profile/logo-home.png" width="100" />

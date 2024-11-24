@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Music</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
     @vite('resources/css/style.css')
 
     <script>
@@ -98,35 +99,45 @@
     <div class="main-content">
         <div class="header">
             <input placeholder="Bạn đang tìm kiếm gì?" type="text" />
-
+            <a class="search-song-icon" href="/searchsong">
+                <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+            </a>
             @if (Auth::check())
-                {{-- Nếu người dùng đã đăng nhập --}}
-                <div id="avatar" class="user" onclick="togglePopup()">
-                    <span>{{ Auth::user()->name }}</span>
-                    <img alt="User Avatar" class="rounded-full" height="40"
-                        src="data:image/jepg;base64,{{ Auth::user()->avatar_id ? App\Models\Image::where('img_id', Auth::user()->avatar_id)->first()->img_path ?? asset('images/default-avatar.jpg') : asset('images/default-avatar.jpg') }}"
-                        width="40" />
-                </div>
+            {{-- Nếu người dùng đã đăng nhập --}}
+            <div id="avatar" class="user" onclick="togglePopup()">
+                <span>{{ Auth::user()->name }}</span>
+                <img alt="User Avatar" class="rounded-full" height="40"
+                    src="data:image/jepg;base64,{{ Auth::user()->avatar_id ? App\Models\Image::where('img_id', Auth::user()->avatar_id)->first()->img_path ?? asset('images/default-avatar.jpg') : asset('images/default-avatar.jpg') }}"
+                    width="40" />
+            </div>
 
-                <!-- Popup Profile / Logout -->
-                <div id="popup" class="avatar-popup hidden">
-                    <ul>
-                        <li><a href="/profile/{{ Auth::user()->id }}">Profile</a></li>
-                        <li>
-                            <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                                @csrf
-                                <button type="submit" class="logout-btn">Logout</button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
+            <!-- Popup Profile / Logout -->
+            <div id="popup" class="avatar-popup hidden">
+                <ul>
+                    <li>
+                        <i class="fa-solid fa-user"></i>
+                        <a href="/profile/{{ Auth::user()->id }}">
+                            Profile
+                        </a>
+                    </li>
+                    <li>
+                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                            @csrf
+                            <div class="icon-wrapper">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                            </div>
+                            <button type="submit" class="logout-btn">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
             @else
-                {{-- Nếu người dùng chưa đăng nhập --}}
-                <div class="auth-links">
-                    <a href="javascript:void(0)" onclick="showLoginForm()" class="login-link">Login</a>
-                    <span class="separator">/</span>
-                    <a href="javascript:void(0)" onclick="showRegisterForm()" class="register-link">Register</a>
-                </div>
+            {{-- Nếu người dùng chưa đăng nhập --}}
+            <div class="auth-links">
+                <a href="javascript:void(0)" onclick="showLoginForm()" class="login-link">Login</a>
+                <span class="separator">/</span>
+                <a href="javascript:void(0)" onclick="showRegisterForm()" class="register-link">Register</a>
+            </div>
             @endif
         </div>
 
@@ -418,34 +429,34 @@
                 <hr>
             </div>
             @if (session('message'))
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        showLoginForm(); // Hiển thị form đăng nhập
-                    });
-                </script>
-                <div class="alert alert-danger" id="login-message">{{ session('message') }}</div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    showLoginForm(); // Hiển thị form đăng nhập
+                });
+            </script>
+            <div class="alert alert-danger" id="login-message">{{ session('message') }}</div>
             @endif
             <form id="login-form" action="{{ route('login') }}" method="POST">
                 @csrf
                 <input type="text" placeholder="Email" @error('email') is-invalid @enderror" id="email"
                     name="email" value="{{ old('email') }}">
                 @error('email')
-                    <p class="invalid-feedback">{{ $message }}</p>
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            showLoginForm(); // Hiển thị form đăng nhập
-                        });
-                    </script>
+                <p class="invalid-feedback">{{ $message }}</p>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        showLoginForm(); // Hiển thị form đăng nhập
+                    });
+                </script>
                 @enderror
                 <input type="password" placeholder="Password" @error('password') is-invalid @enderror" id="password"
                     name="password" value="{{ old('password') }}">
                 @error('password')
-                    <p class="invalid-feedback">{{ $message }}</p>
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            showLoginForm(); // Hiển thị form đăng nhập
-                        });
-                    </script>
+                <p class="invalid-feedback">{{ $message }}</p>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        showLoginForm(); // Hiển thị form đăng nhập
+                    });
+                </script>
                 @enderror
 
 

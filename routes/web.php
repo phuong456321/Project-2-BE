@@ -17,11 +17,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
-    return view('welcome');
-});
-
-
-Route::get('/home', function () {
     return view('user/home'); // Hoặc trả về view trang chủ của bạn
 })->name('home');
 
@@ -44,6 +39,12 @@ Route::get('/likesong', function () {
 Route::get('/playist', function () {
     return view('user/playist');
 })->name('playist');
+Route::get('/searchsong', function () {
+    return view('user/searchsong');
+})->name('searchsong');
+
+
+
 
 //Route Login
 Route::get('login', [LoginController::class, 'index'])->name('login');
