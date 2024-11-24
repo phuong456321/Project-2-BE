@@ -29,7 +29,7 @@
             
             const songId = document.getElementById('songId').value;
             
-            fetch(`/api/get-song/${songId}`)
+            fetch(`/get-song/${songId}`)
                 .then(response => {
                     if (response.ok) {
                         return response.json();

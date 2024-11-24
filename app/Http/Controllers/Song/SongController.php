@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Song;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 use App\Models\Song;
+use getID3;
 
 use Illuminate\Http\Request;
 
@@ -33,6 +34,11 @@ class SongController extends Controller
         } else {
             return response()->json(['message' => 'No audio file uploaded'], 400);
         }
+
+        $getID3 = new getID3();
+        $fileInfo = $getID3->analyze(storage_path('app/public/' . $audioPath));
+        $duration = isset($fileInfo['playtime_string']) ? $fileInfo['playtime_string'] : null; // "mm:ss" format
+
         // Create new song entry
         $song = new Song();
         $song->song_name = $request->song_name;
@@ -44,11 +50,13 @@ class SongController extends Controller
         $song->img_id = $request->img_id;
         $song->status = $request->status;
         $song->lyric = $request->lyric;
+        $song->duration = $duration;
         $song->save();
 
         return response()->json([
             'message' => 'Song uploaded successfully',
             'song_name' => $song->song_name,
+            'duration' => $duration,
         ], 201);
     }
     catch(\Exception $e)
@@ -61,7 +69,8 @@ class SongController extends Controller
     {
         $song = Song::find($id);
         if ($song) {
-            return response()->json($song, 200);
+            $absolutePath = url('storage/' . $song->audio_path);
+            return response()->json($absolutePath, 200);
         } else {
             return response()->json(['message' => 'Song not found'], 404);
         }

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('genre_id');
             $table->string('description');
             $table->string('audio_path');
+            $table->string('duration')->nullable();
             $table->unsignedBigInteger('img_id');
             $table->enum('status', ['published', 'deleted', 'inactive', 'pending']);
             $table->integer('likes')->default(0);
