@@ -28,3 +28,4 @@ $(document).ready(function () {
         $('#main-content').html('<h1>Welcome to the Home Page</h1>');
     });
 });
+

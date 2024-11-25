@@ -65,6 +65,32 @@
                 e.stopPropagation();
             });
         });
+
+        // pop up create playist
+        document.addEventListener("DOMContentLoaded", function() {
+            // Lấy các phần tử popup và nút
+            var createPlaylistBtn = document.getElementById("createPlaylistBtn");
+            var popup = document.getElementById("createPlaylistPopup");
+            var closePopupBtn = document.getElementById("closePopupBtn");
+
+            // Hiển thị popup khi nhấn nút "Create Playlist"
+            createPlaylistBtn.addEventListener("click", function() {
+                popup.style.display = "block";
+            });
+
+            // Đóng popup khi nhấn nút đóng
+            closePopupBtn.addEventListener("click", function() {
+                popup.style.display = "none";
+            });
+
+            // Đóng popup nếu người dùng nhấn ra ngoài popup
+            window.addEventListener("click", function(event) {
+                if (event.target == popup) {
+                    popup.style.display = "none";
+                }
+            });
+        });
+        
     </script>
 
 </head>
@@ -83,9 +109,7 @@
         <a href="/playist" id="playist">
             Playist
         </a>
-        <div class="create-playlist">
-            + Create playlist
-        </div>
+            <button id="createPlaylistBtn" class="btn-create-playist"> +  Create Playlist </button>
         <a href="/likesong" id="likesong">
             Like songs
         </a>
@@ -95,6 +119,24 @@
         <a href="/playist" id="playist">
             Playlist 1
         </a>
+        <!-- Popup form tạo playlist -->
+        <div id="createPlaylistPopup" class="popup">
+            <div class="popup-content">
+                <span class="close-btn" id="closePopupBtn">&times;</span>
+                <h2>Create Playlist</h2>
+                <form id="createPlaylistForm">
+                    <input type="text" id="title" name="title" placeholder="Tiêu đề" required><br><br>
+                    <textarea id="description" name="description" placeholder="Mô tả" required></textarea><br><br>
+                    <!-- <label for="privacy">Privacy:</label>
+                    <select id="privacy" name="privacy" required>
+                        <option value="public">Public</option>
+                        <option value="private">Private</option>
+                    </select><br><br> -->
+
+                    <button id="btn-createplayist" type="submit">Create</button>
+                </form>
+            </div>
+        </div>
     </div>
     <div class="main-content">
         <div class="header">
@@ -110,6 +152,8 @@
                     src="data:image/jepg;base64,{{ Auth::user()->avatar_id ? App\Models\Image::where('img_id', Auth::user()->avatar_id)->first()->img_path ?? asset('images/default-avatar.jpg') : asset('images/default-avatar.jpg') }}"
                     width="40" />
             </div>
+
+
 
             <!-- Popup Profile / Logout -->
             <div id="popup" class="avatar-popup hidden">

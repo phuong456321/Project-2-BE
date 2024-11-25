@@ -996,19 +996,27 @@ input[type="password"] {
 .popup-content {
     background-color: #1c1a1a;
     margin: 13% auto;
-    padding: 18px;
+    padding: 12px;
     border: 1px solid #888;
     width: 100%;
     max-width: 500px;
-    height: 350px;
+    height: 381px;
 }
 
 /* Nút đóng popup */
 .close-btn {
     color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 24px;
+    background-color: transparent;
+    border: none;
+    position: relative;
+    left: 28rem;
 }
 
 .close-btn:hover,
@@ -1073,6 +1081,7 @@ input[type="password"] {
     position: relative;
     left: 0rem;
     top: 0rem;
+    font-size: x-large;
 }
 #btn-createplayist{
     margin-top: 20px;
@@ -1083,9 +1092,9 @@ input[type="password"] {
     font-family: inherit;
     font-size: 15px;
     position: relative;
-    left: 23rem;
+    left: 21rem;
     right: 8px;
-    top: 4rem;
+    top: 3rem;
     bottom: 1rem;
     text-align: center;
     border-radius: 26px;
