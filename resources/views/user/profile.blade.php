@@ -284,10 +284,17 @@
 
             <div class="container mt-2 ">
                 <!-- Nút Đăng nhập bằng Google với thiết kế giống nút Premium -->
+                @if (Auth::user()->google_id == null)
                 <button class="google-login-btn mx-auto" href="{{ route('link-google') }}">
                     <i class="fa-brands fa-google"></i>
                     Đăng nhập bằng Google
                 </button>
+                @else
+                <div class="google-login-btn mx-auto">
+                    <i class="fa-solid fa-check"></i>
+                    Đã liên kết với Google
+                </div>
+                @endif
             </div>
         </div>
 

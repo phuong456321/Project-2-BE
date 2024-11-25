@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Author;
 
 Route::get('/', function () {
-    $authors = Author::inRandomOrder()->take(9)->get();
+    $authors = Author::inRandomOrder()->take(7)->get();
     return view('user/home', compact('authors')); // Hoặc trả về view trang chủ của bạn
 })->name('home');
 
@@ -76,29 +76,26 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/likesong', function () {
         return view('user/likesong');
     })->name('likesong');
-    Route::get('/playist', function () {
-        return view('user/playist');
-    })->name('playist');
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
     // Trang yêu cầu xác thực email
-    Route::get('/email/verify', function () {
-        return view('emails.verify-email');
-    })->middleware('auth:sanctum')->name('verification.notice');
-    // Xác thực email
-    Route::get('email/verify/{token}', [RegisterController::class, 'verify'])
-        ->name('verification.verify');
-
-    // Gửi lại email xác thực
-    Route::post('/email/verification-notification', [RegisterController::class, 'resendVerificationEmail'])
-        ->middleware(['auth:sanctum', 'throttle:6,1'])
-        ->name('verification.send');
+   
 });
 
 Route::post('/forgot-password', [ResetPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/email/verify', function () {
+    return view('emails.verify-email');
+})->middleware('auth:sanctum')->name('verification.notice');
+// Xác thực email
+Route::get('email/verify/{token}', [RegisterController::class, 'verify'])
+    ->name('verification.verify');
 
+// Gửi lại email xác thực
+Route::post('/email/verification-notification', [RegisterController::class, 'resendVerificationEmail'])
+    ->middleware(['auth:sanctum', 'throttle:6,1'])
+    ->name('verification.send');
 
 
 Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.request');

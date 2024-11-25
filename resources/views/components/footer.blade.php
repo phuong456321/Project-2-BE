@@ -97,7 +97,7 @@
 
     function playAudio(filePath) {
         const audioPlayer = document.getElementById('footerAudioPlayer');
-        audioPlayer.src = `/audio/${filePath}`;
+        audioPlayer.src = `${filePath}`;
         audioPlayer.play();
     }
 </script>

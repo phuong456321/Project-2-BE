@@ -6,12 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Models\Author;
 use App\Models\Image;
 use App\Models\User;
+use Auth;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
     public function showProfile($id)
     {
+
+        // Kiểm tra nếu người dùng hiện tại không phải là người sở hữu profile
+        if (Auth::id() != $id) {
+            return redirect('profile/'. Auth::id())->with('warning', 'Unauthorized action.');
+        }
         // Lấy thông tin profile của user theo ID
         $user = User::findOrFail($id);
         $author = Author::where('user_id', $id)->first();

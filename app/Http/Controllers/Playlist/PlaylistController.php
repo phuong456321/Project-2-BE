@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Playlist;
 
 use App\Http\Controllers\Controller;
+use App\Models\InPlaylist;
 use Illuminate\Http\Request;
 use App\Models\playlist;
-use App\Models\in_playlist;
 use App\Models\song;
 use App\Models\Author;
 use Illuminate\Support\Facades\Auth;
@@ -66,7 +66,7 @@ class PlaylistController extends Controller
             'song_id' => 'required|integer',
         ]);
 
-        $in_playlist = new in_playlist();
+        $in_playlist = new InPlaylist();
         $in_playlist->playlist_id = $request->playlist_id;
         $in_playlist->song_id = $request->song_id;
         $in_playlist->save();
@@ -79,7 +79,7 @@ class PlaylistController extends Controller
     //Get all song in playlist
     public function getSongInPlaylist($playlist_id)
     {
-        $in_playlist = in_playlist::where('playlist_id', $playlist_id)->get();
+        $in_playlist = InPlaylist::where('playlist_id', $playlist_id)->get();
         $songs = [];
 
         foreach ($in_playlist as $item) {
@@ -108,7 +108,7 @@ class PlaylistController extends Controller
             'song_id' => 'required|integer',
         ]);
 
-        $in_playlist = in_playlist::where('playlist_id', $request->playlist_id)->where('song_id', $request->song_id)->first();
+        $in_playlist = InPlaylist::where('playlist_id', $request->playlist_id)->where('song_id', $request->song_id)->first();
         if ($in_playlist) {
             $in_playlist->delete();
             return response()->json([

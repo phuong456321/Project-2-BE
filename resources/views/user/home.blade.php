@@ -404,7 +404,7 @@
                 style="cursor: pointer; position: absolute; top: 10px; right: 10px; font-size: 20px;">&times;</span>
             <h2>Create Account</h2>
             <p>Register a new account</p>
-            <img class="gg-btn" src="{{ asset('images/profile/gg.png') }}" onclick="" alt="gg">
+            <img class="gg-btn" src="{{ asset('images/profile/gg.png') }}" onclick="window.location.href='{{ route('login-google') }}'" alt="gg">
 
             <div class="separator">
                 <hr> <span>Or continue with</span>
