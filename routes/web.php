@@ -20,6 +20,14 @@ Route::get('/', function () {
     return view('user/home'); // Hoặc trả về view trang chủ của bạn
 })->name('home');
 
+
+Route::get('/intro', function () {
+    return view('intromusic/intro'); // Nếu file view là home.blade.php
+});
+
+Route::get('/changepassword', function () {
+    return view('user/changepassword'); // Nếu file view là home.blade.php
+});
 Route::get('/premium', function () {
     return view('user/premium'); // Nếu file view là home.blade.php
 });
@@ -30,6 +38,10 @@ Route::get('/albums', function () {
 Route::get('/profile', function () {
     return view('user/profile'); // Trang profile
 });
+
+Route::get('/Profileuser', function () {
+    return view('user/Profileuser');
+})->name('Profileuser');
 Route::get('/library', function () {
     return view('user/library'); 
 });
@@ -42,6 +54,14 @@ Route::get('/playist', function () {
 Route::get('/searchsong', function () {
     return view('user/searchsong');
 })->name('searchsong');
+
+Route::get('/email', function () {
+    return view('emails/email');
+})->name('email');
+Route::get('/upload', function () {
+    return view('user/upload');
+})->name('upload');
+
 
 
 
@@ -57,7 +77,7 @@ Route::get('login-google/callback', [LoginGoogleController::class, 'handleGoogle
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // Define your protected routes here
-    Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+
     Route::middleware(['web'])->group(function () {
         Route::get('link-google', [LoginGoogleController::class, 'linkGoogleAccount'])->name('link-google');
         Route::get('link-google/callback', [LoginGoogleController::class, 'handleLinkGoogleCallback']);
@@ -70,6 +90,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('profile/{id}', [ProfileController::class, 'showProfile']);
     Route::post('profile/{id}', [ProfileController::class, 'updateProfile']);
 });
+Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 // Email verification routes
 // Trang yêu cầu xác thực email

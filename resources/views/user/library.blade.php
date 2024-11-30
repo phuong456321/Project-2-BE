@@ -1,6 +1,6 @@
 @extends('user.layout')
 
-@section('title', 'Library')
+@section('title', 'Library',)
 
 @push('styles')
 @vite('resources/css/library.css')
@@ -12,12 +12,15 @@
 <body class="bg-gray-800 text-white">
     <div class="header">
         <input placeholder="Bạn đang tìm kiếm gì?" type="text" />
-        <div class="user">
-            <span>
-                User
-            </span>
-            <img alt="User" height="40" src="images/profile/hinh tao.jpg" width="40" />
+        @if (Auth::check())
+        {{-- Nếu người dùng đã đăng nhập --}}
+        <div id="avatar" class="user" onclick="togglePopup()">
+            <span>{{ Auth::user()->name }}</span>
+            <img alt="User Avatar" class="rounded-full" height="40"
+                src="data:image/jepg;base64,{{ Auth::user()->avatar_id ? App\Models\Image::where('img_id', Auth::user()->avatar_id)->first()->img_path ?? asset('images/default-avatar.jpg') : asset('images/default-avatar.jpg') }}"
+                width="40" />
         </div>
+        @endif
     </div>
     <div class="p-4">
         <h2 class="text-3xl font-bold mb-4">
@@ -78,6 +81,7 @@
             </div>
         </div>
     </div>
+    
 </body>
 
 @endsection

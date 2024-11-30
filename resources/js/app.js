@@ -1,6 +1,7 @@
 import './bootstrap';
 import '@fortawesome/fontawesome-free/css/all.css';
 
+
 // public/js/app.js
 
 $(document).ready(function () {
@@ -28,4 +29,5 @@ $(document).ready(function () {
         $('#main-content').html('<h1>Welcome to the Home Page</h1>');
     });
 });
+
 

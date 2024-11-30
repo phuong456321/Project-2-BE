@@ -175,68 +175,14 @@
         .google-login-btn i {
             margin-right: 10px;
         }
-
-        /* Ẩn form mặc định */
-        #change-password-form {
-            display: none;
-            /* Ban đầu ẩn */
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            /* Đảm bảo form nổi bật trên các phần khác */
-            width: 300px;
-            text-align: center;
-            backdrop-filter: brightness(0.5);
-        }
-
-        /* Kiểu cho các input trong form */
-        #change-password-form input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        /* Kiểu cho nút */
-        #change-password-form button {
-            padding: 10px 20px;
-            margin: 5px 0;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            border-radius: 4px;
-        }
-
-        /* Kiểu cho nút Đóng */
-        #change-password-form button[type="button"] {
-            background-color: #f44336;
+        .profile-header a{
             color: white;
+            text-decoration: none;
+        }
+        .profile-header a:hover{
+            color: #0a1b34;
         }
 
-        /* Kiểu cho nút Submit */
-        #change-password-form button[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        /* Nút Đổi Mật Khẩu */
-        .change-password-btn {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            margin: 20px 0;
-        }
 
         /* Kiểu cho nút quay về trang Home */
         .back-to-home-btn {
@@ -258,15 +204,7 @@
         }
     </style>
     <script>
-        // Mở form đổi mật khẩu
-        function showChangePasswordForm() {
-            document.getElementById('change-password-form').style.display = 'block';
-        }
 
-        // Đóng form đổi mật khẩu
-        function hideChangePasswordForm() {
-            document.getElementById('change-password-form').style.display = 'none';
-        }
     </script>
 </head>
 
@@ -278,7 +216,9 @@
         <!-- Profile Header -->
         <div class="profile-header">
 
-            <button onclick="showChangePasswordForm()" class="edit-btn">Đổi mật khẩu</button>
+            <button class="edit-btn">
+                <a href="/changepassword">Đổi mật khẩu</a>
+            </button>
 
             <!-- Nút quay về trang Home --> <a href="{{ route('home') }}" class="back-to-home-btn">Trở về</a>
 
@@ -346,24 +286,23 @@
             </div>
         </div>
     </div>
-    <!-- Form Đổi Mật Khẩu (Pop-up) -->
+    <!-- Form Đổi Mật Khẩu (Pop-up)
     <div id="change-password-form" style="display: none;">
         <form action="" method="POST">
             @csrf
             <h2>Đổi Mật Khẩu</h2>
 
-            <!-- Mật khẩu mới -->
             <input type="password" name="new_password" placeholder="Mật khẩu mới" required>
 
-            <!-- Xác nhận mật khẩu -->
+       
             <input type="password" name="new_password_confirmation" placeholder="Xác nhận mật khẩu" required>
 
-            <!-- Nút Submit -->
+         
             <button class="bg-info text-white" type="submit">Đổi mật khẩu</button>
 
-            <!-- Nút Đóng -->
+      
             <button type="button" onclick="hideChangePasswordForm()">Đóng</button>
-        </form>
+        </form> -->
 
 
 
