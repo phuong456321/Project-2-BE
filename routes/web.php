@@ -61,6 +61,10 @@ Route::get('/email', function () {
 Route::get('/upload', function () {
     return view('user/upload');
 })->name('upload');
+Route::get('/uploadsong', function () {
+    return view('user/uploadsong');
+})->name('uploadsong');
+
 
 
 
