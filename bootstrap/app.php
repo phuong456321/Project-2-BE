@@ -18,6 +18,8 @@ return Application::configure(basePath: dirname(__DIR__))
             '/create-playlist',
             'upload-song',
             'add-song-to-playlist',
+            'delete-song-in-playlist',
+            'delete-playlist',
         ]);
 
     })

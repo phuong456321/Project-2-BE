@@ -25,7 +25,7 @@
             </h2>
             <div class="grid grid-cols-4 gap-4">
 
-                <div class="flex flex-col items-center">
+                {{-- <div class="flex flex-col items-center">
                     <img alt="Liked music icon" class="w-24 h-24 rounded-lg cursor-pointer" height="100"
                         src="https://storage.googleapis.com/a1aa/image/1WXOj4TWAUI0LJcJdK3fUOms0x8phjxkvb5qpFaIcJN4Zw5JA.jpg"
                         width="100" />
@@ -35,7 +35,7 @@
                     <span class="text-gray-400">
                         Auto List
                     </span>
-                </div>
+                </div> --}}
 
                 @foreach ($playlists as $playlist)
                     <div class="flex flex-col items-center cursor-pointer">
@@ -57,7 +57,7 @@
                     </div>
                 @endforeach
 
-                <div class="flex flex-col items-center cursor-pointer">
+                {{-- <div class="flex flex-col items-center cursor-pointer">
                     <img alt="Artist HIEUTHUHAI" class="w-24 h-24 rounded-full cursor-pointer" height="100"
                         src="https://storage.googleapis.com/a1aa/image/Fx1eHLTcZ1WgQq9RbfMCEtH0xysQNaNZchah7dgGaryuzgzTA.jpg"
                         width="100" />
@@ -79,7 +79,7 @@
                     <span class="text-gray-400">
                         Artist
                     </span>
-                </div>
+                </div> --}}
 
             </div>
         </div>
