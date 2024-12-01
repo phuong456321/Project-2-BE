@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->id('img_id');
             $table->string('img_name');
-            $table->binary('img_path');
+            $table->string('img_path');
             $table->enum('category', ["avatar", "song_img", "artist_img", "other"]);
             $table->timestamps();
         });

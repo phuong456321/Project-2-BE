@@ -7,6 +7,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Image;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class SongSeeder extends Seeder
 {
@@ -83,14 +84,17 @@ class SongSeeder extends Seeder
             ]
         ];
         foreach ($songs as $song) {
+            $imageData = file_get_contents($song['img_url']);
+            $imageName = Str::uuid() . '.webp';
+            $image = Storage::disk('public')->put('images/' . $imageName, $imageData);
             $image = Image::create([
-                'img_name' => $song['song_name'],
-                'img_path' => file_get_contents($song['img_url']),
+                'img_name' => $imageName,
+                'img_path' => 'images/' . $imageName,
                 'category' => 'song_img',
             ]);
             $audioContent = file_get_contents(public_path($song['audio_path'])); // Lấy nội dung tệp từ public
-            $audioFileName = 'music/' . basename($song['audio_path']); // Đặt tên file
-            Storage::disk('public')->put($audioFileName, $audioContent); // Lưu file
+            $audioFileName = Str::uuid() . '.mp3'; // Đặt tên file
+            Storage::disk('public')->put('music/' . $audioFileName, $audioContent); // Lưu file
 
             Song::create([
                 'song_name' => $song['song_name'],
@@ -98,7 +102,7 @@ class SongSeeder extends Seeder
                 'area_id' => $song['area_id'],
                 'genre_id' => $song['genre_id'],
                 'description' => $song['description'],
-                'audio_path' => $audioFileName,
+                'audio_path' => 'music/' . $audioFileName,
                 'img_id' => $image->id,
                 'status' => $song['status'],
                 'likes' => $song['likes'],

@@ -19,4 +19,10 @@ class Product extends Model
     {
         return $this->hasMany(Payment::class);
     }
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_product')
+            ->withPivot('purchased_at', 'expired_at')
+            ->withTimestamps();
+    }
 }

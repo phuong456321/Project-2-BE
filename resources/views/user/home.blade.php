@@ -384,7 +384,7 @@
 
                 <div class="options">
                     <label>
-                        <input type="checkbox" name="remember"> Remember me
+                        <input type="checkbox" name="remember" id="remember"> Remember me
                     </label>
                     <a href="#" class="recover-password">Forgot Password?</a>
                 </div>

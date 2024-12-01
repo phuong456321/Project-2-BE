@@ -14,5 +14,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call([
+            AreaSeeder::class,
+            ArtistImgSeeder::class,
+            AuthorSeeder::class,
+            SongSeeder::class,
+        ]);
     }
 }

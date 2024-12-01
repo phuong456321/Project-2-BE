@@ -35,7 +35,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
     protected $casts = [
         'email_verification_sent_at' => 'datetime',
     ];
-    
+
 
     public function avatar()
     {
@@ -72,9 +72,16 @@ class User extends Authenticatable implements MustVerifyEmailContract
         return $this->hasMany(Payment::class);
     }
 
+    // Mối quan hệ giữa User và Author
     public function author()
+{
+    return $this->hasOne(Author::class, 'id', 'author_id');
+}
+    public function products()
     {
-        return $this->hasOne(Author::class);
+        return $this->belongsToMany(Product::class, 'user_product')
+            ->withPivot('purchased_at', 'expired_at') // Thêm thông tin từ bảng pivot nếu cần
+            ->withTimestamps(); // Nếu muốn lấy thông tin thời gian
     }
 
     /**

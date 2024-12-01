@@ -17,14 +17,16 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->unsignedBigInteger('author_id')->nullable();
             $table->enum('role', ['admin', 'user'])->default('user');
-            $table->string('plan')->default('free');
+            $table->enum('plan', ['free', 'premium'])->default('free');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->string('google_id')->nullable();
             $table->unsignedBigInteger('avatar_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->foreign('avatar_id')->references('img_id')->on('images');
+            $table->foreign('author_id')->references('id')->on('authors');
             $table->foreign('google_id')->references('google_id')->on('google_accounts');
         });
 

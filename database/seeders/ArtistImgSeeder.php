@@ -6,6 +6,8 @@ use App\Models\Image;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ArtistImgSeeder extends Seeder
 {
@@ -98,9 +100,12 @@ class ArtistImgSeeder extends Seeder
         ];
 
         foreach ($artists as $artist) {
+            $imageData = file_get_contents($artist['image_url']);
+            $imageName = Str::uuid() . '.webp';
+            $image = Storage::disk('public')->put('images/' . $imageName, $imageData);
             Image::create([
-                'img_name' => $artist['name'],
-                'img_path' => file_get_contents($artist['image_url']),
+                'img_name' => $imageName,
+                'img_path' => 'images/' . $imageName,
                 'category' => 'artist_img',
             ]);
         }

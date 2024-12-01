@@ -13,11 +13,13 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
+            'admin' => \App\Http\Middleware\AdminMiddleware::class,
         ]);
         $middleware->validateCsrfTokens(except: [ //Tạm thời bỏ qua CSRF token
             '/create-playlist',
             'upload-song',
             'add-song-to-playlist',
+            'upload-image',
         ]);
 
     })

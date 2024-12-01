@@ -3,65 +3,61 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Payment;
+use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http; // Thư viện để gửi yêu cầu HTTP
-use Illuminate\Support\Str; // Thư viện để tạo chuỗi ngẫu nhiên
+use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
-    public function payWithMomo(Request $request)
+    public function index()
     {
-        // Kiểm tra và xác thực dữ liệu yêu cầu
-        $request->validate([
-            'amount' => 'required|numeric',
-            'orderId' => 'required|string',
-            // Thêm các trường cần thiết khác
-        ]);
-
-        // Thông tin thanh toán
-        $partnerCode = 'YOUR_PARTNER_CODE';
-        $accessKey = 'YOUR_ACCESS_KEY';
-        $secretKey = 'YOUR_SECRET_KEY';
-        $orderId = $request->orderId;
-        $amount = $request->amount;
-        $orderInfo = 'Thanh toán đơn hàng ' . $orderId;
-        $redirectUrl = 'YOUR_REDIRECT_URL';
-        $ipnUrl = 'YOUR_IPN_URL';
-        $requestId = Str::uuid(); // Tạo ID yêu cầu ngẫu nhiên
-        $extraData = ''; // Dữ liệu bổ sung nếu cần
-
-        // Tạo timestamp
-        $timestamp = now()->format('YmdHis');
-
-        // Tạo chuỗi để mã hóa
-        $rawHash = "partnerCode=$partnerCode&accessKey=$accessKey&requestId=$requestId&amount=$amount&orderId=$orderId&orderInfo=$orderInfo&redirectUrl=$redirectUrl&ipnUrl=$ipnUrl&extraData=$extraData&timestamp=$timestamp";
+        try {
+            $user = Auth::user();
+            $products = Product::all();
+    
+            // Lấy gói Premium đang sử dụng của người dùng, nếu có
+            $activeProduct = $user->products()
+        ->wherePivot('expired_at', '>', now())
+        ->orderBy('user_product.expired_at', 'desc') // Thêm phần alias
+         ->first();
+    
+            return view('user.premium', compact('products', 'user', 'activeProduct'));
+        } catch (\Exception $e) {
+            flash()->addError('Đã xảy ra lỗi: ' . $e->getMessage());
+            return redirect()->back();
+        }    
         
-        // Mã hóa chuỗi bằng SHA256
-        $signature = hash_hmac('sha256', $rawHash, $secretKey);
-
-        // Dữ liệu gửi đến Momo
-        $data = [
-            'partnerCode' => $partnerCode,
-            'accessKey' => $accessKey,
-            'requestId' => $requestId,
-            'amount' => $amount,
-            'orderId' => $orderId,
-            'orderInfo' => $orderInfo,
-            'redirectUrl' => $redirectUrl,
-            'ipnUrl' => $ipnUrl,
-            'extraData' => $extraData,
-            'signature' => $signature,
-            'timestamp' => $timestamp,
-        ];
-
-        // Gửi yêu cầu đến API của Momo
-        $response = Http::post('https://test-payment.momo.vn/gw_payment/transactionProcessor', $data);
-
-        // Kiểm tra phản hồi từ Momo
-        if ($response->successful()) {
-            return response()->json($response->json());
-        } else {
-            return response()->json(['message' => 'Payment initiation failed'], 500);
-        }
     }
+
+// Hiển thị trang checkout
+public function show(Request $request)
+{
+    $selectedPlan = $request->query('product'); // Nhận gói được chọn từ query string
+    $product = Product::find($selectedPlan);
+
+    if (!$product) {
+        return redirect()->route('premium'); // Quay lại trang Premium nếu plan không hợp lệ
+    }
+
+    return view('checkout/checkout', [
+        'product' => $product,
+    ]);
+}
+
+// Xử lý thanh toán
+public function processPayment(Request $request)
+{
+    $paymentMethod = $request->input('payment_method');
+    $amount = $request->input('amount'); // Số tiền cần thanh toán
+    $name = $request->input('name'); // Tên gói được chọn
+    if ($paymentMethod === 'stripe') {
+        return redirect()->route('stripe.stripe', ['amount' => $amount, 'name' => $name]);
+    } elseif ($paymentMethod === 'momo') {
+        return redirect()->route('momo.createPayment', ['amount' => $amount]);
+    }
+
+    return back()->with('error', 'Invalid payment method selected!');
+}
 }
