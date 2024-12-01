@@ -85,6 +85,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     //Premium
     Route::get('/premium',[PaymentController::class, 'index'])->name('premium');
 });
+Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');

@@ -176,68 +176,14 @@
         .google-login-btn i {
             margin-right: 10px;
         }
-
-        /* Ẩn form mặc định */
-        #change-password-form {
-            display: none;
-            /* Ban đầu ẩn */
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            /* Đảm bảo form nổi bật trên các phần khác */
-            width: 300px;
-            text-align: center;
-            backdrop-filter: brightness(0.5);
-        }
-
-        /* Kiểu cho các input trong form */
-        #change-password-form input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        /* Kiểu cho nút */
-        #change-password-form button {
-            padding: 10px 20px;
-            margin: 5px 0;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            border-radius: 4px;
-        }
-
-        /* Kiểu cho nút Đóng */
-        #change-password-form button[type="button"] {
-            background-color: #f44336;
+        .profile-header a{
             color: white;
+            text-decoration: none;
+        }
+        .profile-header a:hover{
+            color: #0a1b34;
         }
 
-        /* Kiểu cho nút Submit */
-        #change-password-form button[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        /* Nút Đổi Mật Khẩu */
-        .change-password-btn {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            margin: 20px 0;
-        }
 
         /* Kiểu cho nút quay về trang Home */
         .back-to-home-btn {
