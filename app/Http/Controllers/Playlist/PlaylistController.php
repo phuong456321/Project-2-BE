@@ -122,8 +122,9 @@ class PlaylistController extends Controller
     }
 
     //Delete playlist
-    public function deletePlaylist($playlist_id)
+    public function deletePlaylist(Request $request)
     {
+        $playlist_id = $request->playlist_id;
         $playlist = playlist::find($playlist_id);
         if ($playlist) {
             // Xóa các bản ghi liên quan trong bảng in_playlists
