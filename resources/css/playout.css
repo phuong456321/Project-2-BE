@@ -927,7 +927,7 @@ input[type="password"] {
     }
 }
 
-.avatar-popup.block {
+.avatar-popup .block {
     /* Dùng animation khi popup hiển thị */
     animation: popupAnimation 0.3s ease-out forwards;
 
@@ -968,7 +968,7 @@ input[type="password"] {
 }
 
 /* Class khi popup hiển thị */
-.avatar-popup.block {
+.avatar-popup .block {
     opacity: 1;
     transform: translate(0);
     display: flex;

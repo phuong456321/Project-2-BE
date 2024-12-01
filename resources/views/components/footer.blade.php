@@ -1,20 +1,17 @@
 <head>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    @vite('resources/css/style.css')
     <style>
-        .footer {
-            position: fixed;
-            bottom: 5px;
-            height: 7rem;
-            z-index: 100;
-        }
-        .footer img{
+        .footer img {
+            position: absolute;
             margin-left: 2rem;
         }
     </style>
 </head>
 <div class="footer" id="footer" style="display: none;">
-    <img id="footerSongImg" src="" alt="Music Image" width="100" height="100">
+    <div class="loader">
+        <div class="justify-content-center jimu-primary-loading"></div>
+    </div>
+    <img id="footerSongImg" src="" alt="Music Image" width="90" height="90">
     <div class="controls">
         <i class="fas fa-step-backward">
         </i>
@@ -23,25 +20,21 @@
         <i class="fas fa-step-forward">
         </i>
     </div>
-    <!-- Display Current Time -->
-    <div class="current-time">
-        <span id="currentTime">0:00</span> / <span id="totalTime">0:00</span>
-    </div>
     <div class="progress">
         <input type="range" id="progressBar" max="100" min="0" value="0"
             oninput="changeProgress(this)" />
+        <p id="currentTime">0:00</p> / <p id="totalTime">0:00</p>
     </div>
     <div class="current-song">
         <p id="footerSongTitle">Tên bài hát</p>
         <p id="footerSongArtist">Tên ca sĩ</p>
     </div>
     <div class="actions">
-        <i class="fas fa-heart">
-        </i>
-        <i class="fas fa-random">
-        </i>
-        <i class="fas fa-volume-up">
-        </i>
+        <i class="fas fa-heart"></i>
+        <i class="fas fa-random"></i>
+        <i class="fas fa-volume-up"></i>
+        <i class="fa-solid fa-music" id="toggleLyricsIcon"></i>
+        <i onclick="openPopup()" class="fas fa-ellipsis-h"></i>
     </div>
     <!-- Audio element -->
     <audio id="footerAudioPlayer" src="" preload="auto" style="display:none;" controls></audio>

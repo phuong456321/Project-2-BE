@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AuthorController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\Song\AudioController;
 use App\Http\Middleware\EnsureEmailIsVerified;
+use App\Models\Playlist;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\LoginController;
@@ -26,10 +27,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Author;
 
-Route::get('/', function () {
-    $authors = Author::inRandomOrder()->take(7)->get();
-    return view('user/home', compact('authors')); // Hoặc trả về view trang chủ của bạn
-})->name('home');
+Route::get('/', [AudioController::class, 'index'])->name('home');
 
 Route::get('/checkout', [PaymentController::class, 'show'])->name('checkout.show');
 Route::post('/checkout/process', [PaymentController::class, 'processPayment'])->name('checkout.process');

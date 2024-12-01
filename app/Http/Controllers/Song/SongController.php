@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Song;
 
 use App\Http\Controllers\Controller;
+use App\Models\Playlist;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Models\Song;
 use getID3;
@@ -81,6 +83,12 @@ class SongController extends Controller
                 $q->where('author_name', 'like', '%' . $query . '%');
             })
             ->get();
-        return view('user/searchsong', ['songs' => $songs, 'query' => $query]);
+
+        if(Auth::check()){
+                $playlists = Playlist::where('user_id', auth()->user()->id)->get();}
+        else{
+            $playlists = [];
+        }
+        return view('user/searchsong', ['songs' => $songs, 'query' => $query, 'playlists' => $playlists]);
     }
 }

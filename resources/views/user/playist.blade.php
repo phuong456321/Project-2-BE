@@ -11,15 +11,6 @@
 @section('content')
 
 <body>
-    @if (Auth::check())
-    {{-- Nếu người dùng đã đăng nhập --}}
-    <div id="avatar" class="user" onclick="togglePopup()">
-        <span>{{ Auth::user()->name }}</span>
-        <img alt="User Avatar" class="rounded-full" height="40"
-            src="data:image/jepg;base64,{{ Auth::user()->avatar_id ? App\Models\Image::where('img_id', Auth::user()->avatar_id)->first()->img_path ?? asset('images/default-avatar.jpg') : asset('images/default-avatar.jpg') }}"
-            width="40" />
-    </div>
-    @endif
     <div class="container">
         <div class="left-panel">
             <div class="album-cover">
