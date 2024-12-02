@@ -42,9 +42,25 @@
     <audio id="footerAudioPlayer" style="display:none;" controls></audio>
 </div>
 <div id="adPopup" class="hidden fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center">
-    <div class="bg-white p-6 rounded-lg w-4/5 max-w-md text-center">
-        <h3 class="text-xl font-bold mb-4">Hỗ trợ chúng tôi bằng cách nâng cấp tài khoản!</h3>
-        <p class="text-gray-700 mb-6">Bạn đang sử dụng gói Free. Hãy xem quảng cáo hoặc nâng cấp lên Premium để trải nghiệm không giới hạn.</p>
+    <div class="!bg-white !p-6 !rounded-lg !w-4/5 !max-w-md !text-center">
+        <!-- Quảng cáo AdSense -->
+        <div class="popup-content">
+            <span id="closePopup" class="close-btn">&times;</span>
+            <!-- Chèn mã quảng cáo Google AdSense -->
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4089886839959004"
+        crossorigin="anonymous"></script>
+            <!-- Nulltifly-home -->
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-4089886839959004"
+                data-ad-slot="5674451393"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
         <button onclick="closeAdPopup()" 
             class="px-6 py-2 bg-green-500 text-white font-medium rounded-md hover:bg-green-600 transition">
             Tiếp tục
