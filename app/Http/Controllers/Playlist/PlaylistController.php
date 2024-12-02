@@ -70,7 +70,6 @@ class PlaylistController extends Controller
         $in_playlist->playlist_id = $request->playlist_id;
         $in_playlist->song_id = $request->song_id;
         $in_playlist->save();
-
         return response()->json([
             'message' => 'Song added to playlist successfully',
         ], 201);
@@ -81,7 +80,7 @@ class PlaylistController extends Controller
     {
         $in_playlist = InPlaylist::where('playlist_id', $playlist_id)->get();
         $songs = [];
-
+        $playlist = Playlist::where('user_id', Auth::user()->id)->get();
         foreach ($in_playlist as $item) {
             $song = song::find($item->song_id);
 
@@ -96,7 +95,7 @@ class PlaylistController extends Controller
             }
             array_push($songs, $song);
         }
-        return view('user/playist', compact('songs'));
+        return view('user/playist', ['songs' => $songs, 'playlists' => $playlist]);
     }
 
 

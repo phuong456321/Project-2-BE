@@ -19,7 +19,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
         
         if (auth()->attempt($credentials)) {
-            return redirect()->route('admin.manageSongs');
+            return redirect()->route('admin.songs');
         }
 
         return back()->withErrors([

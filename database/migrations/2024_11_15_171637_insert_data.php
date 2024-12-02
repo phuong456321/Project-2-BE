@@ -23,7 +23,58 @@ return new class extends Migration
 
         DB::table('genres')->insert([
             [
-                'name' => 'Music',
+                'name' => 'Pop',
+            ],
+            [
+                'name' => 'Rock',
+            ],
+            [
+                'name' => 'Hip-hop/Rap',
+            ],
+            [
+                'name' => 'Jazz',
+            ],
+            [
+                'name' => 'Classical',
+            ],
+            [
+                'name' => 'Electronic/Dance',
+            ],
+            [
+                'name' => 'R&B/Soul',
+            ],
+            [
+                'name' => 'Reggae',
+            ],
+            [
+                'name' => 'Country',
+            ],
+            [
+                'name' => 'Blues',
+            ],
+            [
+                'name' => 'Folk',
+            ],
+            [
+                'name' => 'Metal',
+            ],
+            [
+                'name' => 'Indie',
+            ],
+            [
+                'name' => 'Latin',
+            ],
+            [
+                'name' => 'Gospel/Christian',
+            ],
+            [
+                'name' => 'Soundtrack',
+            ],
+            [
+                'name' => 'World Music',
+            ],
+            [
+                'name' => 'Ambient',
             ],
         ]);
         DB::table('users')->insert([

@@ -907,11 +907,10 @@ input[type="password"] {
     border: 1px solid #ddd;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-    z-index: 1000; /* Đảm bảo hiển thị trên các thành phần khác */
-   /* Đặt trạng thái ban đầu */
+    z-index: 1000;
    opacity: 0;
-   transform: translateY(-20px); /* Di chuyển lên phía trên */
-   animation: popupAnimation 0.3s ease-out forwards; /* Áp dụng animation */
+   transform: translateY(-20px);
+   animation: popupAnimation 0.3s ease-out forwards;
    position: absolute;
    top: 5rem;
    right: 13rem;
@@ -926,13 +925,24 @@ input[type="password"] {
         transform: translateY(0);
     }
 }
-
+/* Class khi popup hiển thị */
 .avatar-popup .block {
-    /* Dùng animation khi popup hiển thị */
-    animation: popupAnimation 0.3s ease-out forwards;
-
+    opacity: 1;
+    transform: translate(0);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background-color: #3e3e3f;
+    border: none;
+    width: 8rem;
+    position: absolute;
+    right: 10rem;
+    left: 74rem;
+    top: -28rem;
 }
-
+.avatar-popup.block {
+    animation: popupAnimation 0.3s ease-out forwards;
+}
 .avatar-popup ul {
     list-style: none;
     padding: 0;
@@ -965,23 +975,6 @@ input[type="password"] {
     background-color: #49494b;
     border-radius: 2px;
     width: 128px;
-}
-
-/* Class khi popup hiển thị */
-.avatar-popup .block {
-    opacity: 1;
-    transform: translate(0);
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    background-color: #3e3e3f;
-    border: none;
-    width: 8rem;
-    position: absolute;
-    right: 10rem;
-    left: 74rem;
-    top: -28rem;
-    
 }
 
 .logout-btn{

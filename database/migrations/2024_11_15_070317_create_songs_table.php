@@ -25,7 +25,7 @@ return new class extends Migration
             $table->integer('likes')->default(0);
             $table->integer('play_count')->default(0);
             $table->timestamps();
-            $table->string('lyric');
+            $table->text('lyric');
             $table->foreign('author_id')->references('id')->on('authors');
             $table->foreign('area_id')->references('id')->on('areas');
             $table->foreign('genre_id')->references('id')->on('genres');

@@ -57,7 +57,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('check', function (Request $request) {
         return response()->json(Auth::user(), 200);
     });
-    Route::post('upload-song', [SongController::class, 'uploadSong']);
+    Route::post('upload-song', [SongController::class, 'uploadSong'])->name('uploadSong');
 
     //Playlist
     Route::get('get-playlist', [PlaylistController::class, 'getPlaylist'])->name('library');
@@ -82,6 +82,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     })->name('likesong');
     //Premium
     Route::get('/premium',[PaymentController::class, 'index'])->name('premium');
+    Route::get('/upload-song', [SongController::class, 'index'])->name('upload');
 });
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
@@ -104,8 +105,6 @@ Route::post('/email/verification-notification', [RegisterController::class, 'res
     ->middleware(['auth:sanctum', 'throttle:6,1'])
     ->name('verification.send');
 
-
-Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.request');
 //Music
 Route::get('get-song/{id}', [SongController::class, 'getSong']);
 
@@ -118,10 +117,13 @@ Route::get('/audio/music/{filePath}', [AudioController::class, 'streamAudio']);
 Route::post('email', [ResetPasswordController::class, 'sendResetLinkEmail'])->name('reset.password.email');
 
 // Route hiển thị form đặt lại mật khẩu (nếu bạn sử dụng giao diện)
-Route::get('reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset.form');
+Route::get('/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset.form');
 
 // Route thực hiện đặt lại mật khẩu
-Route::post('reset/{token}', [ResetPasswordController::class, 'reset'])->name('password.reset');
+Route::post('/password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
+
+//Quên mật khẩu
+Route::get('/forgot-password', [ResetPasswordController::class, 'showForgotForm'])->name('password.forgot');
 
 Route::delete('/admin/user/{id}', [AdminController::class, 'deleteUser'])->name('admin.deleteUser');
 Route::delete('/admin/song/{id}', [AdminController::class, 'deleteSong'])->name('admin.deleteSong');
@@ -163,3 +165,9 @@ Route::prefix('stripe')->name('stripe.')->group(function () {
 Route::post('upload-image', [ImageController::class, 'storeImage'])->name('upload-image');
 
 Route::get('image/{id}', [ImageController::class, 'showImage']);
+
+// Đường dẫn tới manifest .mpd
+Route::get('/storage/dash/{file}', [AudioController::class, 'playAudio']);
+
+// Đường dẫn tới các segment .m4s
+Route::get('/storage/dash/segment/{file}', [AudioController::class, 'streamSegment']);

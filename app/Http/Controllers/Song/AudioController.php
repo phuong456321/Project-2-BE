@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Song;
 use App\Http\Controllers\Controller;
 use App\Models\Author;
 use App\Models\Playlist;
-use Auth;
+use App\Models\Song;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -53,12 +54,49 @@ class AudioController extends Controller
     }
 
     public function index(){
-        $authors = Author::inRandomOrder()->take(7)->get();
+        $songs = Song::inRandomOrder()->where('status', '=', 'published')->take(7)->get();
         if(Auth::check()){
-            $playlists = Playlist::where('user_id', auth()->user()->id)->get();}
-        else{
+            $user = Auth::user();
+            $playlists = $user->playlists()->with(['songs' => function ($query) {
+                $query->orderBy('in_playlists.created_at')->limit(1);
+            }])->get();
+        } else {
             $playlists = [];
         }
-        return view('user.home', compact('authors', 'playlists'));
+        return view('user.home', compact('playlists', 'songs'));
+    }
+
+      // Phương thức xử lý yêu cầu tải file manifest .mpd
+    public function playAudio($file)
+    {
+        // Đường dẫn đến file manifest .mpd
+        $filePath = storage_path("app/public/dash/{$file}");
+
+        // Kiểm tra nếu file tồn tại
+        if (!Storage::exists("public/dash/{$file}")) {
+            abort(404, "File manifest .mpd không tìm thấy");
+        }
+
+        // Trả về file .mpd (Manifest) với Content-Type là application/dash+xml
+        return response()->file($filePath, [
+            'Content-Type' => 'application/dash+xml',
+        ]);
+    }
+
+    // Phương thức xử lý các segment .m4s
+    public function streamSegment($file)
+    {
+        // Đường dẫn đến các segment .m4s
+        $filePath = storage_path("app/public/dash/{$file}");
+
+        // Kiểm tra nếu file tồn tại
+        if (!Storage::exists("public/dash/{$file}")) {
+            abort(404, "Segment .m4s không tìm thấy");
+        }
+
+        // Trả về segment .m4s với Content-Type là audio/mp4
+        return response()->file($filePath, [
+            'Content-Type' => 'video/mp4', // Hoặc 'video/mp4' tùy thuộc vào loại segment
+        ]);
     }
 }

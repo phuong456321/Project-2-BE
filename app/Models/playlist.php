@@ -22,4 +22,10 @@ class Playlist extends Model
     {
         return $this->hasMany(InPlaylist::class);
     }
+    public function songs()
+{
+    return $this->belongsToMany(Song::class, 'in_playlists', 'playlist_id', 'song_id')
+                ->withPivot('created_at');
+}
+
 }

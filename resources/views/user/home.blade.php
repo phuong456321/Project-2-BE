@@ -11,6 +11,7 @@
     @vite('resources/css/style.css')
     @vite('resources/js/app.js')
     @vite('resources/css/app.css')
+    @vite('resources/js/play.js')
     <style>
         .search-form input[type="text"] {
             height: 2rem;
@@ -27,6 +28,9 @@
 
         .search-song-icon {
             left: -3rem;
+        }
+        .search-form input[type="text"] {
+            height: 2.5rem;
         }
     </style>
     <script>
@@ -117,32 +121,7 @@
         function closePopup() {
             document.getElementById('overlay').classList.remove('active');
         }
-
-        // Function to toggle selection of a playlist
-        function toggleSelection(element) {
-            const checkIcon = element.querySelector('i.fas.fa-check-circle');
-
-            // Kiểm tra xem dấu tích đã có class 'hidden' chưa
-            if (checkIcon.classList.contains('hidden')) {
-                // Bỏ dấu tích (hiện icon check)
-                checkIcon.classList.remove('hidden');
-            } else {
-                // Đặt lại dấu tích (ẩn icon check)
-                checkIcon.classList.add('hidden');
-            }
-        }
-
-        // Function to confirm selection
-        function confirmSelection() {
-            const selected = document.querySelector('.fa-check-circle:not(.hidden)');
-            if (selected) {
-                const playlistName = selected.parentNode.querySelector('span').innerText;
-                alert(`Đã thêm vào danh sách phát: "${playlistName}"`);
-                closePopup();
-            } else {
-                alert('Vui lòng chọn một danh sách phát!');
-            }
-        }
+        let selectedPlaylists = []; // Lưu các playlist_id đã chọn
     </script>
 
 </head>
@@ -182,19 +161,30 @@
 
     </div>
     <div class="playlists">
+        @if (count($playlists) > 0)
         <h3>
             Playlists for you
         </h3>
-        @foreach ($authors as $author)
-            <div class="playlist">
-                <img src="{{ url('image/' . $author->img_id) }}"
-                    alt="{{ App\Models\Image::where('img_id', $author->img_id)->first()->img_name }}"
-                    style="height: 150px; width: 150px;">
-                <p>{{ $author->author_name }}</p>
-            </div>
-        @endforeach
+        @foreach ($playlists as $playlist)
+    <div class="playlist cursor-pointer">
+        <a href="{{ route('playlist', ['playlist_id' => $playlist->id]) }}" class="flex flex-col items-center text-white no-underline">
+            <div class="images">
+                @if ($playlist->songs->isEmpty())
+                    <img src="http://localhost:8000/images/profile/logo-home.png" alt="Default Image" class="song-image">
+                @else
+                    @foreach ($playlist->songs as $song)
+                        <img src="{{ url('image/' . $song->img_id) }}" alt="Song Image" class="song-image">
+                    @endforeach
+                @endif
+            </div>        
+        <h3>{{ $playlist->name }}</h3>
+        </a>
     </div>
-    <h3>
+@endforeach
+
+        @endif
+    </div>
+    {{-- <h3>
         Recently played
     </h3>
     <div class="recently-played">
@@ -308,56 +298,33 @@
                 </p>
             </div>
         </div>
-    </div>
+    </div> --}}
     <div class="trending-music">
         <h3>
             Trending Music
         </h3>
-        <div class="music">
-            <img alt="Hip Hop &amp; Rap" height="150" src="https://placehold.co/150x150" width="150" />
-            <p>
-                Hip Hop &amp; Rap
-            </p>
-            <p>
-                Trending Music
-            </p>
-        </div>
-        <div class="music">
-            <img alt="Jazz" height="150" src="https://placehold.co/150x150" width="150" />
-            <p>
-                Jazz
-            </p>
-            <p>
-                Trending Music
-            </p>
-        </div>
-        <div class="music">
-            <img alt="R&amp;B" height="150" src="https://placehold.co/150x150" width="150" />
-            <p>
-                R&amp;B
-            </p>
-            <p>
-                Trending Music
-            </p>
-        </div>
-        <div class="music">
-            <img alt="Chill" height="150" src="https://placehold.co/150x150" width="150" />
-            <p>
-                Chill
-            </p>
-            <p>
-                Trending Music
-            </p>
-        </div>
+        @foreach ($songs as $song)
+            <div class="music song-item max-h-[200px] min-h-[200px] overflow-hidden cursor-pointer" data-song-id="{{ $song->id }}">
+                <img alt="{{ $song->name }}" height="150" src="{{ url('image/' . $song->img_id) }}" width="150" />
+                <p id="song-name">
+                    {{ $song->song_name }}
+                </p>
+                <p id="song-artist">
+                    {{ $song->author->author_name }}
+                </p>
+                <audio src="{{ url('storage/' . $song->audio_path) }}" preload="auto" style="display:none;" controls></audio>
+                <p id="lyrics-text" class="whitespace-pre-line"> {{ $song->lyric }} </p>
+            </div>
+        @endforeach
     </div>
     <!-- Popup lyrics -->
     <div id="lyricPopup" class="popup-lyrics hidden">
         <div class="popup-lyrics-content">
             <div class="lyrics-container">
                 <div class="left">
-                    <img alt="Album cover with text 'SƠN TÙNG M-TP CÓ CHẮC YÊU LÀ ĐÂY' and a person looking down"
+                    <img alt="Album cover" id="footer-lyrics-img"
                         height="600"
-                        src="https://1.bp.blogspot.com/-capieOTmKV4/XSFjKrRJ-hI/AAAAAAAANuM/1VXeYK1rg88CEqlEDa6wESWFumYqFTIBACLcBGAs/s1600/bo-hinh-nen-son-tung-mtp-cute-dep-nhat-cho-dien-thoai-trong-mv-hay-trao-cho-anh-8.jpg"
+                        src=""
                         width="600" />
                 </div>
                 <div class="right">
@@ -365,45 +332,7 @@
                         <div class="tab active">LYRIC</div>
                     </div>
                     <div class="lyrics">
-                        <p>
-                            (Thấp thoáng ánh mắt, thấp thoáng ánh mắt)
-                            <br />
-                            (Thấp thoáng ánh mắt, thấp thoáng ánh mắt)
-                            <br />
-                            Good boy
-                        </p>
-                        <p>
-                            Thấp thoáng ánh mắt đôi môi mang theo hương mê say
-                            <br />
-                            Em cho anh tan trong miên man quên luôn đi đêm ngày
-                            <br />
-                            Chạm nhẹ vội vàng hai ba giây nhưng con tim đâu hay
-                            <br />
-                            Bối rối khẽ lên ngôi yêu thương đong đầy thật đầy
-                        </p>
-                        <p>
-                            Anh ngẩn ngơ cứ ngỡ
-                            <br />
-                            (Đó chỉ là giấc mơ)
-                            <br />
-                            Anh ngẩn ngơ cứ ngỡ
-                            <br />
-                            (Như đang ngất ngây trong giấc mơ)
-                            <br />
-                            Thật ngọt ngào êm dịu đắm chìm
-                            <br />
-                            Phút chốc viết tương tư gieo nên thơ (yeah, hey)
-                        </p>
-                        <p>
-                            Có câu ca trong gió hát ngân nga, ru trôi mây
-                            <br />
-                            Nhẹ nhàng đón ban mai ngang qua trao nụ cười (trao nụ cười)
-                            <br />
-                            Nắng đưa chen, khóe sắc, vui đùa giữa muôn ngàn hoa
-                            <br />
-                            Dưới ánh nắng dịu dàng âu yếm tâm hồn người
-                        </p>
-
+                        <p id="footer-lyrics-text" style="white-space: pre-line;"></p>
                     </div>
                 </div>
             </div>
@@ -411,7 +340,7 @@
         <!-- Audio element -->
         <audio id="audioPlayer" src="audio/music/W9TTtw6VsZJ7E1NiT9S0H9UxWXiKYXuHPVwAzqeo.mp3" preload="auto"
             style="display:none;" controls></audio>
-    </div> --}}
+    </div>
 
     <!-- Overlay Login Form -->
     <div id="loginOverlay" class="overlay" style="display: none;">
@@ -464,7 +393,7 @@
                     <label>
                         <input type="checkbox" name="remember" id="remember"> Remember me
                     </label>
-                    <a href="#" class="recover-password">Forgot Password?</a>
+                    <a href="{{ route('password.forgot') }}" class="recover-password">Forgot Password?</a>
                 </div>
                 <button class="action-btn" type="submit">Log In</button>
             </form>
@@ -532,20 +461,15 @@
             </div>
             <!-- Playlists -->
             <div id="playlists">
-                <div class="flex items-center mb-4 cursor-pointer" onclick="toggleSelection(this)">
+                @foreach ($playlists as $playlist)
+                <div class="flex items-center mb-4 cursor-pointer" onclick="toggleSelection(this)" data-playlist-id="{{ $playlist->id }}">
                     <img alt="Heart icon" class="w-6 h-6 rounded mr-3"
                         src="https://storage.googleapis.com/a1aa/image/B52gnTORR458O56CfplN0UUXr2vJMWPUie257n5NYDgJkH2TA.jpg"
                         width="24" height="24" />
-                    <span class="flex-1 text-white">Bài hát đã thích</span>
-                    <i class="fas fa-check-circle text-green-500 mr-2 hidden"></i>
+                    <span class="flex-1 text-white">{{ $playlist->name }}</span>
+                    <i class="fas fa-check-circle text-green-500 mr-2 !hidden"></i>
                 </div>
-                <div class="flex items-center mb-4 cursor-pointer" onclick="toggleSelection(this)">
-                    <img alt="Music note icon" class="w-6 h-6 rounded mr-3"
-                        src="https://storage.googleapis.com/a1aa/image/YFIUdA8GQWayP5XJap5gjCDpFVeTf1DB7k9ZhAmh1foRIPsnA.jpg"
-                        width="24" height="24" />
-                    <span class="flex-1 text-white">Danh sách phát của tôi ...</span>
-                    <i class="fas fa-check-circle text-green-500 mr-2 hidden"></i>
-                </div>
+                @endforeach
             </div>
             <!-- Buttons -->
             <div class="flex justify-between items-center mt-4">
@@ -559,7 +483,7 @@
             </div>
         </div>
     @endsection
-
+@include('components.footer')
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -668,6 +592,8 @@
             audioPlayer.src = `/audio/${filePath}`;
             audioPlayer.play();
         }
+        
+
     </script>
 
 </html>

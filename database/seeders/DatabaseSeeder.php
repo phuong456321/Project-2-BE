@@ -18,7 +18,6 @@ class DatabaseSeeder extends Seeder
             AreaSeeder::class,
             ArtistImgSeeder::class,
             AuthorSeeder::class,
-            SongSeeder::class,
         ]);
     }
 }

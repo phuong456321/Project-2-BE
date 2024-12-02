@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Song;
 
+use App\Models\Genre;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\Area;
+use App\Models\Image;
 use App\Models\Playlist;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -18,6 +21,12 @@ use Illuminate\Http\Request;
 
 class SongController extends Controller
 {
+    public function index()
+    {
+        $areas = Area::all();
+        $genres = Genre::all();
+        return view('user/upload', ['areas' => $areas, 'genres' => $genres]);
+    }
 
     public function uploadSong(Request $request)
     {
@@ -29,12 +38,20 @@ class SongController extends Controller
                 'area_id' => 'required|integer',
                 'genre_id' => 'required|integer',
                 'description' => 'nullable|string',
-                'img_id' => 'required|integer',
+                'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
                 'status' => 'required|string',
                 'lyric' => 'nullable|string',
                 'audio' => 'required|mimes:mp3,wav,ogg|max:20240', // Max 20MB
             ]);
 
+            $imageData = file_get_contents($request->file('image'));
+            $imageName = Str::uuid() . '.webp';
+            $image = Storage::disk('public')->put('images/' . $imageName, $imageData);
+            $img = Image::create([
+                'img_name' => $imageName,
+                'img_path' => 'images/' . $imageName,
+                'category' => 'song_img',
+            ]);
             // Lưu file 
             $audio = $request->file('audio');
             if ($audio) {
@@ -64,7 +81,7 @@ class SongController extends Controller
             $song->genre_id = $request->genre_id;
             $song->description = $request->description;
             $song->audio_path = $audioPath;  // Store the path to audio file
-            $song->img_id = $request->img_id;
+            $song->img_id = $img->id;
             $song->status = $status;
             $song->lyric = $request->lyric;
             $song->duration = $duration;
@@ -84,11 +101,20 @@ class SongController extends Controller
                 'pending' => 'Song is suspected of copyright infringement, please wait for review',
                 default => 'Song uploaded successfully.',
             };
-
-            return response()->json([
-                'message' => $message,
-                'song_name' => $song->song_name,
-            ], $status === 'deleted' ? 202 : 201);
+            if($status === 'deleted'){
+                flash()->error('Song is copyrighted and marked as deleted.');
+            }
+            else if($status === 'pending'){
+                flash()->warning('Song is suspected of copyright infringement, please wait for review');
+            }
+            else{
+                flash()->success('Song uploaded successfully.');
+            }
+            // return response()->json([
+            //     'message' => $message,
+            //     'song_name' => $song->song_name,
+            // ], $status === 'deleted' ? 202 : 201);
+            return redirect()->route('profile', Auth::user()->id);
         } catch (\Exception $e) {
             return response()->json(['Lỗi khi upload' => $e->getMessage()], 400);
         }
@@ -247,9 +273,11 @@ class SongController extends Controller
     {
         $query = $request->input('query');
         $songs = Song::where('song_name', 'like', '%' . $query . '%')
+            ->where('status', 'published') // Thêm điều kiện kiểm tra status
             ->orWhereHas('author', function ($q) use ($query) {
                 $q->where('author_name', 'like', '%' . $query . '%');
             })
+            ->where('status', 'published') // Cần thêm điều kiện này để áp dụng cho cả orWhereHas
             ->get();
 
         if(Auth::check()){

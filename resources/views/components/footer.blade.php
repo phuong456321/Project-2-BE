@@ -1,24 +1,26 @@
 <head>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
     <style>
         .footer img {
             position: absolute;
             margin-left: 2rem;
         }
+
+        .footer .current-song {
+            margin-right: 0;
+        }
     </style>
 </head>
-<div class="footer" id="footer" style="display: none;">
+<div class="footer" id="footer" style="display: none;" data-song-id="">
     <div class="loader">
         <div class="justify-content-center jimu-primary-loading"></div>
     </div>
     <img id="footerSongImg" src="" alt="Music Image" width="90" height="90">
     <div class="controls">
-        <i class="fas fa-step-backward">
-        </i>
-        <i class="fas fa-play" onclick="togglePlay()">
-        </i>
-        <i class="fas fa-step-forward">
-        </i>
+        <i class="fas fa-step-backward"></i>
+        <i class="fas fa-play" onclick="togglePlay()"></i>
+        <i class="fas fa-step-forward" onclick=""></i>
     </div>
     <div class="progress">
         <input type="range" id="progressBar" max="100" min="0" value="0"
@@ -37,60 +39,106 @@
         <i onclick="openPopup()" class="fas fa-ellipsis-h"></i>
     </div>
     <!-- Audio element -->
-    <audio id="footerAudioPlayer" src="" preload="auto" style="display:none;" controls></audio>
+    <audio id="footerAudioPlayer" style="display:none;" controls></audio>
 </div>
+<div id="adPopup" class="hidden fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg w-4/5 max-w-md text-center">
+        <h3 class="text-xl font-bold mb-4">Hỗ trợ chúng tôi bằng cách nâng cấp tài khoản!</h3>
+        <p class="text-gray-700 mb-6">Bạn đang sử dụng gói Free. Hãy xem quảng cáo hoặc nâng cấp lên Premium để trải nghiệm không giới hạn.</p>
+        <button onclick="closeAdPopup()" 
+            class="px-6 py-2 bg-green-500 text-white font-medium rounded-md hover:bg-green-600 transition">
+            Tiếp tục
+        </button>
+    </div>
+</div>
+
+
 <script>
-    // Lấy đối tượng audio và thanh tiến trình
-    const audioPlayer = document.getElementById('footerAudioPlayer');
+    const user = {
+        isLoggedIn: {{ Auth::check() ? 'true' : 'false' }},
+        plan: "{{ Auth::check() ? Auth::user()->plan : 'guest' }}"
+    };
+    // Initialize Dash.js Player
+    const footerAudioElement = document.getElementById('footerAudioPlayer');
+    const player = dashjs.MediaPlayer().create();
+    player.initialize(footerAudioElement, '', true); // Thiết lập player với element video/audio và để autoplay
+
     const progressBar = document.getElementById('progressBar');
     const currentTimeDisplay = document.getElementById('currentTime');
     const totalTimeDisplay = document.getElementById('totalTime');
-    // Điều khiển phát/tạm dừng
-    function togglePlay() {
-        if (audioPlayer.paused) {
-            audioPlayer.play(); // Phát nhạc
-            document.querySelector('.fa-play').classList.replace('fa-play', 'fa-pause'); // Thay đổi biểu tượng
-        } else {
-            audioPlayer.pause(); // Tạm dừng nhạc
-            document.querySelector('.fa-pause').classList.replace('fa-pause', 'fa-play'); // Thay đổi biểu tượng
-        }
-    }
 
-    // Thay đổi tiến trình phát nhạc khi người dùng kéo thanh tiến trình
-    function changeProgress(progressBar) {
-        if (!audioPlayer.readyState) {
-            alert('Tệp âm thanh chưa được tải đủ để tua. Vui lòng thử lại!');
-            return;
-        }
-        const newTime = (progressBar.value / 100) * audioPlayer.duration;
-        audioPlayer.currentTime = newTime; // Thay đổi currentTime trực tiếp
-    }
-
-    // Cập nhật tiến trình phát nhạc
-    audioPlayer.addEventListener('timeupdate', () => {
-        // Tính thời gian hiện tại và thời gian tổng
-        const currentTime = audioPlayer.currentTime;
-        const duration = audioPlayer.duration ? audioPlayer.duration : 0;
-
-        // Chuyển thời gian từ giây sang phút:giây (ví dụ: 2:15)
-        const formatTime = (timeInSeconds) => {
-            const minutes = Math.floor(timeInSeconds / 60);
-            const seconds = Math.floor(timeInSeconds % 60);
-            return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-        };
-
-        // Cập nhật thời gian hiện tại và tổng thời gian
-        currentTimeDisplay.textContent = formatTime(currentTime);
-        totalTimeDisplay.textContent = formatTime(duration);
-
-        // Cập nhật thanh tiến trình
-        const progressPercent = (currentTime / duration) * 100 || 0;
-        progressBar.value = progressPercent;
+    // Hàm bắt lỗi
+    player.on('error', function(event) {
+        console.error('Dash.js Error:', event.data);
     });
 
-    function playAudio(filePath) {
-        const audioPlayer = document.getElementById('footerAudioPlayer');
-        audioPlayer.src = `${filePath}`;
-        audioPlayer.play();
+    function togglePlay() {
+        if (footerAudioElement.paused) {
+            footerAudioElement.play();
+            document.querySelector('.fa-play').classList.replace('fa-play', 'fa-pause');
+        } else {
+            footerAudioElement.pause();
+            document.querySelector('.fa-pause').classList.replace('fa-pause', 'fa-play');
+        }
     }
+
+    function changeProgress(progressBar) {
+        const newTime = (progressBar.value / 100) * footerAudioElement.duration;
+        footerAudioElement.currentTime = newTime;
+    }
+
+    function formatTime(timeInSeconds) {
+        const minutes = Math.floor(timeInSeconds / 60);
+        const seconds = Math.floor(timeInSeconds % 60);
+        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
+
+    function playAudio(filePath) {
+        if (!filePath) {
+            console.error('Không có file để phát');
+            return;
+        }
+        player.attachSource(filePath); // Đính kèm nguồn DASH (MPD   file)
+        footerAudioElement.play();
+    }
+
+    function playAudioWithAd(filePath) {
+        if ((user.isLoggedIn && user.plan === 'free') || !user.isLoggedIn) {
+            // Hiển thị popup quảng cáo trước khi phát
+            showAdPopup(() => {
+                playAudio(filePath); // Gọi hàm playAudio sau khi tắt popup
+            });
+        } else {
+            playAudio(filePath); // Người dùng có gói Premium
+        }
+    }
+
+    function showAdPopup(callback) {
+        const popup = document.getElementById('adPopup');
+        popup.style.display = 'flex';
+
+        // Đóng popup và thực hiện callback
+        window.closeAdPopup = function() {
+            popup.style.display = 'none';
+            if (typeof callback === 'function') callback();
+        };
+    }
+
+
+    footerAudioElement.addEventListener('canplay', function() {
+        // Đăng ký sự kiện `timeupdate`
+        footerAudioElement.addEventListener('timeupdate', function() {
+            const currentTime = footerAudioElement.currentTime;
+            const duration = footerAudioElement.duration;
+
+            // Kiểm tra xem currentTime và duration có hợp lệ không
+            if (!isNaN(currentTime) && !isNaN(duration)) {
+                currentTimeDisplay.textContent = formatTime(currentTime);
+                totalTimeDisplay.textContent = formatTime(duration);
+
+                // Cập nhật thanh tiến trình
+                progressBar.value = (currentTime / duration) * 100 || 0;
+            }
+        });
+    });
 </script>

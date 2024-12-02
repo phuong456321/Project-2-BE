@@ -8,7 +8,7 @@
     <div class="bg-white p-8 rounded-lg shadow-md w-96">
         <h1 class="text-2xl font-bold text-center mb-2">Email details</h1>
         <p class="text-center text-gray-600 mb-6">Enter your email to verify your profile information.</p>
-        <form method="POST" action="#">
+        <form method="POST" action="{{ route('reset.password.email') }}">
             @csrf
             <div class="mb-4">
                 <label for="email" class="block text-gray-700 mb-2">Email</label>

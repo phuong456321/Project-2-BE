@@ -59,10 +59,10 @@
                         <div>
                             <h3 class="text-lg font-bold">{{ $topSong->song_name }}</h3>
                             <p class="text-gray-400">
-                                Bài hát • {{ $topSong->author->author_name }} • {{ $topSong->likes }} lượt thích •
+                                {{ $topSong->author->author_name }} • {{ $topSong->likes }} lượt thích •
                                 {{ $topSong->play_count }} lượt phát
                             </p>
-                            <audio src="{{ url('audio/' . $topSong->audio_path) }}" preload="auto" style="display:none;"
+                            <audio src="{{ url('storage/' . $topSong->audio_path) }}" preload="auto" style="display:none;"
                                 controls></audio>
                         </div>
                         <div class="ml-auto flex space-x-2">
@@ -102,7 +102,7 @@
                                         lượt
                                         thích • {{ $song->play_count }} lượt phát
                                     </p>
-                                    <audio src="{{ url('audio/' . $song->audio_path) }}" preload="auto"
+                                    <audio src="{{ url('storage/' . $song->audio_path) }}" preload="auto"
                                         style="display:none;" controls></audio>
                                 </div>
                             </div>
@@ -112,8 +112,6 @@
             </div>
         </div>
     @endsection
-    @include('components.footer')
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Lắng nghe sự kiện click vào các bài hát
@@ -129,13 +127,16 @@
                 document.getElementById('footerSongImg').setAttribute('src', songImage);
                 document.getElementById('footerSongTitle').innerText = songName;
                 document.getElementById('footerSongArtist').innerText = songArtist;
-
+                document.getElementById('footer').setAttribute('data-song-id', songId);
                 // Cập nhật nguồn âm thanh vào footer và kiểm tra nếu không có âm thanh
-                const footerAudioElement = document.getElementById('footerAudioPlayer');
                 if (audioSrc) {
                     footerAudioElement.setAttribute('src', audioSrc);
                     document.getElementById('footer').style.display = 'flex'; // Hiển thị footer khi có âm thanh
-                    togglePlay();
+                    const playButton = document.querySelector('.fa-play');
+                    if(playButton){
+                        playButton.classList.replace('fa-play', 'fa-pause');
+                    }   
+                    playAudioWithAd(audioSrc);
                 } else {
                     footerAudioElement.removeAttribute('src');
                     document.getElementById('footer').style.display = 'none'; // Ẩn footer nếu không có âm thanh

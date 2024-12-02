@@ -9,6 +9,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/css/playout.css'])
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/3.1.0/shaka-player.compiled.js"></script>
     @stack('styles')
     <style>
         .sidebar a.active {
@@ -60,17 +61,16 @@
             color: #f5efef;
             cursor: pointer;
         }
-
     </style>
     <script>
-        
         function flash(message, type = 'success') {
             // Lấy phần tử flash message
             const flashMessage = document.getElementById('flash-message');
 
             // Cập nhật nội dung và kiểu dáng dựa trên loại thông báo
             flashMessage.textContent = message;
-            flashMessage.className = `fixed top-4 right-4 py-2 px-4 rounded-lg shadow-lg z-50 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white`;
+            flashMessage.className =
+                `fixed top-4 right-4 py-2 px-4 rounded-lg shadow-lg z-50 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white`;
             // Hiển thị thông báo
             flashMessage.style.display = 'block';
             // Ẩn sau 3 giây
@@ -136,9 +136,10 @@
                     // Mở popup, thêm độ trễ nhỏ để hiệu ứng trượt lên
                     lyricPopup.classList.remove("hidden");
                     setTimeout(() => {
-                        lyricPopup.classList.add("show");
-                    },
-                    10); // Thêm chút độ trễ nhỏ để cho phép class 'hidden' thay đổi trước khi 'show' được áp dụng
+                            lyricPopup.classList.add("show");
+                        },
+                        10
+                        ); // Thêm chút độ trễ nhỏ để cho phép class 'hidden' thay đổi trước khi 'show' được áp dụng
                     // Khi popup mở, thêm lớp no-scroll vào body để ngừng cuộn trang
                     document.body.classList.add("no-scroll");
                 } else {
@@ -225,31 +226,47 @@
         }
 
 
-        // Function to toggle selection of a playlist
         function toggleSelection(element) {
             const checkIcon = element.querySelector('i.fas.fa-check-circle');
-
-            // Chuyển trạng thái của dấu tích
-            if (checkIcon.classList.contains('hidden')) {
-                checkIcon.classList.remove('hidden');
-                checkIcon.style.display = 'block';
+            const playlistId = element.getAttribute('data-playlist-id');
+            // Kiểm tra xem dấu tích đã có class 'hidden' chưa
+            if (checkIcon.classList.contains('!hidden')) {
+                selectedPlaylists.push(playlistId);
+                // Bỏ dấu tích (hiện icon check)
+                checkIcon.classList.remove('!hidden');
             } else {
-                checkIcon.classList.add('hidden');
-                checkIcon.style.display = 'none';
+                selectedPlaylists = selectedPlaylists.filter(id => id !== playlistId);
+                // Đặt lại dấu tích (ẩn icon check)
+                checkIcon.classList.add('!hidden');
             }
         }
-
-
-        // Function to confirm selection
         function confirmSelection() {
-            const selected = document.querySelector('.fa-check-circle:not(.hidden)');
-            if (selected) {
-                const playlistName = selected.parentNode.querySelector('span').innerText;
-                alert(`Đã thêm vào danh sách phát: "${playlistName}"`);
-                closePopup();
-            } else {
-                alert('Vui lòng chọn một danh sách phát!');
-            }
+            const songId = document.getElementById('footer').getAttribute('data-song-id');
+            selectedPlaylists.forEach(playlistId => {
+        fetch('/add-song-to-playlist', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // CSRF token
+            },
+            body: JSON.stringify({
+                playlist_id: playlistId,
+                song_id: songId,
+            })
+        })
+                .then(response => response.json())
+                .then(data => {
+                    flash('Bài hát đã được thêm vào danh sách phát!', 'success');
+                    console.log(`Playlist ${playlistId} updated successfully`, data);
+                })
+                    .catch(error => {
+                        flash('Có lỗi xảy ra khi thêm bài hát vào danh sách phát!', 'error');
+                        console.error(`Error updating playlist ${playlistId}:`, error);
+                    });
+            });
+
+            // Sau khi gửi, đóng popup
+            closePopup();
         }
     </script>
 </head>
@@ -258,7 +275,7 @@
 
     <div class="sidebar">
         <a class="no-hover" href="{{ route('home') }}">
-            <img alt="Logo" height="100" src="images/profile/logo-home.png" width="100" />
+            <img alt="Logo" height="100" src="http://localhost:8000/images/profile/logo-home.png" width="100" />
         </a>
         <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
         <a href="{{ route('library') }}" id="librarys"
@@ -279,45 +296,31 @@
                     <button id="closePopupBtn" class="absolute top-4 right-4 text-gray-400 hover:text-gray-300 text-xl">
                         &times;
                     </button>
-            
+
                     <!-- Tiêu đề -->
                     <h2 class="!text-2xl !font-bold !text-center !text-white !mb-6">Create Playlist</h2>
-            
+
                     <!-- Form -->
                     <form id="createPlaylistForm" method="POST" class="!space-y-4">
                         @csrf
                         <input type="hidden" id="user_id" name="user_id" value="">
-            
+
                         <!-- Tiêu đề -->
-                        <input
-                            type="text"
-                            id="title-playlist"
-                            name="title"
-                            placeholder="Tiêu đề"
-                            required
-                            class="!w-full !px-4 !py-3 !border !border-gray-600 !rounded-lg !shadow-sm !bg-gray-800 !text-white !placeholder-gray-400 !focus:outline-none !focus:ring-2 !focus:ring-green-400 !focus:border-green-400 !right-0"
-                        />
+                        <input type="text" id="title-playlist" name="title" placeholder="Tiêu đề" required
+                            class="!w-full !px-4 !py-3 !border !border-gray-600 !rounded-lg !shadow-sm !bg-gray-800 !text-white !placeholder-gray-400 !focus:outline-none !focus:ring-2 !focus:ring-green-400 !focus:border-green-400 !right-0" />
 
                         <!-- Mô tả -->
-                        <textarea
-                            id="description-playlist"
-                            name="description"
-                            placeholder="Mô tả"
-                            required
-                            class="!w-full !px-4 !py-3 !border !border-gray-600 !rounded-lg !shadow-sm !bg-gray-800 !text-white !placeholder-gray-400 !focus:outline-none !focus:ring-2 !focus:ring-green-400 !focus:border-green-400 !right-0"
-                        ></textarea>
-            
+                        <textarea id="description-playlist" name="description" placeholder="Mô tả" required
+                            class="!w-full !px-4 !py-3 !border !border-gray-600 !rounded-lg !shadow-sm !bg-gray-800 !text-white !placeholder-gray-400 !focus:outline-none !focus:ring-2 !focus:ring-green-400 !focus:border-green-400 !right-0"></textarea>
+
                         <!-- Nút tạo -->
-                        <button
-                            id="btn-createplayist"
-                            type="submit"
-                            class="!w-full !bg-gray-500 !text-white !px-4 !py-3 !rounded-lg !font-semibold !hover:bg-green-600 !focus:ring-2 !focus:ring-green-400 !focus:ring-offset-1 !focus:outline-none !right-0 !left-0 !top-0"
-                        >
+                        <button id="btn-createplayist" type="submit"
+                            class="!w-full !bg-gray-500 !text-white !px-4 !py-3 !rounded-lg !font-semibold !hover:bg-green-600 !focus:ring-2 !focus:ring-green-400 !focus:ring-offset-1 !focus:outline-none !right-0 !left-0 !top-0">
                             Create
                         </button>
                     </form>
                 </div>
-            </div>            
+            </div>
         </div>
     </div>
     <div class="main-content">
@@ -454,13 +457,13 @@
             <!-- Playlists -->
             <div id="playlists">
                 @foreach ($playlists as $playlist)
-                <div class="flex items-center mb-4 cursor-pointer" onclick="toggleSelection(this)">
-                    <img alt="Heart icon" class="w-6 h-6 rounded mr-3"
-                        src="https://storage.googleapis.com/a1aa/image/B52gnTORR458O56CfplN0UUXr2vJMWPUie257n5NYDgJkH2TA.jpg"
-                        width="24" height="24" />
-                    <span class="flex-1 text-white">{{ $playlist->name }}</span>
-                    <i class="fas fa-check-circle text-green-500 mr-2 hidden" style="display: none;"></i>
-                </div>
+                    <div class="flex items-center mb-4 cursor-pointer" onclick="toggleSelection(this)">
+                        <img alt="Heart icon" class="w-6 h-6 rounded mr-3"
+                            src="https://storage.googleapis.com/a1aa/image/B52gnTORR458O56CfplN0UUXr2vJMWPUie257n5NYDgJkH2TA.jpg"
+                            width="24" height="24" />
+                        <span class="flex-1 text-white">{{ $playlist->name }}</span>
+                        <i class="fas fa-check-circle text-green-500 mr-2 hidden" style="display: none;"></i>
+                    </div>
                 @endforeach
                 <div class="flex items-center mb-4 cursor-pointer" onclick="toggleSelection(this)">
                     <img alt="Music note icon" class="w-6 h-6 rounded mr-3"

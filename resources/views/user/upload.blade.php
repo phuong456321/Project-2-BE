@@ -1,67 +1,120 @@
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>
-        Upload Audio Files
-    </title>
-    <script src="https://cdn.tailwindcss.com">
-    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Nhạc</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .container i {
+            position: relative;
+            top: 28px;
+            left: 17rem;
+            font-size: 33px;
+            color: #fff;
+        }
 
+        #btn-upload {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 50px;
+            max-width: 30%;
+            position: relative;
+            left: 30rem;
+        }
+
+        #btn-upload:hover {
+            background-color: #3e8e41;
+        }
+    </style>
 </head>
 
-<body class="bg-gray-900 text-black font-sans">
+<body class="bg-gray-900 text-white">
     <a href="{{ route('home') }}" id="home">
         <img src="{{ asset('images/profile/logo-home.png') }}" alt="Logo" width="150">
     </a>
-    <div class="max-w-4xl mx-auto p-4">
-        <div class="flex justify-between items-center mb-4">
-            <div class="flex items-center">
-                <i class="fa-solid fa-upload text-2xl text-white"></i>
-                <h1 class="ml-2 text-xl font-semibold text-white">
-                    Upload
-                </h1>
-            </div>
-            <button class="text-2xl text-white">
-                ×
-            </button>
-        </div>
-        <div class="bg-gray-600 p-4 rounded-lg mb-6">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center ">
-                    <i class="fa-solid fa-upload text-lg text-white"></i>
-                    <span class="ml-2 text-sm text-white">
-                        0% of uploads used
-                    </span>
-                </div>
-                <span class="text-sm text-white">
-                    0 of 180 minutes
-                </span>
-            </div>
-        </div>
-        <div class="text-center mb-6">
-            <h2 class="text-2xl font-semibold text-white">
-                Upload your audio files.
-            </h2>
-            <p class="text-sm text-gray-600 text-white">
-                For best quality, use WAV, FLAC, AIFF, or ALAC. The maximum file size is 4GB uncompressed.
-                <a class="text-blue-500" href="#">
-                    Learn more.
-                </a>
-            </p>
-        </div>
-        <div class="border-dashed border-2 border-gray-300 p-8 rounded-lg text-center">
-            <img alt="Upload icon" class="mx-auto mb-4" height="100" src="https://www.freeiconspng.com/uploads/upload-icon-30.png" width="100" />
-            <p class="text-lg mb-4 text-white">
-                Drag and drop audio files to get started.
-            </p>
-            <form method="POST" action="#" enctype="multipart/form-data">
+    <div class="container mx-auto p-6">
+        <div class="max-w-3xl mx-auto bg-gray-800 rounded-lg shadow-md p-6">
+            <i class="fa-solid fa-upload text-2xl text-white"></i>
+            <h2 class="text-center text-2xl font-bold mb-6">Upload</h2>
+            <form action="{{ route('uploadSong') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <label class="text-white" for="file">Chọn file để upload:</label>
-                <input class="text-white" type="file" name="file" id="file" required>
-                <button class="text-black bg-white p-4 rounded-full hover:bg-gray-300 hover:scale-105 transition-transform duration-200" type="submit">Tải lên</button>
+                <input type="hidden" name="author_id" value="{{ Auth::user()->id }}">
+                <input type="hidden" name="status" value="pending">
+                <div class="mb-4">
+                    <label for="songName" class="block text-sm font-medium mb-2">Tên bài hát</label>
+                    <input type="text" id="songName" name="song_name"
+                        class="w-full p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Nhập tên bài hát" required>
+                </div>
+
+
+                <div class="mb-4">
+                    <label for="region" class="block text-sm font-medium mb-2">Khu vực</label>
+                    <select id="region" name="area_id"
+                        class="w-full p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                        <option value="" disabled selected>Chọn khu vực</option>
+                        @foreach ($areas as $area)
+                            <option value="{{ $area->id }}">{{ $area->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label for="genre" class="block text-sm font-medium mb-2">Thể loại</label>
+                    <select id="genre" name="genre_id"
+                        class="w-full p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                        <option value="" disabled selected>Chọn thể loại</option>
+                        @foreach ($genres as $genre)
+                            <option value="{{ $genre->id }}">{{ $genre->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label for="description" class="block text-sm font-medium mb-2">Mô tả</label>
+                    <textarea id="description" name="description"
+                        class="w-full p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        rows="3" placeholder="Nhập mô tả bài hát" required></textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label for="coverImage" class="block text-sm font-medium mb-2">Ảnh bìa</label>
+                    <input type="file" id="coverImage" name="image"
+                        class="w-full p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        accept="image/*" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="lyric" class="block text-sm font-medium mb-2">Lyric</label>
+                    <textarea id="lyric" name="lyric"
+                        class="w-full p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        rows="5" placeholder="Nhập lời bài hát"></textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label for="audioFile" class="block text-sm font-medium mb-2">File Audio</label>
+                    <input type="file" id="audioFile" name="audio"
+                        class="w-full p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        accept="audio/*" required>
+                </div>
+
+
+                <button id="btn-upload" type="submit"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition duration-200">
+                    Upload
+                </button>
             </form>
         </div>
     </div>
