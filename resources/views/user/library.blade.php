@@ -9,35 +9,22 @@
         </h2>
         <div class="grid grid-cols-4 gap-4">
 
-            {{-- <div class="flex flex-col items-center">
-                    <img alt="Liked music icon" class="w-24 h-24 rounded-lg cursor-pointer" height="100"
-                        src="https://storage.googleapis.com/a1aa/image/1WXOj4TWAUI0LJcJdK3fUOms0x8phjxkvb5qpFaIcJN4Zw5JA.jpg"
-                        width="100" />
-                    <span class="mt-2 cursor-pointer">
-                        Liked music
-                    </span>
-                    <span class="text-gray-400">
-                        Auto List
-                    </span>
-                </div> --}}
-
             @foreach ($playlists as $playlist)
                 <div class="flex flex-col items-center cursor-pointer">
                     <a href="{{ route('playlist', ['playlist_id' => $playlist->id]) }}" class="flex flex-col items-center">
-
                         <img alt="{{ $playlist->name }} cover" class="w-24 h-24 rounded-lg cursor-pointer" height="100"
-                            src="https://storage.googleapis.com/a1aa/image/9qspU7uk9yqCJ5dWUy5geXbUOz5novf4SoEcAR6lBaVxzgzTA.jpg"
+                            src="{{ $playlist->name == 'Liked music' ? 'https://i1.sndcdn.com/artworks-4Lu85Xrs7UjJ4wVq-vuI2zg-t500x500.jpg' : 'https://storage.googleapis.com/a1aa/image/9qspU7uk9yqCJ5dWUy5geXbUOz5novf4SoEcAR6lBaVxzgzTA.jpg' }}"
                             width="100" />
                         <span class="mt-2 cursor-pointer">
                             {{ $playlist->name }}
                         </span>
                         <span class="text-gray-400">
-                            Playlist
+                            {{ $playlist->name == 'Liked music' ? 'Auto List' : 'Playlist' }}
                         </span>
-
                     </a>
                 </div>
             @endforeach
+
         </div>
     </div>
 @endsection

@@ -13,23 +13,6 @@ use Illuminate\Support\Facades\DB;
 
 class PlaylistController extends Controller
 {
-    //Auto create Like Playlsit with token
-    public function createLikePlaylist(Request $request)
-    {
-        $request->validate([
-            'user_id' => 'required|integer',
-        ]);
-
-        $playlist = new playlist();
-        $playlist->user_id = $request->user_id;
-        $playlist->name = 'LikePlaylist';
-        $playlist->save();
-
-        return response()->json([
-            'message' => 'Like Playlist created successfully',
-            'playlist_name' => $playlist->name,
-        ], 201);
-    }
 
     //Get all playlist of user
     public function getPlaylist()
@@ -58,23 +41,6 @@ class PlaylistController extends Controller
         ], 201);
     }
 
-    //Add song to playlist
-    public function addSongToPlaylist(Request $request)
-    {
-        $request->validate([
-            'playlist_id' => 'required|integer',
-            'song_id' => 'required|integer',
-        ]);
-
-        $in_playlist = new InPlaylist();
-        $in_playlist->playlist_id = $request->playlist_id;
-        $in_playlist->song_id = $request->song_id;
-        $in_playlist->save();
-        return response()->json([
-            'message' => 'Song added to playlist successfully',
-        ], 201);
-    }
-
     //Get all song in playlist
     public function getSongInPlaylist($playlist_id)
     {
@@ -91,7 +57,6 @@ class PlaylistController extends Controller
             //audio_path trả về url của file audio
             if ($song) {
                 $song->audio_path = url('storage/' . $song->audio_path);
-                
             }
             array_push($songs, $song);
         }
@@ -140,5 +105,77 @@ class PlaylistController extends Controller
                 'message' => 'Playlist not found',
             ], 404);
         }
+    }
+
+
+    //Thích nhạc và thêm vào playlist
+    public function likeSong(Request $request)
+    {
+        $request->validate([
+            'song_id' => 'required|integer',
+        ]);
+
+        $user_id = Auth::user()->id;
+        // Kiểm tra xem bài hát đã được like chưa
+        $alreadyLiked = $this->checkIfLiked($request); // Gọi hàm checkIfLiked
+
+        if ($alreadyLiked) {
+            // Nếu bài hát đã được like, bỏ thích (set like = like -1)
+            $song = Song::find($request->song_id);
+            $song->likes -= 1;
+            $song->save();
+
+            // Lấy id của playlist "Liked music"
+            $playlist_id = Playlist::where('user_id', $user_id)->where('name', 'Liked music')->value('id');
+
+            // Loại bỏ bài hát khỏi playlist
+            InPlaylist::where('playlist_id', $playlist_id)
+                ->where('song_id', $request->song_id)
+                ->delete();
+
+            return response()->json([
+                'message' => 'Song removed from liked music',
+            ], 201);
+        } else {
+            // Nếu bài hát chưa được like, thực hiện thao tác thích bài hát và thêm vào playlist
+            $song = Song::find($request->song_id);
+            $song->likes +=1;
+            $song->save();
+
+            // Lấy id của playlist "Liked music"
+            $playlist_id = Playlist::where('user_id', $user_id)->where('name', 'Liked music')->value('id');
+
+            // Thêm bài hát vào playlist
+            $in_playlist = new InPlaylist();
+            $in_playlist->playlist_id = $playlist_id;
+            $in_playlist->song_id = $request->song_id;
+            $in_playlist->save();
+
+            return response()->json([
+                'message' => 'Song added to liked music',
+            ], 201);
+        }
+    }
+
+    public function checkIfLiked(Request $request)
+    {
+        $request->validate([
+            'song_id' => 'required|integer',
+        ]);
+
+        $user_id = Auth::user()->id;
+        // Lấy id của playlist "Liked music"
+        $playlist_id = Playlist::where('user_id', $user_id)->where('name', 'Liked music')->value('id');
+
+        if (!$playlist_id) {
+            return false; // Nếu không có playlist "Liked music", trả về false
+        }
+
+        // Kiểm tra xem bài hát đã có trong playlist chưa
+        $liked = InPlaylist::where('playlist_id', $playlist_id)
+            ->where('song_id', $request->song_id)
+            ->exists();
+
+        return $liked; // Trả về true nếu bài hát đã được like, ngược lại false
     }
 }

@@ -106,4 +106,17 @@ class User extends Authenticatable implements MustVerifyEmailContract
             'password' => 'hashed',
         ];
     }
+
+
+    // *Trigger here*
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            // Tạo một playlist mặc định khi user mới được tạo
+            \App\Models\Playlist::create([
+                'user_id' => $user->id,
+                'name' => 'Liked music',
+            ]);
+        });
+    }
 }

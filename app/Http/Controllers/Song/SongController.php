@@ -67,10 +67,10 @@ class SongController extends Controller
 
             // Kiểm tra bài hát có bản quyền không (Tên và file)
             $status = 'published';
-            if ($this->isCopyrightedAudio($audioPath)) {
-                $status = 'deleted';
-            } elseif ($this->isSimilarSongName($request->song_name)) {
+            if ($this->isSimilarSongName($request->song_name)) {
                 $status = 'pending';
+            } elseif ($this->isCopyrightedAudio($audioPath)) {
+                $status = 'deleted';
             }
 
             // Tạo bài hát mới
@@ -101,13 +101,11 @@ class SongController extends Controller
                 'pending' => 'Song is suspected of copyright infringement, please wait for review',
                 default => 'Song uploaded successfully.',
             };
-            if($status === 'deleted'){
+            if ($status === 'deleted') {
                 flash()->error('Song is copyrighted and marked as deleted.');
-            }
-            else if($status === 'pending'){
+            } else if ($status === 'pending') {
                 flash()->warning('Song is suspected of copyright infringement, please wait for review');
-            }
-            else{
+            } else {
                 flash()->success('Song uploaded successfully.');
             }
             // return response()->json([
@@ -127,7 +125,7 @@ class SongController extends Controller
         $inputPath = Storage::disk('public')->path($audioPath);
         $outputDir = Storage::disk('public')->path('dash/' . pathinfo($audioPath, PATHINFO_FILENAME));
 
-        Log::info("Input Path: $inputPath, Output Directory: $outputDir");
+        // Log::info("Input Path: $inputPath, Output Directory: $outputDir");
 
         // Tạo thư mục nếu nó chưa tồn tại
         if (!is_dir($outputDir)) {
@@ -136,11 +134,11 @@ class SongController extends Controller
 
         // Lệnh ffmpeg
         $command = "ffmpeg -i \"$inputPath\" " .
-        "-map 0:a:0 -b:a:0 128k -map 0:a:0 -b:a:1 256k -map 0:a:0 -b:a:2 320k " .
-        "-f dash \"$outputDir/output.mpd\"";
+            "-map 0:a:0 -b:a:0 128k -map 0:a:0 -b:a:1 256k -map 0:a:0 -b:a:2 320k " .
+            "-f dash \"$outputDir/output.mpd\"";
 
         // Ghi log lệnh ffmpeg
-        Log::info("FFmpeg Command: $command");
+        // Log::info("FFmpeg Command: $command");
 
         exec($command . " 2>&1", $output, $returnCode);
 
@@ -152,63 +150,122 @@ class SongController extends Controller
 
         return 'dash/' . pathinfo($audioPath, PATHINFO_FILENAME) . '/output.mpd';
     }
-    
+
     private function isCopyrightedAudio(string $filePath): bool
     {
         try {
-            // Đọc nội dung file nhạc upload
-            Log::info("Checking file path: $filePath");
-            if (!Storage::disk('public')->exists($filePath)) {
+            // Đường dẫn tuyệt đối tới file nhạc
+            $absolutePath = storage_path("app/public/$filePath");
+            if (!file_exists($absolutePath)) {
                 throw new \Exception("File không tồn tại: $filePath");
             }
-
-            $fileContent = file_get_contents(Storage::disk('public')->path($filePath));
-            if (!$fileContent) {
-                throw new \Exception("Không thể đọc nội dung file $filePath");
+    
+            // **Trích xuất 200KB đầu của file**
+            $fileSize = filesize($absolutePath);
+            $chunkSize = 200 * 1024; // 200KB
+            $startByte = 0; // Bắt đầu từ đầu file
+    
+            $handle = fopen($absolutePath, 'rb');
+            fseek($handle, $startByte);
+            $data = fread($handle, $chunkSize);
+            fclose($handle);
+    
+            // Tạo file tạm từ phần dữ liệu đầu
+            $chunkFilePath = storage_path("app/public/temp/first200KB.mp3");
+            file_put_contents($chunkFilePath, $data);
+    
+            // Tạo fingerprint cho phần đầu 200KB
+            $outputHead = [];
+            exec("fpcalc -json \"$chunkFilePath\"", $outputHead);
+            $uploadedFingerprintHead = json_decode(implode('', $outputHead), true);
+    
+            // Xóa file tạm
+            Storage::disk('public')->delete("temp/first200KB.mp3");
+    
+            if (empty($uploadedFingerprintHead) || !isset($uploadedFingerprintHead['fingerprint'])) {
+                throw new \Exception("Không thể tạo fingerprint đoạn đầu: $filePath");
             }
-
-            // Tạo hash từ file nhạc upload (10KB đầu tiên)
-            $uploadedHash = hash('sha256', substr($fileContent, 0, 1024 * 10));
-            Log::info("Uploaded Hash: $uploadedHash");
-
-            // Lấy danh sách file trong thư mục 'public/storage/Copyrighted_music'
+    
+            // **Trích xuất 200KB cuối của file**
+            $startByte = max(0, $fileSize - $chunkSize); // Bắt đầu từ 200KB cuối
+            $handle = fopen($absolutePath, 'rb');
+            fseek($handle, $startByte);
+            $data = fread($handle, $chunkSize);
+            fclose($handle);
+    
+            // Tạo file tạm từ phần dữ liệu cuối
+            $chunkFilePath = storage_path("app/public/temp/last200KB.mp3");
+            file_put_contents($chunkFilePath, $data);
+    
+            // Tạo fingerprint cho phần cuối 200KB
+            $outputChunk = [];
+            exec("fpcalc -json \"$chunkFilePath\"", $outputChunk);
+            $uploadedFingerprintChunk = json_decode(implode('', $outputChunk), true);
+    
+            // Xóa file tạm
+            Storage::disk('public')->delete("temp/last200KB.mp3");
+    
+            if (empty($uploadedFingerprintChunk) || !isset($uploadedFingerprintChunk['fingerprint'])) {
+                throw new \Exception("Không thể tạo fingerprint đoạn cuối: $filePath");
+            }
+    
+            // Lấy danh sách file JSON trong thư mục Copyrighted_music
             $copyrightedFiles = Storage::disk('public')->files('Copyrighted_music');
             if (empty($copyrightedFiles)) {
-                Log::warning('Thư mục public/storage/Copyrighted_music không có file nào.');
+                Log::warning("Thư mục 'Copyrighted_music' không có file nào.");
+                return false;
             }
-            // So sánh hash với các file bản quyền
-            foreach ($copyrightedFiles as $file) {
-                // Kiểm tra file bản quyền có tồn tại không
-                if (!Storage::disk('public')->exists($file)) {
-                    Log::error("File bản quyền không tồn tại: $file");
+    
+            // So sánh fingerprint
+            foreach ($copyrightedFiles as $jsonFile) {
+                $jsonContent = Storage::disk('public')->get($jsonFile);
+                $copyrightedFingerprint = json_decode($jsonContent, true);
+    
+                if (empty($copyrightedFingerprint)) {
+                    Log::warning("File JSON không hợp lệ: $jsonFile");
                     continue;
                 }
-
-                // Đọc nội dung file
-                $absolutePath = Storage::disk('public')->path($file);
-                $copyrightedContent = file_get_contents($absolutePath);
-                if (!$copyrightedContent) {
-                    Log::error("Không thể đọc nội dung file bản quyền: $file");
-                    continue;
+    
+                // So sánh fingerprint đoạn đầu
+                $similarityHead = 0;
+                if (isset($copyrightedFingerprint['first_200KB_fingerprint'])) {
+                    similar_text(
+                        $uploadedFingerprintHead['fingerprint'],
+                        $copyrightedFingerprint['first_200KB_fingerprint']['fingerprint'] ?? '',
+                        $similarityHead
+                    );
                 }
-
-                // Tạo hash từ file bản quyền
-                $copyrightedHash = hash('sha256', substr($copyrightedContent, 0, 1024 * 10));
-                Log::info("Hash của file bản quyền ($file): $copyrightedHash");
-
-                // So sánh hash
-                if ($uploadedHash === $copyrightedHash) {
-                    Log::info("File nhạc trùng khớp với bản quyền: $file");
+    
+                // So sánh fingerprint đoạn cuối
+                $similarityChunk = 0;
+                if (isset($copyrightedFingerprint['last_200KB_fingerprint'])) {
+                    similar_text(
+                        $uploadedFingerprintChunk['fingerprint'],
+                        $copyrightedFingerprint['last_200KB_fingerprint']['fingerprint'] ?? '',
+                        $similarityChunk
+                    );
+                }
+    
+                Log::info("----------------------------------------------------------------");
+                Log::info("So sánh fingerprint: $jsonFile");
+                Log::info("Độ tương đồng đoạn đầu: $similarityHead%");
+                Log::info("Độ tương đồng đoạn cuối: $similarityChunk%");
+    
+                // Nếu mức độ tương đồng >= 60% cho bất kỳ loại fingerprint nào, coi như vi phạm bản quyền
+                if ($similarityHead >= 60 || $similarityChunk >= 60) {
+                    Log::info("File nhạc trùng khớp với bản quyền: $jsonFile");
                     return true;
                 }
             }
-
+    
             return false;
         } catch (\Exception $e) {
             Log::error("Lỗi trong isCopyrightedAudio: " . $e->getMessage());
             return false;
         }
     }
+    
+
 
 
 
@@ -280,11 +337,101 @@ class SongController extends Controller
             ->where('status', 'published') // Cần thêm điều kiện này để áp dụng cho cả orWhereHas
             ->get();
 
-        if(Auth::check()){
-                $playlists = Playlist::where('user_id', auth()->user()->id)->get();}
-        else{
+        if (Auth::check()) {
+            $playlists = Playlist::where('user_id', auth()->id)->get();
+        } else {
             $playlists = [];
         }
         return view('user/searchsong', ['songs' => $songs, 'query' => $query, 'playlists' => $playlists]);
+    }
+
+    //Upload nhạc bản quyền để thực hiện chức năng so sánh
+    public function uploadAndGenerateFingerprint(Request $request)
+    {
+        $request->validate([
+            'audio_files.*' => 'required|file|mimes:mp3,wav|max:15240', // Tối đa 15MB mỗi file
+        ]);
+
+        $files = $request->file('audio_files'); // Nhận danh sách file upload
+
+        foreach ($files as $file) {
+            // Lưu file nhạc tạm thời
+            $audioPath = $file->store('temp', 'public');
+            $absolutePath = storage_path("app/public/$audioPath");
+            Log::info("Uploaded file: $absolutePath");
+
+            $chunkSize = 200 * 1024; // 200KB (thay đổi nếu cần)
+            $fileSize = filesize($absolutePath);
+
+            // **Trích xuất 200KB đầu**
+            $handle = fopen($absolutePath, 'rb');
+            $dataFirst = fread($handle, $chunkSize); // Đọc từ đầu file
+            fclose($handle);
+
+            $firstChunkFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . '_first200KB.mp3';
+            $firstChunkFilePath = storage_path("app/public/temp/$firstChunkFileName");
+            file_put_contents($firstChunkFilePath, $dataFirst);
+
+            // Tạo fingerprint cho đoạn đầu
+            $outputFirst = [];
+            exec("fpcalc -json \"$firstChunkFilePath\"", $outputFirst);
+            $resultFirst = json_decode(implode('', $outputFirst), true);
+
+            // Kiểm tra nếu không tạo được fingerprint cho đoạn đầu
+            if (empty($resultFirst)) {
+                Storage::disk('public')->delete($audioPath);
+                Storage::disk('public')->delete($firstChunkFilePath);
+                return response()->json([
+                    'error' => "Could not generate fingerprint for the first 200KB of {$file->getClientOriginalName()}",
+                ], 500);
+            }
+
+            // **Trích xuất 200KB cuối**
+            $startByte = max(0, $fileSize - $chunkSize);
+
+            $handle = fopen($absolutePath, 'rb');
+            fseek($handle, $startByte); // Di chuyển con trỏ tới 200KB cuối
+            $dataLast = fread($handle, $chunkSize);
+            fclose($handle);
+
+            $lastChunkFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . '_last200KB.mp3';
+            $lastChunkFilePath = storage_path("app/public/temp/$lastChunkFileName");
+            file_put_contents($lastChunkFilePath, $dataLast);
+
+            // Tạo fingerprint cho đoạn cuối
+            $outputLast = [];
+            exec("fpcalc -json \"$lastChunkFilePath\"", $outputLast);
+            $resultLast = json_decode(implode('', $outputLast), true);
+
+            // Kiểm tra nếu không tạo được fingerprint cho đoạn cuối
+            if (empty($resultLast)) {
+                Storage::disk('public')->delete($audioPath);
+                Storage::disk('public')->delete($firstChunkFilePath);
+                Storage::disk('public')->delete($lastChunkFilePath);
+                return response()->json([
+                    'error' => "Could not generate fingerprint for the last 200KB of {$file->getClientOriginalName()}",
+                ], 500);
+            }
+
+            // Lưu thông tin fingerprint vào JSON
+            $jsonFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . '.json';
+            $jsonPath = "Copyrighted_music/$jsonFileName";
+
+            $dataToSave = [
+                'first_200KB_fingerprint' => $resultFirst,
+                'last_200KB_fingerprint' => $resultLast,
+            ];
+
+            Storage::disk('public')->put($jsonPath, json_encode($dataToSave, JSON_PRETTY_PRINT));
+
+            // Xóa file tạm
+            Storage::disk('public')->delete($audioPath);
+            Storage::disk('public')->delete("temp/$firstChunkFileName");
+            Storage::disk('public')->delete("temp/$lastChunkFileName");
+        }
+
+        return response()->json([
+            'message' => 'Fingerprints for the first and last 200KB generated successfully!',
+        ]);
     }
 }

@@ -21,6 +21,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'add-song-to-playlist',
             'delete-song-in-playlist',
             'delete-playlist',
+            '/upload/fingerprint',
+            'like-song',
         ]);
 
     })
