@@ -60,9 +60,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::post('create-like-playlist', [PlaylistController::class, 'createLikePlaylist']);
     Route::post('create-playlist', [PlaylistController::class, 'createPlaylist']);
-    Route::post('add-song-to-playlist', [PlaylistController::class, 'addSongToPlaylist']);
     Route::post('delete-song-in-playlist', [PlaylistController::class, 'removeSongFromPlaylist']);
     Route::post('delete-playlist', [PlaylistController::class, 'deletePlaylist'])->name('delete');
+
+    //Song (like,....)
+    Route::post('like-song', [PlaylistController::class, 'likeSong']);
+    Route::post('check-like', [PlaylistController::class, 'checkIfLiked']);
 
 
     //Profile
@@ -173,3 +176,7 @@ Route::get('/storage/dash/{file}', [AudioController::class, 'playAudio']);
 
 // Đường dẫn tới các segment .m4s
 Route::get('/storage/dash/segment/{file}', [AudioController::class, 'streamSegment']);
+
+//Uplaod nhạc bản quyền và sinh fingerprint
+Route::post('/upload/fingerprint', [SongController::class, 'uploadAndGenerateFingerprint'])->name('upload.fingerprint');
+

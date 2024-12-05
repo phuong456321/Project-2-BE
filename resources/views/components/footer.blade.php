@@ -10,6 +10,10 @@
         .footer .current-song {
             margin-right: 0;
         }
+
+        .fas.fa-heart::before {
+            color: #FFF;
+        }
     </style>
     @vite('resources/js/history_play.js')
 </head>
@@ -33,7 +37,7 @@
         <p id="footerSongArtist">Tên ca sĩ</p>
     </div>
     <div class="actions">
-        <i class="fas fa-heart"></i>
+        <i class="fas fa-heart" onclick="likeSong()"></i>
         <i class="fas fa-random"></i>
         <i class="fas fa-volume-up"></i>
         <i class="fa-solid fa-music" id="toggleLyricsIcon"></i>
@@ -70,20 +74,16 @@
             <span id="closePopup" class="close-btn">&times;</span>
             <!-- Chèn mã quảng cáo Google AdSense -->
             <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4089886839959004"
-        crossorigin="anonymous"></script>
+                crossorigin="anonymous"></script>
             <!-- Nulltifly-home -->
-            <ins class="adsbygoogle"
-                style="display:block"
-                data-ad-client="ca-pub-4089886839959004"
-                data-ad-slot="5674451393"
-                data-ad-format="auto"
-                data-full-width-responsive="true"></ins>
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4089886839959004"
+                data-ad-slot="5674451393" data-ad-format="auto" data-full-width-responsive="true"></ins>
             <script>
                 (adsbygoogle = window.adsbygoogle || []).push({});
             </script>
         </div>
 
-        <button onclick="closeAdPopup()" 
+        <button onclick="closeAdPopup()"
             class="px-6 py-2 bg-green-500 text-white font-medium rounded-md hover:bg-green-600 transition">
             Tiếp tục
         </button>
@@ -179,4 +179,26 @@
             }
         });
     });
+
+    function likeSong() { //Thêm bài hát vào likeplaylsit nếu người dùng đã đăng nhập
+        const songId = document.getElementById('footer').dataset.songId;
+
+        if (!user.isLoggedIn) {
+            alert("Bạn cần đăng nhập để thích bài hát.");
+            return;
+        }
+
+        // Gửi request lưu bài hát vào like playlist
+        fetch(`/like-song`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                song_id: songId,
+            })
+        }).catch(error => {
+            console.log('Error:', error);
+        });
+    }
 </script>
