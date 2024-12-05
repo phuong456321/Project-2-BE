@@ -2,6 +2,7 @@
 
 @section('title', 'Library')
 @vite('resources/css/style.css')
+
 @section('content')
     <div class="p-4">
         <h2 class="text-3xl font-bold mb-4">

@@ -30,6 +30,7 @@ class SongController extends Controller
 
     public function uploadSong(Request $request)
     {
+        dd($request);
         try {
             // Validate input
             $request->validate([

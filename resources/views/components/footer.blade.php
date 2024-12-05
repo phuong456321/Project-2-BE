@@ -11,6 +11,7 @@
             margin-right: 0;
         }
     </style>
+    @vite('resources/js/history_play.js')
 </head>
 <div class="footer" id="footer" style="display: none;" data-song-id="">
     <div class="loader">
@@ -40,6 +41,27 @@
     </div>
     <!-- Audio element -->
     <audio id="footerAudioPlayer" style="display:none;" controls></audio>
+</div>
+<!-- Popup lyrics -->
+<div id="lyricPopup" class="popup-lyrics hidden">
+    <div class="popup-lyrics-content">
+        <div class="lyrics-container">
+            <div class="left">
+                <img alt="Album cover" id="footer-lyrics-img"
+                    height="600"
+                    src=""
+                    width="600" />
+            </div>
+            <div class="right">
+                <div class="tabs">
+                    <div class="tab active">LYRIC</div>
+                </div>
+                <div class="lyrics">
+                    <p id="footer-lyrics-text" style="white-space: pre-line;"></p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div id="adPopup" class="hidden fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center">
     <div class="!bg-white !p-6 !rounded-lg !w-4/5 !max-w-md !text-center">

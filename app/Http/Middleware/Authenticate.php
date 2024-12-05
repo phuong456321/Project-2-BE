@@ -2,20 +2,27 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
-use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 
 class Authenticate
 {
-    protected function redirectTo($request)
+    public function handle($request, Closure $next)
     {
-        // Kiểm tra nếu route là admin
-        if ($request->is('admin/*')) {
-            return route('admin.login'); // Chuyển đến trang login admin
-        }
+        // Kiểm tra xem người dùng có cookie "remember_token" không
+        if (Cookie::has('remember_token')) {
+        $token = Cookie::get('remember_token');
 
-        // Mặc định chuyển đến trang login user thường
-        return route('login');
+        // Tìm token trong database
+        $user = User::where('remember_token', hash('sha256', $token))->first();
+
+        if ($user) {
+            // Tìm người dùng tương ứng và đăng nhập cho họ
+                Auth::guard('web')->login($user);
+            }
+        }
+        return $next($request);
     }
 }

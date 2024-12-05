@@ -10,11 +10,24 @@ class Payment extends Model
 
     protected $fillable = [
         'user_id',
-        'product_id',
-        'payer_name',
-        'payer_email',
-        'payment_status',
+        'stripe_payment_intent_id',
+        'stripe_checkout_session_id',
+        'momo_transaction_id',
+        'momo_payment_request_id',
+        'momo_status',
+        'transaction_id',
+        'amount',
+        'currency',
+        'status',
         'payment_method',
+        'payment_status',
+        'product_id',
+        'quantity',
+        'price',
+        'tax_amount',
+        'fee_amount',
+        'total_amount',
+        'completed_at',
     ];
 
     public function user()

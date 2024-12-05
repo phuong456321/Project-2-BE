@@ -8,6 +8,7 @@
     <title>Admin Dashboard</title>
     @vite('resources/css/app.css') <!-- Laravel Mix -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    @yield('head')
     <style>
         .sidebar {
             will-change: transform;
@@ -128,6 +129,7 @@
     </div>
 </body>
 <script>
+    @yield('script')
     function openLogoutModal() {
         // Hiển thị modal
         document.getElementById('logoutModal').classList.remove('hidden');

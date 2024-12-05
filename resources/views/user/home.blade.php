@@ -317,30 +317,6 @@
             </div>
         @endforeach
     </div>
-    <!-- Popup lyrics -->
-    <div id="lyricPopup" class="popup-lyrics hidden">
-        <div class="popup-lyrics-content">
-            <div class="lyrics-container">
-                <div class="left">
-                    <img alt="Album cover" id="footer-lyrics-img"
-                        height="600"
-                        src=""
-                        width="600" />
-                </div>
-                <div class="right">
-                    <div class="tabs">
-                        <div class="tab active">LYRIC</div>
-                    </div>
-                    <div class="lyrics">
-                        <p id="footer-lyrics-text" style="white-space: pre-line;"></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Audio element -->
-        <audio id="audioPlayer" src="audio/music/W9TTtw6VsZJ7E1NiT9S0H9UxWXiKYXuHPVwAzqeo.mp3" preload="auto"
-            style="display:none;" controls></audio>
-    </div>
 
     <!-- Overlay Login Form -->
     <div id="loginOverlay" class="overlay" style="display: none;">

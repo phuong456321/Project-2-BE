@@ -45,19 +45,4 @@ public function show(Request $request)
         'product' => $product,
     ]);
 }
-
-// Xử lý thanh toán
-public function processPayment(Request $request)
-{
-    $paymentMethod = $request->input('payment_method');
-    $amount = $request->input('amount'); // Số tiền cần thanh toán
-    $name = $request->input('name'); // Tên gói được chọn
-    if ($paymentMethod === 'stripe') {
-        return redirect()->route('stripe.stripe', ['amount' => $amount, 'name' => $name]);
-    } elseif ($paymentMethod === 'momo') {
-        return redirect()->route('momo.createPayment', ['amount' => $amount]);
-    }
-
-    return back()->with('error', 'Invalid payment method selected!');
-}
 }

@@ -7,9 +7,6 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\AuthorController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\Song\AudioController;
-use App\Http\Middleware\EnsureEmailIsVerified;
-use App\Models\Playlist;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\LoginController;
 use App\Http\Controllers\User\LoginGoogleController;
@@ -19,18 +16,16 @@ use App\Http\Controllers\Song\SongController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\Playlist\PlaylistController;
 use App\Http\Controllers\User\PaymentController;
+use App\Http\Controllers\User\PaymentWithMomoController;
 use App\Http\Controllers\User\PaymentWithStripeController;
-use App\Models\Song;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use App\Models\Author;
+
+
 
 Route::get('/', [AudioController::class, 'index'])->name('home');
 
 Route::get('/checkout', [PaymentController::class, 'show'])->name('checkout.show');
-Route::post('/checkout/process', [PaymentController::class, 'processPayment'])->name('checkout.process');
 
 Route::get('/albums', function () {
     return view('user/albums'); // Trang album
@@ -84,7 +79,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/premium',[PaymentController::class, 'index'])->name('premium');
     Route::get('/upload-song', [SongController::class, 'index'])->name('upload');
 });
-Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
@@ -160,6 +154,14 @@ Route::prefix('stripe')->name('stripe.')->group(function () {
     Route::post('stripe', [PaymentWithStripeController::class, 'stripe'])->name('stripe');
     Route::get('success', [PaymentWithStripeController::class, 'success'])->name('success');
     Route::get('cancel', [PaymentWithStripeController::class, 'cancel'])->name('cancel');
+});
+
+Route::prefix('momo')->name('momo.')->group(function () {
+    Route::post('/momo-payment', [PaymentWithMomoController::class, 'createPayment'])->name('momo');
+    Route::get('/momo-return', [PaymentWithMomoController::class, 'return'])->name('return');
+    Route::post('/momo-notify', [PaymentWithMomoController::class, 'notify'])->name('notify');
+
+
 });
 
 Route::post('upload-image', [ImageController::class, 'storeImage'])->name('upload-image');

@@ -33,7 +33,10 @@ class AdminSongsController extends Controller
         // Fetch all genres for filter dropdown
         $genres = Genre::all();
 
-        return view('admin.songs', compact('songs', 'genres'));
+        // Fetch all authors for filter dropdown
+        $authors = Author::all();
+
+        return view('admin.songs', compact('songs', 'genres', 'authors'));
     }
     // Cập nhật trạng thái bài hát
     public function updateStatus(Request $request, $id)

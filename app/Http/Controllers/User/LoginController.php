@@ -29,20 +29,23 @@ class LoginController extends Controller
             }
             $remember = $request->has('remember');
             // Thử đăng nhập
-            if (!Auth::attempt($request->only('email', 'password'))) {
+            if (!Auth::attempt($request->only('email', 'password'), $remember)) {
                 flash()->option('timeout', 2000)->error('Email or Password is incorrect');
                 return redirect()->back()->with('message', 'Email or Password is incorrect')->withInput();
             }
-            $user = User::where('email', $request->email)->first();
-            Auth::login($user, $remember);
+            if(auth()->user()->status == 'inactive'){
+                Auth::logout();
+                flash()->option('timeout', 2000)->error('Your account has been deactivated');
+                return redirect()->route('home')->with('message', 'Your account has been deactivated');
+            }
             // Check if the user is verified
-            if (!$user->hasVerifiedEmail()) {
+            if (!auth()->user()->hasVerifiedEmail()) {
                 return redirect()->with('error', 'Your email address is not verified. Please check your email for the verification link.');
             }
             if($remember){
                 $token = Str::random(60);
-                $user->remember_token = hash('sha256', $token);
-                $user->save();
+                auth()->user()->remember_token = hash('sha256', $token);
+                auth()->user()->save();
                 Cookie::queue('remember_token', $token, 60 * 24 * 30);
             }
             flash()->option('timeout', 2000)->success('Logged in successfully');

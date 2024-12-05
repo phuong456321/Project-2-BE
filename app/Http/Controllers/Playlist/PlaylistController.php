@@ -80,6 +80,7 @@ class PlaylistController extends Controller
     {
         $in_playlist = InPlaylist::where('playlist_id', $playlist_id)->get();
         $songs = [];
+        $totalSeconds = 0;
         $playlist = Playlist::where('user_id', Auth::user()->id)->get();
         foreach ($in_playlist as $item) {
             $song = song::find($item->song_id);
@@ -91,11 +92,23 @@ class PlaylistController extends Controller
             //audio_path trả về url của file audio
             if ($song) {
                 $song->audio_path = url('storage/' . $song->audio_path);
+
+                 // Tính tổng thời gian bài hát
+             $parts = explode(':', $song->duration); // duration dạng 'mm:ss'
+             $minutes = intval($parts[0]);
+            $seconds = intval($parts[1]);
+            $totalSeconds += $minutes * 60 + $seconds;
                 
             }
             array_push($songs, $song);
         }
-        return view('user/playist', ['songs' => $songs, 'playlists' => $playlist]);
+        // Chuyển đổi tổng giây thành định dạng mm:ss hoặc hh:mm:ss
+    $hours = floor($totalSeconds / 3600);
+    $minutes = floor(($totalSeconds % 3600) / 60);
+    $seconds = $totalSeconds % 60;
+
+    $totalDuration = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds); // hh:mm:ss
+        return view('user/playist', ['songs' => $songs, 'playlists' => $playlist, 'playlist_id' => $playlist_id, 'totalDuration' => $totalDuration]);
     }
 
 

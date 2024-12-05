@@ -6,7 +6,7 @@
 @vite('resources/css/playist.css')
 @endpush
 
-
+@extends('components.footer')
 
 @section('content')
 
@@ -14,28 +14,21 @@
     <div class="container">
         <div class="left-panel">
             <div class="album-cover">
-                <img alt="Album cover 1" height="150" src="https://storage.googleapis.com/a1aa/image/BEmMbvrRne3UcqIsWscmafVu1AyjrGCp9EnYeszIpKdhxJnnA.jpg" width="150" />
-                <img alt="Album cover 2" height="150" src="https://storage.googleapis.com/a1aa/image/cvizA7M7ipZbNd2L7StmwNI91LDfWwWzrTsIyD0kUUCbcy5JA.jpg" width="150" />
-                <img alt="Album cover 3" height="150" src="https://storage.googleapis.com/a1aa/image/obTGgLJmPwruFRjgfKxMcYdlC7RVM70nPZmJoqctAUSe4kzTA.jpg" width="150" />
-                <img alt="Album cover 4" height="150" src="https://storage.googleapis.com/a1aa/image/UD5Qe7PW4zW6HCQRoDXH9zArXZFr9Crhzir4XqV2qWNdcy5JA.jpg" width="150" />
+                @foreach (collect($songs)->take(4) as $song)
+                <img alt="Album cover 1" height="150" src="{{ url('image/' . $song->img_id) }}" width="150" />
+                @endforeach
             </div>
             <div class="playlist-info">
                 <h2>
-                    pock
+                    {{ \App\Models\Playlist::find($playlist_id)->name }}
                 </h2>
                 <div class="user-info">
                     <i class="fas fa-user-circle">
                     </i>
-                    Dat Le
+                    {{ Auth::user()->name }}
                 </div>
                 <p>
-                    Danh sách phát • Công khai • 2024
-                </p>
-                <p>
-                    3 bản nhạc • 11 phút, 18 giây
-                </p>
-                <p>
-                    pock
+                    {{ count($songs) }} bản nhạc • {{ $totalDuration }}
                 </p>
                 <div class="actions">
                     <button>
@@ -67,7 +60,7 @@
                 <div class="song-item">
                     <div class="song-info">
                         <!-- Hiển thị ảnh bìa bài hát -->
-                        <img alt="{{ $song->song_name }} cover" height="50" src="https://storage.googleapis.com/a1aa/image/EfZvf2K5ZQlCdkOeZ51UWtSqHzJWjJAUXTvaZICHcfVsjTOPB.jpg" width="50" />
+                        <img alt="{{ $song->song_name }} cover" height="50" src="{{ url('image/' . $song->img_id) }}" width="50" />
 
                         <div>
                             <!-- Hiển thị tên bài hát và nghệ sĩ -->

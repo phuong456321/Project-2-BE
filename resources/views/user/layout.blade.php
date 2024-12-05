@@ -370,7 +370,7 @@
         </div>
         @yield('content')
     </div>
-    @include('components.footer')
+    @extends('components.footer')
     <!-- Popup lyrics -->
     <div id="lyricPopup" class="popup-lyrics hidden">
         <div class="popup-lyrics-content">

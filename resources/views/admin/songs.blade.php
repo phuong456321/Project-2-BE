@@ -1,5 +1,7 @@
 @extends('admin.admin')
-
+@section('head')
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.0/dist/cdn.min.js" defer></script>
+@endsection
 @section('content')
     <!-- Main Content -->
     <h1 class="text-2xl font-bold mb-4">Manage Songs</h1>
@@ -42,13 +44,70 @@
                 <!-- Clear Filters Button -->
                 <div class="flex justify-start sm:justify-end w-full sm:w-auto">
                     <a href="{{ route('admin.songs') }}"
-                        class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 flex items-center justify-center w-full sm:w-auto    ">
+                        class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 flex items-center justify-center w-full sm:w-auto">
                         Clear Filters
                     </a>
                 </div>
             </form>
-
-
+             <!-- Popup Form for Creating New Song -->
+    <div x-data="{ open: false }" class="self-end w-full sm:w-auto">
+        <!-- Button to open the popup -->
+        <button @click="open = true" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 whitespace-nowrap w-full sm:w-auto">
+           + Create New Song
+        </button>
+    
+        <!-- Popup -->
+        <div x-show="open" @keydown.escape.window="open = false" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div class="bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg">
+                <!-- Header -->
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-white">Create New Song</h2>
+                    <button @click="open = false" class="text-gray-400 hover:text-gray-200">✖</button>
+                </div>
+    
+                <!-- Form -->
+                <form action="{{ route('admin.songs') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="mb-4">
+                        <label for="song_name" class="block text-white font-bold mb-2">Song Name</label>
+                        <input type="text" id="song_name" name="song_name" class="w-full px-3 py-2 bg-gray-700 text-white rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="author_id" class="block text-white font-bold mb-2">Author</label>
+                        <select id="author_id" name="author_id" class="w-full px-3 py-2 bg-gray-700 text-white rounded" required>
+                            @foreach ($authors as $author)
+                                <option value="{{ $author->id }}">{{ $author->author_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="description" class="block text-white font-bold mb-2">Description</label>
+                        <textarea id="description" name="description" class="w-full px-3 py-2 bg-gray-700 text-white rounded"></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label for="genre_id" class="block text-white font-bold mb-2">Genre</label>
+                        <select id="genre_id" name="genre_id" class="w-full px-3 py-2 bg-gray-700 text-white rounded" required>
+                            @foreach ($genres as $genre)
+                                <option value="{{ $genre->id }}">{{ $genre->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="img_id" class="block text-white font-bold mb-2">Song Image</label>
+                        <input type="file" id="img_id" name="img_id" class="w-full px-3 py-2 bg-gray-700 text-white rounded" required>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="button" @click="open = false" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 mr-2">
+                            Cancel
+                        </button>
+                        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                            Create Song
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
         </div>
 
         <!-- Songs Table (Make it scrollable on small screens) -->
@@ -177,5 +236,4 @@
             </table>
         </div>
     </div>
-
 @endsection
