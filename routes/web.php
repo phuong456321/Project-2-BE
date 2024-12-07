@@ -38,6 +38,9 @@ Route::get('/albums', function () {
 Route::get('/profile', function () {
     return view('user/profile'); // Trang profile
 });
+Route::get('/Profileuser', function () {
+    return view('user/Profileuser'); // Trang profile
+});
 
 //Route Login
 Route::get('login', [LoginController::class, 'index'])->name('show.login');
@@ -171,3 +174,17 @@ Route::get('/storage/dash/{file}', [AudioController::class, 'playAudio']);
 
 // Đường dẫn tới các segment .m4s
 Route::get('/storage/dash/segment/{file}', [AudioController::class, 'streamSegment']);
+
+
+//setting
+Route::get('/editprofile', function () {
+    return view('setting/editprofile');
+});
+
+Route::get('/uploadedsong', function () {
+    return view('setting/uploadedsong');
+});
+
+Route::get('/layoutsetting', function () {
+    return view('setting/layoutsetting');
+});
