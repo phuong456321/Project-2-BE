@@ -37,38 +37,21 @@
 </head>
 @extends('user.layout')
 @section('content')
-    <ul id="songList"></ul>
-    <div class="prevalent">
-        <div class="info">
-            <h2>
-                Prevalent
-            </h2>
-            <p>
-                Dangrangto
-            </p>
-            <p>
-                AKA Trần Lá Lướt
-            </p>
-            <button>
-                Listen now
-            </button>
-        </div>
-
-        <div class="image-slider">
-            <div class="image-track">
-                <img src="images/profile/hinh tao.jpg" alt="Image 1">
-                <img src="images/song/exit.jpg" alt="Image 2">
-                <img src="images/song/2340.jpg" alt="Image 3">
-                <img src="images/song/drt.jpg" alt="Image 4">
-
-                <img src="images/profile/hinh tao.jpg" alt="Image 1">
-                <img src="images/song/exit.jpg" alt="Image 2">
-                <img src="images/song/2340.jpg" alt="Image 3">
-                <img src="images/song/drt.jpg" alt="Image 4">
-            </div>
-        </div>
-
-
+<ul id="songList"></ul>
+<div class="prevalent">
+    <div class="info">
+        <h2>
+            Prevalent
+        </h2>
+        <p>
+            Dangrangto
+        </p>
+        <p>
+            AKA Trần Lá Lướt
+        </p>
+        <button>
+            Listen now
+        </button>
     </div>
     <div class="playlists">
         @if (count($playlists) > 0)
@@ -231,99 +214,66 @@
         @endforeach
     </div>
 
-    <!-- Overlay Login Form -->
-    <div id="loginOverlay" class="overlay" style="display: none;">
-        <div class="login-form">
-            <span onclick="closeOverlay()"
-                style="cursor: pointer; position: absolute; top: 10px; right: 10px; font-size: 20px;">&times;</span>
-            <h2>Welcome</h2>
-            <h3>Login into your account</h3>
+<!-- Overlay Login Form -->
+<div id="loginOverlay" class="overlay" style="display: none;">
+    <div class="login-form">
+        <span onclick="closeOverlay()"
+            style="cursor: pointer; position: absolute; top: 10px; right: 10px; font-size: 20px;">&times;</span>
+        <h2>Welcome</h2>
+        <h3>Login into your account</h3>
 
-            <img class="gg-btn" src="{{ asset('images/profile/gg.png') }}"
-                onclick="window.location.href='{{ route('login-google') }}'" alt="gg">
+        <img class="gg-btn" src="{{ asset('images/profile/gg.png') }}"
+            onclick="window.location.href='{{ route('login-google') }}'" alt="gg">
 
-            <div class="separator">
-                <hr> <span>Or continue with</span>
-                <hr>
-            </div>
-            @if (session('message'))
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        showLoginForm(); // Hiển thị form đăng nhập
-                    });
-                </script>
-                <div class="alert alert-danger" id="login-message">{{ session('message') }}</div>
-            @endif
-            <form id="login-form" action="{{ route('login') }}" method="POST">
-                @csrf
-                <input type="text" placeholder="Email" @error('email') is-invalid @enderror" id="email"
-                    name="email" value="{{ old('email') }}">
-                @error('email')
-                    <p class="invalid-feedback">{{ $message }}</p>
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            showLoginForm(); // Hiển thị form đăng nhập
-                        });
-                    </script>
-                @enderror
-                <input type="password" placeholder="Password" @error('password') is-invalid @enderror" id="password"
-                    name="password" value="{{ old('password') }}">
-                @error('password')
-                    <p class="invalid-feedback">{{ $message }}</p>
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            showLoginForm(); // Hiển thị form đăng nhập
-                        });
-                    </script>
-                @enderror
-
-
-                <div class="options">
-                    <label>
-                        <input type="checkbox" name="remember" id="remember"> Remember me
-                    </label>
-                    <a href="{{ route('password.forgot') }}" class="recover-password">Forgot Password?</a>
-                </div>
-                <button class="action-btn" type="submit">Log In</button>
-            </form>
-            <p>
-                Don't have an account yet?
-                <a href="javascript:void(0)" onclick="showRegisterForm()">Register</a>
-            </p>
-
+        <div class="separator">
+            <hr> <span>Or continue with</span>
+            <hr>
         </div>
-    </div>
-    <div id="registerOverlay" class="overlay" style="display: none;">
+        @if (session('message'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                showLoginForm(); // Hiển thị form đăng nhập
+            });
+        </script>
+        <div class="alert alert-danger" id="login-message">{{ session('message') }}</div>
+        @endif
+        <form id="login-form" action="{{ route('login') }}" method="POST">
+            @csrf
+            <input type="text" placeholder="Email" @error('email') is-invalid @enderror" id="email"
+                name="email" value="{{ old('email') }}">
+            @error('email')
+            <p class="invalid-feedback">{{ $message }}</p>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    showLoginForm(); // Hiển thị form đăng nhập
+                });
+            </script>
+            @enderror
+            <input type="password" placeholder="Password" @error('password') is-invalid @enderror" id="password"
+                name="password" value="{{ old('password') }}">
+            @error('password')
+            <p class="invalid-feedback">{{ $message }}</p>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    showLoginForm(); // Hiển thị form đăng nhập
+                });
+            </script>
+            @enderror
 
-        <div class="form-container">
-            <span onclick="closeOverlay()"
-                style="cursor: pointer; position: absolute; top: 10px; right: 10px; font-size: 20px;">&times;</span>
-            <h2>Create Account</h2>
-            <p>Register a new account</p>
-            <img class="gg-btn" src="{{ asset('images/profile/gg.png') }}"
-                onclick="window.location.href='{{ route('login-google') }}'" alt="gg">
 
-            <div class="separator">
-                <hr> <span>Or continue with</span>
-                <hr>
+            <div class="options">
+                <label>
+                    <input type="checkbox" name="remember" id="remember"> Remember me
+                </label>
+                <a href="{{ route('password.forgot') }}" class="recover-password">Forgot Password?</a>
             </div>
+            <button class="action-btn" type="submit">Log In</button>
+        </form>
+        <p>
+            Don't have an account yet?
+            <a href="javascript:void(0)" onclick="showRegisterForm()">Register</a>
+        </p>
 
-            <!-- Form đăng ký -->
-            <form action="{{ route('register') }}" method="POST">
-                @csrf
-                <input type="text" name="name" placeholder="Name" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="password" name="password" placeholder="Password" required>
-                <input type="password" name="password_confirmation" placeholder="Confirm Password" required>
-
-                <button class="action-btn" type="submit">Register</button>
-            </form>
-
-            <p>
-                Already have an account?
-                <a onclick="showLoginForm()">Login</a>
-            </p>
-        </div>
     </div>
 @endsection
 @extends('components.footer')

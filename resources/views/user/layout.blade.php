@@ -116,7 +116,7 @@
 
 
     <div class="main-content">
-        <div class="header">
+        <div class="header p-1 flex justify-between items-center">
             <!-- Search -->
             <form action="{{ route('searchsong') }}" method="get" class="search-form" id="search-form">
                 <input name="query" placeholder="Bạn đang tìm kiếm gì?" type="text" id="query" />
@@ -124,6 +124,7 @@
                     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
                 </button>
             </form>
+         
             @if (Auth::check())
                 {{-- Nếu người dùng đã đăng nhập --}}
                 <div id="avatar" class="user">
