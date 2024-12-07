@@ -104,18 +104,6 @@ body {
     padding: 10px 0;
 }
 
-.header input {
-    width: 300px;
-    padding: 10px;
-    border-radius: 20px;
-    border: none;
-    background-color: #000000;
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease;
-    color: white;
-}
-
 /* Thêm hiệu ứng hover */
 .playlist-card:hover {
     transform: scale(1.05);

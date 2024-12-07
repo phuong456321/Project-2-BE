@@ -380,9 +380,8 @@
     function createNewPlaylist() {
         console.log('create new playlist');
         let name = document.getElementById('title-playlist').value.trim();
-        let description = document.getElementById('description-playlist').value.trim();
         let user_id = document.getElementById('user_id').value.trim();
-        if (!name || !description) {
+        if (!name) {
             alert('Vui lòng nhập đầy đủ thông tin.');
             return;
         }
@@ -396,14 +395,12 @@
             },
             data: JSON.stringify({
                 name,
-                description,
                 user_id
             }),
             success: function(data) {
                 var popup = document.getElementById("createPlaylistPopup");
                 popup.style.display = "none";
                 document.getElementById('title-playlist').value = '';
-                document.getElementById('description-playlist').value = '';
                 flash('Danh sách phát mới đã được thêm!', 'success');
 
             },

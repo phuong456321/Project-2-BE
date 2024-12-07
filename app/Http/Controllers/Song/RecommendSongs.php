@@ -13,6 +13,7 @@ class RecommendSongs extends Controller
     public function index(Request $request)
     {
         $songs = Song::inRandomOrder()->where('status', '=', 'published')->take(21)->get();
+        $topSongs = Song::orderBy('play_count', 'desc')->where('status', '=', 'published')->take(7)->get();
         if (Auth::check()) {
             $user = Auth::user();
             $playlists = $user->playlists()->with([
@@ -22,7 +23,7 @@ class RecommendSongs extends Controller
             ])->get();
         } else {
             $playlists = [];
-            return view('user.home')->with(['songs' => $songs, 'playlists' => $playlists]);
+            return view('user.home')->with(['songs' => $songs, 'playlists' => $playlists, 'topSongs' => $topSongs]);
         }
 
         $userId = $request->user()->id;
@@ -34,7 +35,7 @@ class RecommendSongs extends Controller
         // Gộp kết quả
         $recommendedSongs = $this->combineRecommendations($recommendedSongsByContent, $recommendedSongsByBehavior);
 
-        return view('user.home')->with(['songs' => $recommendedSongs, 'playlists' => $playlists]);
+        return view('user.home')->with(['songs' => $songs, 'playlists' => $playlists, 'topSongs' => $topSongs, 'recommendedSongs' => $recommendedSongs]);
     }
 
     protected function getContentBasedRecommendations($userId)
