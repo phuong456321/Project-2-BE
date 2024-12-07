@@ -33,7 +33,7 @@ class LoginController extends Controller
                 flash()->option('timeout', 2000)->error('Email or Password is incorrect');
                 return redirect()->back()->with('message', 'Email or Password is incorrect')->withInput();
             }
-            if(auth()->user()->status == 'inactive'){
+            if (auth()->user()->status == 'inactive') {
                 Auth::logout();
                 flash()->option('timeout', 2000)->error('Your account has been deactivated');
                 return redirect()->route('home')->with('message', 'Your account has been deactivated');
@@ -42,7 +42,7 @@ class LoginController extends Controller
             if (!auth()->user()->hasVerifiedEmail()) {
                 return redirect()->with('error', 'Your email address is not verified. Please check your email for the verification link.');
             }
-            if($remember){
+            if ($remember) {
                 $token = Str::random(60);
                 auth()->user()->remember_token = hash('sha256', $token);
                 auth()->user()->save();
@@ -56,36 +56,36 @@ class LoginController extends Controller
     }
 
     public function logout(Request $request)
-{
-    try {
-        // Kiểm tra và xóa remember_token nếu tồn tại trong cookie
-        $rememberToken = $request->cookie('remember_token');
-        if ($rememberToken) {
-            // Tìm người dùng với remember_token trong cookie
-            $user = User::where('remember_token', hash('sha256', $rememberToken))->first();
-            if ($user) {
-                // Xóa remember_token khỏi người dùng
-                $user->remember_token = null;
-                $user->save();
+    {
+        try {
+            // Kiểm tra và xóa remember_token nếu tồn tại trong cookie
+            $rememberToken = $request->cookie('remember_token');
+            if ($rememberToken) {
+                // Tìm người dùng với remember_token trong cookie
+                $user = User::where('remember_token', hash('sha256', $rememberToken))->first();
+                if ($user) {
+                    // Xóa remember_token khỏi người dùng
+                    $user->remember_token = null;
+                    $user->save();
+                }
+
+                // Xóa cookie remember_token khỏi trình duyệt
+                Cookie::queue(Cookie::forget('remember_token'));
             }
 
-            // Xóa cookie remember_token khỏi trình duyệt
-            Cookie::queue(Cookie::forget('remember_token'));
+            // Hủy session
+            $request->session()->flush();
+
+            // Đăng xuất người dùng
+            Auth::guard('web')->logout();
+
+            // Thông báo thành công
+            flash()->option('timeout', 2000)->success('Đăng xuất thành công!');
+
+            return redirect()->route('home');
+        } catch (\Exception $e) {
+            // Nếu có lỗi, quay lại trang trước đó và hiển thị thông báo lỗi
+            return redirect()->back()->with('error', $e->getMessage());
         }
-
-        // Hủy session
-        $request->session()->flush();
-
-        // Đăng xuất người dùng
-        Auth::guard('web')->logout();
-
-        // Thông báo thành công
-        flash()->option('timeout', 2000)->success('Đăng xuất thành công!');
-
-        return redirect()->route('home');
-    } catch (\Exception $e) {
-        // Nếu có lỗi, quay lại trang trước đó và hiển thị thông báo lỗi
-        return redirect()->back()->with('error', $e->getMessage());
     }
-}
 }

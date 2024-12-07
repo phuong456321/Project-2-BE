@@ -37,14 +37,20 @@ window.addEventListener('load', function () {
             player.attachSource(audioPath);
             document.getElementById('footer').style.display = 'flex';
             // Phát tiếp nếu trước đó đang phát
+            checkLikedStatus(dataSongId);
+            footerAudioElement.load();
+            // Đặt lại thời gian phát nếu có
+            footerAudioElement.addEventListener('canplaythrough', function () {
+                footerAudioElement.currentTime = currentTime;
+            // Nếu đang phát, tiếp tục phát, nếu không thì giữ trạng thái tạm dừng
             if (isPlaying) {
                 footerAudioElement.play();
                 document.querySelector('.fa-play').classList.replace('fa-play', 'fa-pause');
-            }
-            // Đặt lại thời gian phát nếu có
-            footerAudioElement.addEventListener('loadedmetadata', function () {
-                footerAudioElement.currentTime = currentTime;
-            });            
+            } else {
+                footerAudioElement.pause();
+                document.querySelector('.fa-pause').classList.replace('fa-pause', 'fa-play');
+                }
+            }, { once: true });
         }
     }
 });

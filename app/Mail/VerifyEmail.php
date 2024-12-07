@@ -29,9 +29,9 @@ class VerifyEmail extends Mailable
     public function build()
     {
         return $this->subject('Verify Your Email Address')
-                    ->view('emails.verify') // View blade chứa nội dung email
-                    ->with([
-                        'url' => url('/email/verify/' . $this->token), // URL xác thực
-                    ]);
+            ->view('emails.verify') // View blade chứa nội dung email
+            ->with([
+                'url' => url('/email/verify/' . $this->token), // URL xác thực
+            ]);
     }
 }

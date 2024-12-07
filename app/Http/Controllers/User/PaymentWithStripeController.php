@@ -37,7 +37,7 @@ class PaymentWithStripeController extends Controller
                     ]
                 ],
                 'mode' => 'payment',
-                'success_url' => route('stripe.success').'?session_id={CHECKOUT_SESSION_ID}',
+                'success_url' => route('stripe.success') . '?session_id={CHECKOUT_SESSION_ID}',
                 'cancel_url' => route('stripe.cancel'),
             ]);
             if (isset($response->id) && $response->id != '') {
@@ -79,33 +79,33 @@ class PaymentWithStripeController extends Controller
             session()->forget(['name', 'amount', 'product_id']);
 
 
-             // Lấy thông tin gói sản phẩm
-        $product = Product::where('id', $payment->product_id)->first();
-        if ($product) {
-            // Lấy người dùng từ payment
-            $user = User::find($payment->user_id);
-            
-            // Nâng cấp người dùng lên Premium
-            $user->plan = 'premium';  // Đánh dấu người dùng là premium
-            $user->save();
-            
-            // Tính toán ngày hết hạn dựa trên chu kỳ sản phẩm
-            $expirationDate = Carbon::now();
-            if ($product->cycles == 'monthly') {
-                $expirationDate->addMonth();
-            } elseif ($product->cycles == 'six_months') {
-                $expirationDate->addMonths(6);
-            } elseif ($product->cycles == 'yearly') {
-                $expirationDate->addYear();
-            }
+            // Lấy thông tin gói sản phẩm
+            $product = Product::where('id', $payment->product_id)->first();
+            if ($product) {
+                // Lấy người dùng từ payment
+                $user = User::find($payment->user_id);
 
-            // Lưu thông tin gói đã mua vào bảng user_product
-            // Lưu thông tin vào bảng pivot
-            $user->products()->attach($product->id, [
-                'purchased_at' => now(),
-                'expired_at' => $expirationDate,
-            ]);
-        }
+                // Nâng cấp người dùng lên Premium
+                $user->plan = 'premium';  // Đánh dấu người dùng là premium
+                $user->save();
+
+                // Tính toán ngày hết hạn dựa trên chu kỳ sản phẩm
+                $expirationDate = Carbon::now();
+                if ($product->cycles == 'monthly') {
+                    $expirationDate->addMonth();
+                } elseif ($product->cycles == 'six_months') {
+                    $expirationDate->addMonths(6);
+                } elseif ($product->cycles == 'yearly') {
+                    $expirationDate->addYear();
+                }
+
+                // Lưu thông tin gói đã mua vào bảng user_product
+                // Lưu thông tin vào bảng pivot
+                $user->products()->attach($product->id, [
+                    'purchased_at' => now(),
+                    'expired_at' => $expirationDate,
+                ]);
+            }
             return redirect()->route('profile', auth()->user()->id)->with('success', 'Payment is successfully');
         } catch (ApiErrorException $e) {
             return redirect()->route('cancel')->with('error', $e->getMessage());

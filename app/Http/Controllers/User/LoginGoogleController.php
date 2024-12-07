@@ -21,7 +21,7 @@ class LoginGoogleController extends Controller
     public function handleGoogleCallBack()
     {
         $user = Socialite::driver('google')->user();
-        
+
         // Kiểm tra nếu người dùng đã đăng nhập
         $currentUser = Auth::user();
 
@@ -39,7 +39,7 @@ class LoginGoogleController extends Controller
                         'name' => $user->name,
                         'avatar' => $user->avatar,
                     ]);
-                    
+
                     // Cập nhật thông tin Google vào bảng User (nếu cần thiết)
                     $currentUser->google_id = $user->id;
                     $currentUser->save();
@@ -55,7 +55,7 @@ class LoginGoogleController extends Controller
                     'img_path' => $imageData,
                     'category' => 'avatar',
                 ]);
-                
+
                 // Cập nhật avatar_id cho người dùng
                 $currentUser->avatar_id = $image->id;
                 $currentUser->save();
@@ -79,14 +79,14 @@ class LoginGoogleController extends Controller
                         'img_path' => $imageData,
                         'category' => 'avatar',
                     ]);
-                
+
                     $googleAccount = GoogleAccount::create([
                         'google_id' => $user->id,
                         'email' => $user->email,
                         'name' => $user->name,
                         'avatar_id' => $newImage->id,
                     ]);
-                    
+
                     $newUser = User::create([
                         'email' => $user->email,
                         'name' => $user->name,

@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class DetailsPlayed extends Model
 {
     use HasFactory;
-
+    protected $table = 'details_played';
     protected $fillable = [
         'recently_id',
-        'song_id',
+        'song_id'
     ];
 
     public function recentlyPlayed()

@@ -92,11 +92,21 @@ namespace App\Models{
 /**
  * 
  *
- * @property-read \App\Models\RecentlyPlayed|null $recentlyPlayed
- * @property-read \App\Models\Song|null $song
+ * @property int $id
+ * @property int $recently_id
+ * @property int $song_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\RecentlyPlayed $recentlyPlayed
+ * @property-read \App\Models\Song $song
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DetailsPlayed newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DetailsPlayed newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DetailsPlayed query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DetailsPlayed whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DetailsPlayed whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DetailsPlayed whereRecentlyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DetailsPlayed whereSongId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DetailsPlayed whereUpdatedAt($value)
  */
 	class DetailsPlayed extends \Eloquent {}
 }
@@ -319,8 +329,8 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $user_id
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DetailsPlayed> $detailsPlayed
- * @property-read int|null $details_played_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DetailsPlayed> $details
+ * @property-read int|null $details_count
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RecentlyPlayed newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RecentlyPlayed newQuery()
@@ -335,10 +345,22 @@ namespace App\Models{
 /**
  * 
  *
- * @property-read \App\Models\User|null $user
+ * @property int $id
+ * @property int $user_id
+ * @property string $content
+ * @property int|null $clicked_song_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder<static>|SearchHistory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|SearchHistory newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|SearchHistory query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SearchHistory whereClickedSongId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SearchHistory whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SearchHistory whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SearchHistory whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SearchHistory whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|SearchHistory whereUserId($value)
  */
 	class SearchHistory extends \Eloquent {}
 }

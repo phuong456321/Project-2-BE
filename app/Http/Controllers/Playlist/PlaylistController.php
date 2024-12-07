@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Playlist;
 
 use App\Http\Controllers\Controller;
+use App\Models\DetailsPlayed;
 use App\Models\InPlaylist;
+use App\Models\RecentlyPlayed;
 use Illuminate\Http\Request;
 use App\Models\playlist;
 use App\Models\song;
@@ -59,21 +61,21 @@ class PlaylistController extends Controller
             if ($song) {
                 $song->audio_path = url('storage/' . $song->audio_path);
 
-                 // Tính tổng thời gian bài hát
-             $parts = explode(':', $song->duration); // duration dạng 'mm:ss'
-             $minutes = intval($parts[0]);
-            $seconds = intval($parts[1]);
-            $totalSeconds += $minutes * 60 + $seconds;
-                
+                // Tính tổng thời gian bài hát
+                $parts = explode(':', $song->duration); // duration dạng 'mm:ss'
+                $minutes = intval($parts[0]);
+                $seconds = intval($parts[1]);
+                $totalSeconds += $minutes * 60 + $seconds;
+
             }
             array_push($songs, $song);
         }
         // Chuyển đổi tổng giây thành định dạng mm:ss hoặc hh:mm:ss
-    $hours = floor($totalSeconds / 3600);
-    $minutes = floor(($totalSeconds % 3600) / 60);
-    $seconds = $totalSeconds % 60;
+        $hours = floor($totalSeconds / 3600);
+        $minutes = floor(($totalSeconds % 3600) / 60);
+        $seconds = $totalSeconds % 60;
 
-    $totalDuration = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds); // hh:mm:ss
+        $totalDuration = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds); // hh:mm:ss
         return view('user/playist', ['songs' => $songs, 'playlists' => $playlist, 'playlist_id' => $playlist_id, 'totalDuration' => $totalDuration]);
     }
 
@@ -153,7 +155,7 @@ class PlaylistController extends Controller
         } else {
             // Nếu bài hát chưa được like, thực hiện thao tác thích bài hát và thêm vào playlist
             $song = Song::find($request->song_id);
-            $song->likes +=1;
+            $song->likes += 1;
             $song->save();
 
             // Lấy id của playlist "Liked music"
@@ -177,7 +179,32 @@ class PlaylistController extends Controller
             'song_id' => 'required|integer',
         ]);
 
+        Song::where('id', $request->song_id)->update([
+            'play_count' => DB::raw('play_count + 1')
+        ]);
+
         $user_id = Auth::user()->id;
+        if (!$user_id) {
+            return false;
+        }
+        // Tìm hoặc tạo recently_played cho user
+        $recentlyPlayed = RecentlyPlayed::firstOrCreate([
+            'user_id' => $user_id
+        ]);
+
+        // Kiểm tra xem bài hát đã được lưu trong 5 phút qua chưa
+        $exists = DetailsPlayed::where('recently_id', $recentlyPlayed->id)
+            ->where('song_id', $request->song_id)
+            ->where('created_at', '>=', now()->subMinutes(5))
+            ->exists(); // Sử dụng exists() để kiểm tra nhanh
+
+        if (!$exists) {
+            // Nếu không tìm thấy bản ghi trong vòng 5 phút, thì mới lưu
+            $details = DetailsPlayed::create([
+                'recently_id' => $recentlyPlayed->id,
+                'song_id' => $request->song_id
+            ]);
+        }
         // Lấy id của playlist "Liked music"
         $playlist_id = Playlist::where('user_id', $user_id)->where('name', 'Liked music')->value('id');
 

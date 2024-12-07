@@ -401,7 +401,6 @@ aside.now-playing {
 }
 
 .prevalent {
-    background-image: url('images/song/4tengu.jpg');
     background-color: #9da8b8;
     padding: 20px;
     border-radius: 10px;
@@ -491,79 +490,7 @@ aside.now-playing {
     gap: 15px; /* Khoảng cách giữa các item (hàng và cột) */
 }
 
-.footer {
-    position: fixed;
-    bottom: -8px;
-    width: 100%;
-    background-color: #080f20;
-    padding: 0px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 91px;
-    z-index: 2000;
-    
-}
 
-.footer .controls i {
-    margin: 0 10px;
-    cursor: pointer;
-}
-
-.footer .progress {
-    flex-grow: 1;
-    margin: 4px 10rem;
-    padding-left: 7rem;
-    display: flex;
-    justify-content: space-around;
-    position: relative;
-    left: 9rem;
-}
-
-.footer .progress input {
-    width: 70%;
-}
-.footer .controls{
-    display: flex;
-    gap: 10px;
-    padding-left: 8rem;
-    position: relative;
-    left: 18rem;
-}
-.footer .current-song{
-    font-size: 18px;
-    margin-right: 10rem;
-    cursor: pointer;
-    position: relative;
-    right: 56rem;
-}
-.footer .actions {
-    display: flex;
-    gap: 32px;
-    padding: 10px 20px;
-    border-radius: 20px;
-    cursor: pointer;
-    position: relative;
-    right: 15rem;
-}
-
-.footer .controls i,
-.footer .actions i {
-  cursor: pointer; 
-  transition: transform 0.1s ease, color 0.1s ease;  
-}
-
-.footer .controls i:hover,
-.footer .actions i:hover {
-  color: #00a2ff; 
-  transform: scale(1.2); 
-}
-
-
-.footer .controls i,
-.footer .actions i {
-  color: #fff;  
-}
 /* Overlay background */
 /* Thêm vào resources/css/style.css */
 .overlay {
@@ -720,7 +647,6 @@ aside.now-playing {
 
 
 /* Input fields */
-input[type="text"],
 input[type="name"],
 input[type="email"],
 input[type="password"] {
@@ -1000,50 +926,6 @@ input[type="password"] {
     display: none;
 }
 
-
-/* Định dạng popup */
-.popup {
-    display: none; /* Ẩn mặc định */
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: -2rem;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5); /* Nền mờ */
-    backdrop-filter: blur(1px); /* Làm mờ nền phía sau */
-    overflow: hidden;
-    animation: slideIn 0.5s ease;
-}
-
-/* Nội dung popup */
-.popup-content {
-    background-color: #1c1a1a;
-    margin: 13% auto;
-    padding: 12px;
-    border: 1px solid #888;
-    width: 100%;
-    max-width: 500px;
-    height: 381px;
-}
-
-/* Nút đóng popup */
-.close-btn {
-    color: #aaa;
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    line-height: 24px;
-    text-align: center;
-    cursor: pointer;
-    font-size: 24px;
-    background-color: transparent;
-    border: none;
-    position: relative;
-    left: 28rem;
-}
-
 .close-btn:hover,
 .close-btn:focus {
     color: rgb(249, 243, 243);
@@ -1101,33 +983,6 @@ input[type="password"] {
     padding: 10px;
     font-size: 16px;
     border-radius: 2px;
-}
-.popup h2{
-    position: relative;
-    left: 0rem;
-    top: 0rem;
-    font-size: x-large;
-}
-#btn-createplayist{
-    margin-top: 20px;
-    width: 24%;
-    background-color: #444;
-    border: none;
-    color: white;
-    font-family: inherit;
-    font-size: 15px;
-    position: relative;
-    left: 21rem;
-    right: 8px;
-    top: 3rem;
-    bottom: 1rem;
-    text-align: center;
-    border-radius: 26px;
-    cursor: pointer;
-    height: 39px;
-}
-#btn-createplayist:hover{
-    background-color: #6d6f70;
 }
 
 /* From Uiverse.io by Donewenfu */ 

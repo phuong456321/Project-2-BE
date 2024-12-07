@@ -52,8 +52,8 @@
                 </h2>
                 @if (!$songs->isEmpty())
                     @php $topSong = $songs->first(); @endphp
-                    <div class="bg-gray-800 p-4 rounded-lg flex items-center top-song-item data-song-id="{{ $topSong->song_id }}"
-                        style="cursor: pointer;">
+                    <div class="bg-gray-800 p-4 rounded-lg flex items-center top-song-item"
+                        data-song-id="{{ $topSong->id }}" style="cursor: pointer;">
                         <img alt="Album cover image" class="w-20 h-20 rounded-lg mr-4" height="100"
                             src="{{ url('image/' . $topSong->img_id) }}" width="100" />
                         <div>
@@ -89,7 +89,7 @@
                 @else
                     <div class="space-y-4">
                         @foreach ($songs as $song)
-                            <div class="flex items-center song-item" data-song-id="{{ $song->song_id }}"
+                            <div class="flex items-center song-item" data-song-id="{{ $song->id }}"
                                 style="cursor: pointer;">
                                 <img alt="Song thumbnail" class="w-12 h-12 rounded-lg mr-4" height="50"
                                     src="{{ url('image/' . $song->img_id) }}" width="50" />
@@ -112,6 +112,7 @@
             </div>
         </div>
     @endsection
+    @extends('components.footer')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Lắng nghe sự kiện click vào các bài hát
@@ -133,9 +134,9 @@
                     footerAudioElement.setAttribute('src', audioSrc);
                     document.getElementById('footer').style.display = 'flex'; // Hiển thị footer khi có âm thanh
                     const playButton = document.querySelector('.fa-play');
-                    if(playButton){
+                    if (playButton) {
                         playButton.classList.replace('fa-play', 'fa-pause');
-                    }   
+                    }
                     playAudioWithAd(audioSrc);
                 } else {
                     footerAudioElement.removeAttribute('src');

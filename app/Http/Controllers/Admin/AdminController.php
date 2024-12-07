@@ -12,21 +12,21 @@ use Illuminate\Http\Request;
 class AdminController extends Controller
 {
     public function manageSongs()
-{
-    $songs = Song::with('author')->get(); // Include author relationship
-    return view('admin.songs', compact('songs'));
-}
+    {
+        $songs = Song::with('author')->get(); // Include author relationship
+        return view('admin.songs', compact('songs'));
+    }
 
-public function manageUsers()
-{
-    $users = User::all();
-    return view('admin.users', compact('users'));
-}
-public function manageAuthors()
-{
-    $areas = Area::orderBy('name', 'asc')->get();
-    return view('admin.authors', compact('areas'));
-}
+    public function manageUsers()
+    {
+        $users = User::all();
+        return view('admin.users', compact('users'));
+    }
+    public function manageAuthors()
+    {
+        $areas = Area::orderBy('name', 'asc')->get();
+        return view('admin.authors', compact('areas'));
+    }
     public function deleteUser($id)
     {
         $user = User::findOrFail($id);
@@ -41,7 +41,7 @@ public function manageAuthors()
         return redirect()->route('admin.index');
     }
     public function updateStatus(Request $request, $id)
-{
+    {
         $request->validate([
             'status' => 'required|in:published,deleted,inactive,pending',
         ]);

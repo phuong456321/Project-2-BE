@@ -23,60 +23,91 @@ return new class extends Migration
 
         DB::table('genres')->insert([
             [
-                'name' => 'Pop',
+                'name' => 'Nhạc Pop',
             ],
             [
-                'name' => 'Rock',
+                'name' => 'Nhạc Rock',
             ],
             [
-                'name' => 'Hip-hop/Rap',
+                'name' => 'Nhạc Rap/Hip-hop',
             ],
             [
-                'name' => 'Jazz',
+                'name' => 'Nhạc Trữ tình',
             ],
             [
-                'name' => 'Classical',
+                'name' => 'Nhạc Cách mạng',
             ],
             [
-                'name' => 'Electronic/Dance',
+                'name' => 'Nhạc Dân ca',
             ],
             [
-                'name' => 'R&B/Soul',
+                'name' => 'Nhạc R&B',
             ],
             [
-                'name' => 'Reggae',
+                'name' => 'Nhạc Đỏ',
             ],
             [
-                'name' => 'Country',
+                'name' => 'Nhạc Bolero',
             ],
             [
-                'name' => 'Blues',
+                'name' => 'Nhạc Thiếu nhi',
             ],
             [
-                'name' => 'Folk',
+                'name' => 'Nhạc Dance/Electronic',
             ],
             [
-                'name' => 'Metal',
+                'name' => 'Nhạc Acoustic',
             ],
             [
-                'name' => 'Indie',
+                'name' => 'Nhạc Indie Việt',
             ],
             [
-                'name' => 'Latin',
+                'name' => 'Nhạc Cổ điển',
             ],
             [
-                'name' => 'Gospel/Christian',
+                'name' => 'Nhạc Phật giáo',
             ],
             [
-                'name' => 'Soundtrack',
+                'name' => 'Nhạc Phim',
             ],
             [
-                'name' => 'World Music',
+                'name' => 'Nhạc Xuân',
             ],
             [
-                'name' => 'Ambient',
+                'name' => 'Nhạc Thính phòng',
+            ],
+            [
+                'name' => 'Nhạc EDM Việt',
+            ],
+            [
+                'name' => 'Nhạc Chill/Lo-fi',
+            ],
+            [
+                'name' => 'Nhạc Lofi Việt',
+            ],
+            [
+                'name' => 'Nhạc Thiền',
+            ],
+            [
+                'name' => 'Nhạc Hài kịch',
+            ],
+            [
+                'name' => 'Nhạc Trẻ',
+            ],
+            [
+                'name' => 'Nhạc Hoà tấu',
+            ],
+            [
+                'name' => 'Nhạc Remix',
+            ],
+            [
+                'name' => 'Nhạc Quê hương',
+            ],
+            [
+                'name' => 'Nhạc Kịch',
             ],
         ]);
+        
         DB::table('users')->insert([
             [
                 'name' => 'admin',

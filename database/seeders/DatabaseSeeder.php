@@ -16,8 +16,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             AreaSeeder::class,
-            ArtistImgSeeder::class,
-            AuthorSeeder::class,
         ]);
     }
 }

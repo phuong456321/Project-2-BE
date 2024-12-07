@@ -1,4 +1,9 @@
-document.addEventListener('DOMContentLoaded', function() {
+// Khai báo biến global
+let currentSongIndex = 0;
+let isPlayingPlaylist = false;
+let playlistSongs = [];
+
+document.addEventListener('DOMContentLoaded', function () {
     // Lắng nghe sự kiện click vào các bài hát
     function handleSongClick(songItem) {
         const songId = songItem.getAttribute('data-song-id');
@@ -19,10 +24,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (audioSrc) {
             footerAudioElement.setAttribute('src', audioSrc);
             document.getElementById('footer').style.display = 'flex'; // Hiển thị footer khi có âm thanh
+            footerAudioElement.currentTime = 0;
+            progressBar.value = 0;
             const playButton = document.querySelector('.fa-play');
-            if(playButton){
+            if (playButton) {
                 playButton.classList.replace('fa-play', 'fa-pause');
-            }   
+            }
+            checkLikedStatus(songId);
             playAudioWithAd(audioSrc);
         } else {
             footerAudioElement.removeAttribute('src');
@@ -32,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Áp dụng sự kiện click cho tất cả các bài hát
     document.querySelectorAll('.song-item').forEach(item => {
-        item.addEventListener('click', function() {
+        item.addEventListener('click', function () {
             handleSongClick(this);
         });
     });
@@ -40,8 +48,22 @@ document.addEventListener('DOMContentLoaded', function() {
     // Áp dụng sự kiện click cho bài hát trong mục "Kết quả hàng đầu"
     const topSongItem = document.querySelector('.top-song-item');
     if (topSongItem) {
-        topSongItem.addEventListener('click', function() {
+        topSongItem.addEventListener('click', function () {
             handleSongClick(this);
         });
     }
+
+    // Thêm event listener cho khi bài hát kết thúc
+    footerAudioElement.addEventListener('ended', function () {
+        if (isPlayingPlaylist) {
+            currentSongIndex++;
+            if (currentSongIndex < playlistSongs.length) {
+                playCurrentSong();
+            } else {
+                // Hết playlist
+                currentSongIndex = 0;
+                isPlayingPlaylist = false;
+            }
+        }
+    });
 });

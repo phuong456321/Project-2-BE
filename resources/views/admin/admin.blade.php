@@ -69,6 +69,16 @@
                         Manage Authors
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('admin.songApproval') }}" class="flex items-center p-4 hover:bg-gray-700 rounded">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 10h18m-6-6h6m-6 12h6" />
+                        </svg>
+                        Song Approval
+                    </a>
+                </li>
             </ul>
 
             <!-- Logout Button -->
@@ -96,7 +106,7 @@
                         Cancel
                     </button>
                     <!-- Confirm Logout -->
-                    <form action="{{ route('logout') }}" method="POST" id="logout-form">
+                    <form action="{{ route('admin.logout') }}" method="POST" id="logout-form">
                         @csrf
                         <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded">
                             Logout
@@ -130,6 +140,7 @@
 </body>
 <script>
     @yield('script')
+
     function openLogoutModal() {
         // Hiển thị modal
         document.getElementById('logoutModal').classList.remove('hidden');
@@ -140,4 +151,5 @@
         document.getElementById('logoutModal').classList.add('hidden');
     }
 </script>
+
 </html>

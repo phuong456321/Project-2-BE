@@ -29,3 +29,4 @@
         </div>
     </div>
 @endsection
+@extends('components.footer')

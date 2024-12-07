@@ -1,6 +1,6 @@
 @extends('admin.admin')
 @section('head')
-<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.0/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.0/dist/cdn.min.js" defer></script>
 @endsection
 @section('content')
     <!-- Main Content -->
@@ -49,65 +49,91 @@
                     </a>
                 </div>
             </form>
-             <!-- Popup Form for Creating New Song -->
-    <div x-data="{ open: false }" class="self-end w-full sm:w-auto">
-        <!-- Button to open the popup -->
-        <button @click="open = true" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 whitespace-nowrap w-full sm:w-auto">
-           + Create New Song
-        </button>
-    
-        <!-- Popup -->
-        <div x-show="open" @keydown.escape.window="open = false" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div class="bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg">
-                <!-- Header -->
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-bold text-white">Create New Song</h2>
-                    <button @click="open = false" class="text-gray-400 hover:text-gray-200">✖</button>
+            <!-- Popup Form for Creating New Song -->
+            <div x-data="{ open: false }" class="self-end w-full sm:w-auto">
+                <!-- Button to open the popup -->
+                <button @click="open = true"
+                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 whitespace-nowrap w-full sm:w-auto">
+                    + Create New Song
+                </button>
+
+                <!-- Popup -->
+                <div x-show="open" @keydown.escape.window="open = false"
+                    class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div class="bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg max-h-[80vh] overflow-y-auto">
+                        <!-- Header -->
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-bold text-white">Create New Song</h2>
+                            <button @click="open = false" class="text-gray-400 hover:text-gray-200">✖</button>
+                        </div>
+
+                        <!-- Form -->
+                        <form action="{{ route('admin.createSong') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="text" name="status" class="hidden" value="pending">
+                            <div class="mb-4">
+                                <label for="song_name" class="block text-white font-bold mb-2">Song Name</label>
+                                <input type="text" id="song_name" name="song_name"
+                                    class="w-full px-3 py-2 bg-gray-700 text-white rounded" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="author_id" class="block text-white font-bold mb-2">Author</label>
+                                <select id="author_id" name="author_id"
+                                    class="w-full px-3 py-2 bg-gray-700 text-white rounded" required>
+                                    @foreach ($authors as $author)
+                                        <option value="{{ $author->id }}">{{ $author->author_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label for="description" class="block text-white font-bold mb-2">Description</label>
+                                <textarea id="description" name="description" class="w-full px-3 py-2 bg-gray-700 text-white rounded"></textarea>
+                            </div>
+                            <div class="mb-4">
+                                <label for="genre_id" class="block text-white font-bold mb-2">Genre</label>
+                                <select id="genre_id" name="genre_id"
+                                    class="w-full px-3 py-2 bg-gray-700 text-white rounded" required>
+                                    @foreach ($genres as $genre)
+                                        <option value="{{ $genre->id }}">{{ $genre->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label for="area_id" class="block text-white font-bold mb-2">Area</label>
+                                <select id="area_id" name="area_id"
+                                    class="w-full px-3 py-2 bg-gray-700 text-white rounded" required>
+                                    @foreach ($areas as $area)
+                                        <option value="{{ $area->id }}">{{ $area->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label for="image" class="block text-white font-bold mb-2">Song Image</label>
+                                <input type="file" id="image" name="image"
+                                    class="w-full px-3 py-2 bg-gray-700 text-white rounded" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="audio" class="block text-white font-bold mb-2">Song Audio</label>
+                                <input type="file" id="audio" name="audio"
+                                    class="w-full px-3 py-2 bg-gray-700 text-white rounded" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="lyric" class="block text-white font-bold mb-2">Song Lyrics</label>
+                                <textarea id="lyric" name="lyric" class="w-full px-3 py-2 bg-gray-700 text-white rounded"></textarea>
+                            </div>
+                            <div class="flex justify-end">
+                                <button type="button" @click="open = false"
+                                    class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 mr-2">
+                                    Cancel
+                                </button>
+                                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                                    Create Song
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-    
-                <!-- Form -->
-                <form action="{{ route('admin.songs') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="mb-4">
-                        <label for="song_name" class="block text-white font-bold mb-2">Song Name</label>
-                        <input type="text" id="song_name" name="song_name" class="w-full px-3 py-2 bg-gray-700 text-white rounded" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="author_id" class="block text-white font-bold mb-2">Author</label>
-                        <select id="author_id" name="author_id" class="w-full px-3 py-2 bg-gray-700 text-white rounded" required>
-                            @foreach ($authors as $author)
-                                <option value="{{ $author->id }}">{{ $author->author_name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="description" class="block text-white font-bold mb-2">Description</label>
-                        <textarea id="description" name="description" class="w-full px-3 py-2 bg-gray-700 text-white rounded"></textarea>
-                    </div>
-                    <div class="mb-4">
-                        <label for="genre_id" class="block text-white font-bold mb-2">Genre</label>
-                        <select id="genre_id" name="genre_id" class="w-full px-3 py-2 bg-gray-700 text-white rounded" required>
-                            @foreach ($genres as $genre)
-                                <option value="{{ $genre->id }}">{{ $genre->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="img_id" class="block text-white font-bold mb-2">Song Image</label>
-                        <input type="file" id="img_id" name="img_id" class="w-full px-3 py-2 bg-gray-700 text-white rounded" required>
-                    </div>
-                    <div class="flex justify-end">
-                        <button type="button" @click="open = false" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 mr-2">
-                            Cancel
-                        </button>
-                        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                            Create Song
-                        </button>
-                    </div>
-                </form>
             </div>
-        </div>
-    </div>
         </div>
 
         <!-- Songs Table (Make it scrollable on small screens) -->
@@ -132,8 +158,8 @@
                         @foreach ($songs as $song)
                             <tr class="border-b border-gray-700">
                                 <td class="px-4 py-2 flex justify-center items-center">
-                                    <img src="/image/{{ $song->img_id }}" alt="Song Image" class="w-10 h-10 rounded-full"
-                                        loading="lazy">
+                                    <img src="/image/{{ $song->img_id }}" alt="Song Image"
+                                        class="w-10 h-10 rounded-full" loading="lazy">
                                 </td>
                                 <td class="px-4 py-2">{{ $song->song_name }}</td>
                                 <td class="px-4 py-2">{{ $song->author ? $song->author->author_name : 'Unknown' }}</td>
@@ -145,7 +171,8 @@
                                         @method('PATCH')
                                         <select name="status" onchange="this.form.submit()"
                                             class="bg-gray-800 text-white rounded px-2 py-1">
-                                            <option value="published" {{ $song->status == 'published' ? 'selected' : '' }}>
+                                            <option value="published"
+                                                {{ $song->status == 'published' ? 'selected' : '' }}>
                                                 Published</option>
                                             <option value="deleted" {{ $song->status == 'deleted' ? 'selected' : '' }}>
                                                 Deleted</option>
@@ -171,7 +198,8 @@
                                                 <!-- Header -->
                                                 <div class="flex justify-between items-center mb-4">
                                                     <h2 class="text-xl font-bold text-white">Edit Song</h2>
-                                                    <button @click="open = false" class="text-gray-400 hover:text-gray-200">
+                                                    <button @click="open = false"
+                                                        class="text-gray-400 hover:text-gray-200">
                                                         ✖
                                                     </button>
                                                 </div>
@@ -184,7 +212,8 @@
 
                                                     <!-- Song Name -->
                                                     <div class="mb-4">
-                                                        <label for="song_name" class="block text-white font-bold mb-2">Song
+                                                        <label for="song_name"
+                                                            class="block text-white font-bold mb-2">Song
                                                             Name</label>
                                                         <input type="text" id="song_name" name="song_name"
                                                             value="{{ $song->song_name }}"

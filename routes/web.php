@@ -2,11 +2,14 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminSongsController;
+use App\Http\Controllers\Admin\SongApprovalController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\AuthorController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\Song\AudioController;
+use App\Http\Controllers\Song\RecommendSongs;
+use App\Http\Controllers\User\SearchHistoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\LoginController;
 use App\Http\Controllers\User\LoginGoogleController;
@@ -20,10 +23,11 @@ use App\Http\Controllers\User\PaymentWithMomoController;
 use App\Http\Controllers\User\PaymentWithStripeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Song\PlayHistoryController;
 
 
 
-Route::get('/', [AudioController::class, 'index'])->name('home');
+Route::get('/', [RecommendSongs::class, 'index'])->name('home')->middleware('web');
 
 Route::get('/checkout', [PaymentController::class, 'show'])->name('checkout.show');
 
@@ -41,9 +45,9 @@ Route::post('login', [LoginController::class, 'login'])->name('login');
 Route::post('register', [RegisterController::class, 'register'])->name('register');
 Route::get('login-google', [LoginGoogleController::class, 'redirectToGoogle'])->name('login-google');
 Route::get('login-google/callback', [LoginGoogleController::class, 'handleGoogleCallBack']);
+Route::post('/save-search-history', [SearchHistoryController::class, 'store'])->name('save-search-history');
 
-
-Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+Route::middleware(['web', 'auth:sanctum', 'verified'])->group(function () {
     // Define your protected routes here
     Route::middleware(['web'])->group(function () {
         Route::get('link-google', [LoginGoogleController::class, 'linkGoogleAccount'])->name('link-google');
@@ -79,14 +83,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         return view('user/likesong');
     })->name('likesong');
     //Premium
-    Route::get('/premium',[PaymentController::class, 'index'])->name('premium');
+    Route::get('/premium', [PaymentController::class, 'index'])->name('premium');
     Route::get('/upload-song', [SongController::class, 'index'])->name('upload');
+
+    Route::get('/recommend-songs', [RecommendSongs::class, 'index'])->name('recommend-songs');
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
-    // Trang yêu cầu xác thực email
-   
 });
 
 Route::post('/forgot-password', [ResetPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
@@ -126,6 +130,7 @@ Route::delete('/admin/user/{id}', [AdminController::class, 'deleteUser'])->name(
 Route::delete('/admin/song/{id}', [AdminController::class, 'deleteSong'])->name('admin.deleteSong');
 Route::patch('/admin/song/{id}/status', [AdminController::class, 'updateStatus'])->name('admin.updateStatus');
 Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/users', [AdminController::class, 'manageUsers'])->name('manageUsers');
     Route::get('/authors', [AdminController::class, 'manageAuthors'])->name('manageAuthors');
     Route::get('/get-authors', [AuthorController::class, 'index'])->name('authors');
@@ -136,6 +141,7 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
 
     // Hiển thị danh sách bài hát với bộ lọc
     Route::get('/songs', [AdminSongsController::class, 'index'])->name('songs');
+    Route::post('/songs/create', [AdminSongsController::class, 'create'])->name('createSong');
 
     // Cập nhật trạng thái bài hát
     Route::patch('/songs/{id}/status', [AdminSongsController::class, 'updateStatus'])->name('updateStatus');
@@ -145,6 +151,11 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
 
     // Xử lý lưu bài hát sau chỉnh sửa
     Route::put('/songs/{id}', [AdminSongsController::class, 'update'])->name('updateSong');
+
+    // Duyệt bài hát
+    Route::get('/song-approval', [SongApprovalController::class, 'index'])->name('songApproval');
+    Route::post('/song-approval/{id}/approve', [SongApprovalController::class, 'approve'])->name('songApproval.approve');
+    Route::post('/song-approval/{id}/reject', [SongApprovalController::class, 'reject'])->name('songApproval.reject');
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {

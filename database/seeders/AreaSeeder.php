@@ -3,59 +3,81 @@
 namespace Database\Seeders;
 
 use App\Models\Area;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class AreaSeeder extends Seeder
 {
-
     public function run(): void
     {
-        // Danh sách các khu vực theo châu lục
         $continents = [
             [
                 'name' => 'Asia',
                 'countries' => [
-                    'Vietnam', 'Thailand', 'Japan', 'South Korea', 'China', 'India', 'Indonesia', 'Malaysia', 'Singapore'
+                    'Vietnam' => 'Việt Nam',
+                    'Korea' => 'Hàn Quốc',
+                    'Japan' => 'Nhật Bản', 
+                    'China' => 'Trung Quốc',
+                    'Taiwan' => 'Đài Loan',
+                    'Thailand' => 'Thái Lan',
+                    'Indonesia' => 'Indonesia',
+                    'Philippines' => 'Philippines',
+                    'India' => 'Ấn Độ'
                 ]
             ],
             [
                 'name' => 'Europe',
                 'countries' => [
-                    'France', 'Germany', 'UK', 'Italy', 'Spain', 'Sweden', 'Russia', 'Belgium', 'Netherlands'
+                    'UK' => 'Anh',
+                    'France' => 'Pháp',
+                    'Germany' => 'Đức',
+                    'Italy' => 'Ý',
+                    'Spain' => 'Tây Ban Nha',
+                    'Sweden' => 'Thụy Điển',
+                    'Netherlands' => 'Hà Lan',
+                    'Russia' => 'Nga'
                 ]
             ],
             [
                 'name' => 'America',
                 'countries' => [
-                    'USA', 'Canada', 'Brazil', 'Mexico', 'Argentina', 'Chile', 'Colombia', 'Peru'
+                    'USA' => 'Mỹ',
+                    'Canada' => 'Canada',
+                    'Brazil' => 'Brazil',
+                    'Mexico' => 'Mexico',
+                    'Argentina' => 'Argentina',
+                    'Colombia' => 'Colombia',
+                    'Puerto Rico' => 'Puerto Rico',
+                    'Cuba' => 'Cuba'
                 ]
             ],
             [
                 'name' => 'Africa',
                 'countries' => [
-                    'Nigeria', 'South Africa', 'Kenya', 'Egypt', 'Ghana', 'Ethiopia', 'Morocco'
+                    'Nigeria' => 'Nigeria',
+                    'South Africa' => 'Nam Phi',
+                    'Egypt' => 'Ai Cập',
+                    'Morocco' => 'Ma-rốc',
+                    'Ghana' => 'Ghana',
+                    'Kenya' => 'Kenya'
                 ]
             ],
             [
                 'name' => 'Oceania',
                 'countries' => [
-                    'Australia', 'New Zealand', 'Fiji', 'Papua New Guinea'
+                    'Australia' => 'Úc',
+                    'New Zealand' => 'New Zealand'
                 ]
-            ],
-            [
-                'name' => 'Antarctica',
-                'countries' => [] // Châu Nam Cực không có quốc gia nào
-            ],
+            ]
         ];
+
         // Tạo các khu vực cha cho từng châu lục
         foreach ($continents as $continent) {
             $continentArea = Area::create(['name' => $continent['name']]);
 
             // Tạo các quốc gia (khu vực con)
-            foreach ($continent['countries'] as $country) {
+            foreach ($continent['countries'] as $code => $name) {
                 Area::create([
-                    'name' => $country,
+                    'name' => $name,
                     'parents_id' => $continentArea->id
                 ]);
             }

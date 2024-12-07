@@ -62,272 +62,64 @@
             cursor: pointer;
         }
     </style>
-    <script>
-        function flash(message, type = 'success') {
-            // Lấy phần tử flash message
-            const flashMessage = document.getElementById('flash-message');
-
-            // Cập nhật nội dung và kiểu dáng dựa trên loại thông báo
-            flashMessage.textContent = message;
-            flashMessage.className =
-                `fixed top-4 right-4 py-2 px-4 rounded-lg shadow-lg z-50 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white`;
-            // Hiển thị thông báo
-            flashMessage.style.display = 'block';
-            // Ẩn sau 3 giây
-            setTimeout(() => {
-                flashMessage.classList.add('fade-out');
-                setTimeout(() => {
-                    flashMessage.style.display = 'none';
-                    flashMessage.classList.remove('fade-out');
-                }, 500); // Chờ hiệu ứng kết thúc
-            }, 3000);
-        }
-        // pop up create playist
-        document.addEventListener("DOMContentLoaded", function() {
-            const avatar = document.querySelector('#avatar'); // Lấy phần tử #avatar
-            const avatarPopup = document.querySelector('.avatar-popup'); // Lấy phần tử pop-up
-
-            if (!avatar || !avatarPopup) return;
-
-            // Mở popup khi nhấn vào avatar
-            avatar.addEventListener('click', function(e) {
-                e.stopPropagation(); // Ngăn chặn sự kiện ngoài từ việc ẩn pop-up
-                avatarPopup.classList.toggle('block'); // Thêm hoặc xóa class 'block' cho popup
-            });
-
-            // Ẩn popup khi click ra ngoài
-            document.addEventListener('click', function(e) {
-                if (!avatarPopup.contains(e.target) && !avatar.contains(e.target)) {
-                    avatarPopup.classList.remove('block'); // Ẩn pop-up
-                }
-            });
-
-            // Ngăn pop-up bị tắt khi click bên trong
-            avatarPopup.addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
-            // Lấy các phần tử popup và nút
-            var popup = document.getElementById("createPlaylistPopup");
-            var closePopupBtn = document.getElementById("closePopupBtn");
-
-            // Đóng popup khi nhấn nút đóng
-            closePopupBtn.addEventListener("click", function() {
-                popup.style.display = "none";
-            });
-
-            // Đóng popup nếu người dùng nhấn ra ngoài popup
-            window.addEventListener("click", function(event) {
-                if (event.target == popup) {
-                    popup.style.display = "none";
-                }
-            });
-
-            const toggleLyricsBtn = document.getElementById("toggleLyricsIcon"); // Nút play làm trigger
-            const lyricPopup = document.getElementById("lyricPopup");
-
-            let isLyricsVisible = false; // Trạng thái hiển thị lyrics
-
-            // Toggle popup lyrics
-            toggleLyricsBtn.addEventListener("click", () => {
-                isLyricsVisible = !isLyricsVisible;
-                console.log('isLyricsVisible:', isLyricsVisible);
-
-                if (isLyricsVisible) {
-                    // Mở popup, thêm độ trễ nhỏ để hiệu ứng trượt lên
-                    lyricPopup.classList.remove("hidden");
-                    setTimeout(() => {
-                            lyricPopup.classList.add("show");
-                        },
-                        10
-                        ); // Thêm chút độ trễ nhỏ để cho phép class 'hidden' thay đổi trước khi 'show' được áp dụng
-                    // Khi popup mở, thêm lớp no-scroll vào body để ngừng cuộn trang
-                    document.body.classList.add("no-scroll");
-                } else {
-                    // Đóng popup, thêm độ trễ nhỏ để hiệu ứng trượt xuống
-                    lyricPopup.classList.remove("show");
-                    setTimeout(() => {
-                        lyricPopup.classList.add("hidden");
-                    }, 500); // Đảm bảo cho animation trượt xuống hoàn thành trước khi ẩn đi
-                    // Khi popup đóng, xóa lớp no-scroll để khôi phục cuộn trang
-                    document.body.classList.remove("no-scroll");
-                }
-            });
-        });
-
-        //add song
-        // Open popup
-        function openPopup() {
-            document.getElementById('overlay').classList.add('active');
-        }
-
-        // Close popup
-        function closePopup() {
-            document.getElementById('overlay').classList.remove('active');
-        }
-
-        // Function to create a new playlist
-        function NewPlaylist() {
-            const isLoggedIn = {{ Auth::check() ? 'true' : 'false' }};
-            const userId = {{ auth()->check() ? auth()->user()->id : 'null' }};
-            console.log('isLoggedIn:', isLoggedIn);
-            console.log('userId:', userId);
-            if (isLoggedIn) {
-                closePopup();
-                document.getElementById('user_id').value = userId;
-                var popup = document.getElementById("createPlaylistPopup");
-                popup.style.display = "block";
-                const form = document.getElementById('createPlaylistForm');
-                console.log('new playlist');
-                form.addEventListener('submit', async function(event) {
-                    event.preventDefault(); // Ngăn form reload trang
-                    createNewPlaylist();
-                });
-            } else {
-                closePopup();
-                flash('Vui lòng đăng nhập để tạo playlist!', 'error');
-            }
-        }
-
-        function createNewPlaylist() {
-            console.log('create new playlist');
-            let name = document.getElementById('title-playlist').value.trim();
-            let description = document.getElementById('description-playlist').value.trim();
-            let user_id = document.getElementById('user_id').value.trim();
-            if (!name || !description) {
-                alert('Vui lòng nhập đầy đủ thông tin.');
-                return;
-            }
-
-            $.ajax({
-                url: '/create-playlist',
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json; charset=utf-8',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                },
-                data: JSON.stringify({
-                    name,
-                    description,
-                    user_id
-                }),
-                success: function(data) {
-                    var popup = document.getElementById("createPlaylistPopup");
-                    popup.style.display = "none";
-                    document.getElementById('title-playlist').value = '';
-                    document.getElementById('description-playlist').value = '';
-                    flash('Danh sách phát mới đã được thêm!', 'success');
-
-                },
-                error: function(xhr) {
-                    console.error('Error:', xhr.responseText);
-                    flash('Có lỗi xảy ra khi thêm danh sách phát.', 'error');
-                }
-            });
-        }
-
-
-        function toggleSelection(element) {
-            const checkIcon = element.querySelector('i.fas.fa-check-circle');
-            const playlistId = element.getAttribute('data-playlist-id');
-            // Kiểm tra xem dấu tích đã có class 'hidden' chưa
-            if (checkIcon.classList.contains('!hidden')) {
-                selectedPlaylists.push(playlistId);
-                // Bỏ dấu tích (hiện icon check)
-                checkIcon.classList.remove('!hidden');
-            } else {
-                selectedPlaylists = selectedPlaylists.filter(id => id !== playlistId);
-                // Đặt lại dấu tích (ẩn icon check)
-                checkIcon.classList.add('!hidden');
-            }
-        }
-        function confirmSelection() {
-            const songId = document.getElementById('footer').getAttribute('data-song-id');
-            selectedPlaylists.forEach(playlistId => {
-        fetch('/add-song-to-playlist', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // CSRF token
-            },
-            body: JSON.stringify({
-                playlist_id: playlistId,
-                song_id: songId,
-            })
-        })
-                .then(response => response.json())
-                .then(data => {
-                    flash('Bài hát đã được thêm vào danh sách phát!', 'success');
-                    console.log(`Playlist ${playlistId} updated successfully`, data);
-                })
-                    .catch(error => {
-                        flash('Có lỗi xảy ra khi thêm bài hát vào danh sách phát!', 'error');
-                        console.error(`Error updating playlist ${playlistId}:`, error);
-                    });
-            });
-
-            // Sau khi gửi, đóng popup
-            closePopup();
-        }
-    </script>
 </head>
 
 <body>
 
     <div class="sidebar">
         <a class="no-hover" href="{{ route('home') }}">
-            <img alt="Logo" height="100" src="http://localhost:8000/images/profile/logo-home.png" width="100" />
+            <img alt="Logo" height="100" src="http://localhost:8000/images/profile/logo-home.png"
+                width="100" />
         </a>
         <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
         <a href="{{ route('library') }}" id="librarys"
             class="{{ request()->routeIs('library') ? 'active' : '' }}">Library</a>
         <button id="createPlaylistBtn" class="btn-create-playist" onclick="NewPlaylist()"> + Create Playlist </button>
-        <a href="/likesong" class="{{ request()->is('likesong') ? 'active' : '' }}">Like songs</a>
-        <a href="#" class="{{ request()->is('') ? 'active' : '' }}">My Album</a>
-        <a href="/playist" class="{{ request()->is('playlist1') ? 'active' : '' }}">Playlist1</a>
+        @foreach ($playlists as $playlist)
+            <a href="{{ route('playlist', $playlist->id) }}" class="{{ request()->is('get-song-in-playlist/' . $playlist->id) ? 'active' : '' }}">{{ $playlist->name }}</a>
+        @endforeach
     </div>
 
-    <!-- Avatar Section -->
+    <!-- Create Playlist -->
     <div class="relative">
         <!-- Popup form tạo playlist -->
-        <div id="createPlaylistPopup" class="popup hidden">
-            <div class="!inset-0 !bg-gray-600 !bg-opacity-80 !flex !items-center !justify-center !z-50 !w-full !h-full">
-                <div class="!bg-black !w-full !max-w-lg !p-6 !rounded-lg !shadow-lg !relative">
-                    <!-- Nút đóng -->
-                    <button id="closePopupBtn" class="absolute top-4 right-4 text-gray-400 hover:text-gray-300 text-xl">
-                        &times;
-                    </button>
+        <div id="createPlaylistPopup"
+            class="hidden fixed inset-0 bg-gray-600 bg-opacity-80 flex items-center justify-center z-50">
+            <div class="bg-gray-800 w-full max-w-lg p-6 rounded-lg shadow-lg relative">
+                <!-- Nút đóng -->
+                <button id="closePopupBtn"
+                    class="absolute top-4 right-4 text-gray-400 hover:text-gray-300 text-xl focus:outline-none">
+                    &times;
+                </button>
+
+                <!-- Tiêu đề -->
+                <h2 class="text-2xl font-bold text-center text-white mb-6">Create Playlist</h2>
+
+                <!-- Form -->
+                <form id="createPlaylistForm" method="POST" class="space-y-4">
+                    @csrf
+                    <input type="hidden" id="user_id" name="user_id" value="">
 
                     <!-- Tiêu đề -->
-                    <h2 class="!text-2xl !font-bold !text-center !text-white !mb-6">Create Playlist</h2>
+                    <input type="text" id="title-playlist" name="title" placeholder="Tiêu đề" required
+                        class="w-full px-4 py-3 border border-gray-600 rounded-lg shadow-sm bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-x-gray-800 focus:border-x-gray-800" />
 
-                    <!-- Form -->
-                    <form id="createPlaylistForm" method="POST" class="!space-y-4">
-                        @csrf
-                        <input type="hidden" id="user_id" name="user_id" value="">
-
-                        <!-- Tiêu đề -->
-                        <input type="text" id="title-playlist" name="title" placeholder="Tiêu đề" required
-                            class="!w-full !px-4 !py-3 !border !border-gray-600 !rounded-lg !shadow-sm !bg-gray-800 !text-white !placeholder-gray-400 !focus:outline-none !focus:ring-2 !focus:ring-green-400 !focus:border-green-400 !right-0" />
-
-                        <!-- Mô tả -->
-                        <textarea id="description-playlist" name="description" placeholder="Mô tả" required
-                            class="!w-full !px-4 !py-3 !border !border-gray-600 !rounded-lg !shadow-sm !bg-gray-800 !text-white !placeholder-gray-400 !focus:outline-none !focus:ring-2 !focus:ring-green-400 !focus:border-green-400 !right-0"></textarea>
-
-                        <!-- Nút tạo -->
-                        <button id="btn-createplayist" type="submit"
-                            class="!w-full !bg-gray-500 !text-white !px-4 !py-3 !rounded-lg !font-semibold !hover:bg-green-600 !focus:ring-2 !focus:ring-green-400 !focus:ring-offset-1 !focus:outline-none !right-0 !left-0 !top-0">
-                            Create
-                        </button>
-                    </form>
-                </div>
+                    <!-- Nút tạo -->
+                    <button id="btn-createplayist" type="submit"
+                        class="w-full bg-gray-700 text-white px-4 py-3 rounded-lg font-semibold hover:bg-gray-600 focus:ring-2 focus:ring-gray-600 focus:ring-offset-1 focus:outline-none">
+                        Create
+                    </button>
+                </form>
             </div>
         </div>
     </div>
+
+
     <div class="main-content">
         <div class="header">
             <!-- Search -->
-            <form action="{{ route('searchsong') }}" method="get" class="search-form">
-                <input name="query" placeholder="Bạn đang tìm kiếm gì?" type="text" />
+            <form action="{{ route('searchsong') }}" method="get" class="search-form" id="search-form">
+                <input name="query" placeholder="Bạn đang tìm kiếm gì?" type="text" id="query" />
                 <button type="submit" class="search-song-icon">
                     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
                 </button>
@@ -369,66 +161,6 @@
             @endif
         </div>
         @yield('content')
-    </div>
-    @extends('components.footer')
-    <!-- Popup lyrics -->
-    <div id="lyricPopup" class="popup-lyrics hidden">
-        <div class="popup-lyrics-content">
-            <div class="lyrics-container">
-                <div class="left">
-                    <img alt="Album cover with text 'SƠN TÙNG M-TP CÓ CHẮC YÊU LÀ ĐÂY' and a person looking down"
-                        height="600"
-                        src="https://1.bp.blogspot.com/-capieOTmKV4/XSFjKrRJ-hI/AAAAAAAANuM/1VXeYK1rg88CEqlEDa6wESWFumYqFTIBACLcBGAs/s1600/bo-hinh-nen-son-tung-mtp-cute-dep-nhat-cho-dien-thoai-trong-mv-hay-trao-cho-anh-8.jpg"
-                        width="600" />
-                </div>
-                <div class="right">
-                    <div class="tabs">
-                        <div class="tab active">LYRIC</div>
-                    </div>
-                    <div class="lyrics">
-                        <p>
-                            (Thấp thoáng ánh mắt, thấp thoáng ánh mắt)
-                            <br />
-                            (Thấp thoáng ánh mắt, thấp thoáng ánh mắt)
-                            <br />
-                            Good boy
-                        </p>
-                        <p>
-                            Thấp thoáng ánh mắt đôi môi mang theo hương mê say
-                            <br />
-                            Em cho anh tan trong miên man quên luôn đi đêm ngày
-                            <br />
-                            Chạm nhẹ vội vàng hai ba giây nhưng con tim đâu hay
-                            <br />
-                            Bối rối khẽ lên ngôi yêu thương đong đầy thật đầy
-                        </p>
-                        <p>
-                            Anh ngẩn ngơ cứ ngỡ
-                            <br />
-                            (Đó chỉ là giấc mơ)
-                            <br />
-                            Anh ngẩn ngơ cứ ngỡ
-                            <br />
-                            (Như đang ngất ngây trong giấc mơ)
-                            <br />
-                            Thật ngọt ngào êm dịu đắm chìm
-                            <br />
-                            Phút chốc viết tương tư gieo nên thơ (yeah, hey)
-                        </p>
-                        <p>
-                            Có câu ca trong gió hát ngân nga, ru trôi mây
-                            <br />
-                            Nhẹ nhàng đón ban mai ngang qua trao nụ cười (trao nụ cười)
-                            <br />
-                            Nắng đưa chen, khóe sắc, vui đùa giữa muôn ngàn hoa
-                            <br />
-                            Dưới ánh nắng dịu dàng âu yếm tâm hồn người
-                        </p>
-
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Overlay and Modal -->
@@ -489,5 +221,243 @@
     <div id="flash-message"
         class="hidden fixed top-4 right-4 bg-blue-500 text-white py-2 px-4 rounded-lg shadow-lg z-50"></div>
 </body>
+<script>
+    document.getElementById('search-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const searchInput = document.getElementById('query');
+        const query = searchInput.value.trim(); // Lấy từ khóa tìm kiếm
+        const userId = {{ Auth::check() ? Auth::user()->id : 'null' }};
+        if (query.length > 0) {
+            // Gửi dữ liệu tìm kiếm qua AJAX
+            $.ajax({
+                    url: '/save-search-history',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content')
+                    },
+                    data: JSON.stringify({
+                        user_id: userId,
+                        content: query,
+                        clicked_song_id: null, // Không có bài hát nào được nhấn
+                    }),
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+            // Tiến hành tìm kiếm như bình thường
+            window.location.href = '/search?query=' + encodeURIComponent(query);
+        }
+    });
+
+    function flash(message, type = 'success') {
+        // Lấy phần tử flash message
+        const flashMessage = document.getElementById('flash-message');
+
+        // Cập nhật nội dung và kiểu dáng dựa trên loại thông báo
+        flashMessage.textContent = message;
+        flashMessage.className =
+            `fixed top-4 right-4 py-2 px-4 rounded-lg shadow-lg z-50 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white`;
+        // Hiển thị thông báo
+        flashMessage.style.display = 'block';
+        // Ẩn sau 3 giây
+        setTimeout(() => {
+            flashMessage.classList.add('fade-out');
+            setTimeout(() => {
+                flashMessage.style.display = 'none';
+                flashMessage.classList.remove('fade-out');
+            }, 500); // Chờ hiệu ứng kết thúc
+        }, 3000);
+    }
+    // pop up create playist
+    document.addEventListener("DOMContentLoaded", function() {
+        const avatar = document.querySelector('#avatar'); // Lấy phần tử #avatar
+        const avatarPopup = document.querySelector('.avatar-popup'); // Lấy phần tử pop-up
+
+        if (!avatar || !avatarPopup) return;
+
+        // Mở popup khi nhấn vào avatar
+        avatar.addEventListener('click', function(e) {
+            e.stopPropagation(); // Ngăn chặn sự kiện ngoài từ việc ẩn pop-up
+            avatarPopup.classList.toggle('block'); // Thêm hoặc xóa class 'block' cho popup
+        });
+
+        // Ẩn popup khi click ra ngoài
+        document.addEventListener('click', function(e) {
+            if (!avatarPopup.contains(e.target) && !avatar.contains(e.target)) {
+                avatarPopup.classList.remove('block'); // Ẩn pop-up
+            }
+        });
+
+        // Ngăn pop-up bị tắt khi click bên trong
+        avatarPopup.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+        // Lấy các phần tử popup và nút
+        var popup = document.getElementById("createPlaylistPopup");
+        var closePopupBtn = document.getElementById("closePopupBtn");
+
+        // Đóng popup khi nhấn nút đóng
+        closePopupBtn.addEventListener("click", function() {
+            popup.style.display = "none";
+        });
+
+        // Đóng popup nếu người dùng nhấn ra ngoài popup
+        window.addEventListener("click", function(event) {
+            if (event.target == popup) {
+                popup.style.display = "none";
+            }
+        });
+
+        const toggleLyricsBtn = document.getElementById("toggleLyricsIcon"); // Nút play làm trigger
+        const lyricPopup = document.getElementById("lyricPopup");
+
+        let isLyricsVisible = false; // Trạng thái hiển thị lyrics
+
+        // Toggle popup lyrics
+        toggleLyricsBtn.addEventListener("click", () => {
+            isLyricsVisible = !isLyricsVisible;
+            console.log('isLyricsVisible:', isLyricsVisible);
+
+            if (isLyricsVisible) {
+                // Mở popup, thêm độ trễ nhỏ để hiệu ứng trượt lên
+                lyricPopup.classList.remove("hidden");
+                setTimeout(() => {
+                        lyricPopup.classList.add("show");
+                    },
+                    10
+                ); // Thêm chút độ trễ nhỏ để cho phép class 'hidden' thay đổi trước khi 'show' được áp dụng
+                // Khi popup mở, thêm lớp no-scroll vào body để ngừng cuộn trang
+                document.body.classList.add("no-scroll");
+            } else {
+                // Đóng popup, thêm độ trễ nhỏ để hiệu ứng trượt xuống
+                lyricPopup.classList.remove("show");
+                setTimeout(() => {
+                    lyricPopup.classList.add("hidden");
+                }, 500); // Đảm bảo cho animation trượt xuống hoàn thành trước khi ẩn đi
+                // Khi popup đóng, xóa lớp no-scroll để khôi phục cuộn trang
+                document.body.classList.remove("no-scroll");
+            }
+        });
+    });
+
+    // Open popup
+    function openPopup() {
+        document.getElementById('overlay').classList.add('active');
+    }
+
+    // Close popup
+    function closePopup() {
+        document.getElementById('overlay').classList.remove('active');
+    }
+
+    // Function to create a new playlist
+    function NewPlaylist() {
+        const isLoggedIn = {{ Auth::check() ? 'true' : 'false' }};
+        const userId = {{ auth()->check() ? auth()->user()->id : 'null' }};
+        console.log('isLoggedIn:', isLoggedIn);
+        console.log('userId:', userId);
+        if (isLoggedIn) {
+            closePopup();
+            document.getElementById('user_id').value = userId;
+            var popup = document.getElementById("createPlaylistPopup");
+            popup.style.display = "flex";
+            const form = document.getElementById('createPlaylistForm');
+            console.log('new playlist');
+            form.addEventListener('submit', async function(event) {
+                event.preventDefault(); // Ngăn form reload trang
+                createNewPlaylist();
+            });
+        } else {
+            closePopup();
+            flash('Vui lòng đăng nhập để tạo playlist!', 'error');
+        }
+    }
+
+    function createNewPlaylist() {
+        console.log('create new playlist');
+        let name = document.getElementById('title-playlist').value.trim();
+        let description = document.getElementById('description-playlist').value.trim();
+        let user_id = document.getElementById('user_id').value.trim();
+        if (!name || !description) {
+            alert('Vui lòng nhập đầy đủ thông tin.');
+            return;
+        }
+
+        $.ajax({
+            url: '/create-playlist',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            },
+            data: JSON.stringify({
+                name,
+                description,
+                user_id
+            }),
+            success: function(data) {
+                var popup = document.getElementById("createPlaylistPopup");
+                popup.style.display = "none";
+                document.getElementById('title-playlist').value = '';
+                document.getElementById('description-playlist').value = '';
+                flash('Danh sách phát mới đã được thêm!', 'success');
+
+            },
+            error: function(xhr) {
+                console.error('Error:', xhr.responseText);
+                flash('Có lỗi xảy ra khi thêm danh sách phát.', 'error');
+            }
+        });
+    }
+
+
+    function toggleSelection(element) {
+        const checkIcon = element.querySelector('i.fas.fa-check-circle');
+        const playlistId = element.getAttribute('data-playlist-id');
+        // Kiểm tra xem dấu tích đã có class 'hidden' chưa
+        if (checkIcon.classList.contains('!hidden')) {
+            selectedPlaylists.push(playlistId);
+            // Bỏ dấu tích (hiện icon check)
+            checkIcon.classList.remove('!hidden');
+        } else {
+            selectedPlaylists = selectedPlaylists.filter(id => id !== playlistId);
+            // Đặt lại dấu tích (ẩn icon check)
+            checkIcon.classList.add('!hidden');
+        }
+    }
+
+    function confirmSelection() {
+        const songId = document.getElementById('footer').getAttribute('data-song-id');
+        selectedPlaylists.forEach(playlistId => {
+            fetch('/add-song-to-playlist', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content') // CSRF token
+                    },
+                    body: JSON.stringify({
+                        playlist_id: playlistId,
+                        song_id: songId,
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    flash('Bài hát đã được thêm vào danh sách phát!', 'success');
+                    console.log(`Playlist ${playlistId} updated successfully`, data);
+                })
+                .catch(error => {
+                    flash('Có lỗi xảy ra khi thêm bài hát vào danh sách phát!', 'error');
+                    console.error(`Error updating playlist ${playlistId}:`, error);
+                });
+        });
+
+        // Sau khi gửi, đóng popup
+        closePopup();
+    }
+</script>
 
 </html>

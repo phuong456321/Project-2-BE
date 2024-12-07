@@ -15,18 +15,18 @@ class ProfileController extends Controller
     {
         // Kiểm tra nếu người dùng hiện tại không phải là người sở hữu profile
         if (Auth::user()->id != $id) {
-            return redirect('profile/'. Auth::user()->id)->with('warning', 'Unauthorized action.');
+            return redirect('profile/' . Auth::user()->id)->with('warning', 'Unauthorized action.');
         }
 
 
-            $user = User::findOrFail($id);
-            $information = [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'img' => $user->avatar_id,
-            ];
-        
+        $user = User::findOrFail($id);
+        $information = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'img' => $user->avatar_id,
+        ];
+
         return view('user/profile', compact('information'));
     }
 

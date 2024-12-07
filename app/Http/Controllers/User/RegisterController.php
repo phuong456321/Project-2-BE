@@ -94,7 +94,7 @@ class RegisterController extends Controller
             if ($user->hasVerifiedEmail()) {
                 return redirect()->route('home')->with('info', 'Email has been verified.');
             }
-            
+
             // Check if the token has expired
             if ($user->email_verification_sent_at->addMinutes(60)->isPast()) {
                 return redirect()->route('home')->with('error', 'The verification link has expired. Please request to resend.');
