@@ -254,27 +254,6 @@
         // Đảm bảo cả hai overlay đều ẩn khi tải trang
         document.getElementById("loginOverlay").style.display = "none";
         document.getElementById("registerOverlay").style.display = "none";
-
-        // Xử lý avatar popup
-        const avatar = document.querySelector('#avatar');
-        const popup = document.querySelector('.avatar-popup');
-        if (avatar && popup) {
-            avatar.addEventListener('click', function(e) {
-                e.stopPropagation(); // Ngăn chặn sự kiện ngoài để popup không đóng
-                popup.classList.toggle('block');
-            });
-
-            // Ẩn popup khi click bên ngoài
-            document.addEventListener('click', function(e) {
-                if (!popup.contains(e.target) && !avatar.contains(e.target)) {
-                    popup.classList.remove('block');
-                }
-            });
-
-            popup.addEventListener('click', function(e) {
-                e.stopPropagation(); // Ngăn chặn sự kiện bên trong popup
-            });
-        }
     });
 
     // Hiển thị form đăng nhập
@@ -390,9 +369,9 @@
     function closePopup() {
         document.getElementById('overlay').classList.remove('active');
     }
-    let recommendedSongs = @json($recommendedSongs);
+    let recommendedSongs = @json($recommendedSongs ?? []);
     let historySongs = [];
-    let songs = @json($songs);
+    let songs = @json($songs ?? []);
     window.recommendedSongs = recommendedSongs;
     window.songs = songs;
     window.historySongs = historySongs;

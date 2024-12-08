@@ -269,6 +269,8 @@
     document.addEventListener("DOMContentLoaded", function() {
         const avatar = document.querySelector('#avatar'); // Lấy phần tử #avatar
         const avatarPopup = document.querySelector('.avatar-popup'); // Lấy phần tử pop-up
+        console.log(avatar);  // Kiểm tra xem avatar đã được lấy đúng không
+    console.log(avatarPopup);  // Kiểm tra xem avatarPopup đã được lấy đúng không
 
         if (!avatar || !avatarPopup) return;
 

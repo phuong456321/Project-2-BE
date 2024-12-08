@@ -54,6 +54,8 @@
         <i class="fa-solid fa-music text-xl cursor-pointer" id="toggleLyricsIcon"></i>
         <i class="fas fa-ellipsis-h text-xl cursor-pointer" onclick="openPopup()"></i>
     </div>
+
+    <audio id="footerAudioPlayer" src="" controls hidden></audio>
 </div>
 
 
