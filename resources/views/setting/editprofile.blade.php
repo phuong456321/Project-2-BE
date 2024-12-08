@@ -19,7 +19,7 @@
                     <input
                         type="file"
                         id="avatar"
-                        class="block w-70 text-sm text-gray-400 border border-gray-700 cursor-pointer bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        class="block w-full sm:w-70 text-sm text-gray-400 border border-gray-700 cursor-pointer bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 <!-- Change Password Button -->
                 <div class="flex justify-end mt-4">
@@ -90,26 +90,6 @@
             </div>
         </form>
     </div>
-
-
-    <!-- JavaScript để chuyển đổi trạng thái -->
-    <script>
-        const googleLinked = document.getElementById('google-linked');
-        const googleNotLinked = document.getElementById('google-not-linked');
-
-        // Chuyển đổi trạng thái giữa đã liên kết và chưa liên kết
-        document.querySelectorAll('button').forEach(button => {
-            button.addEventListener('click', () => {
-                if (googleNotLinked.classList.contains('hidden')) {
-                    googleLinked.classList.add('hidden');
-                    googleNotLinked.classList.remove('hidden');
-                } else {
-                    googleLinked.classList.remove('hidden');
-                    googleNotLinked.classList.add('hidden');
-                }
-            });
-        });
-    </script>
 </body>
 
 
