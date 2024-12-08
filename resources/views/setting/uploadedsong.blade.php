@@ -6,12 +6,11 @@
 
 <body class="bg-white text-black">
     <h1 class="text-3xl font-bold mb-6 text-gray-100 mt-5">Danh sách bài hát đã tải lên</h1>
-    <div class="overflow-x-auto">
-        <table class="min-w-full table-auto bg-gray-800 shadow-md rounded-lg">
+    <div class="w-full overflow-x-auto">
+        <table class="table-auto min-w-[800px] bg-gray-800 shadow-md rounded-lg">
             <thead class="bg-gray-700">
                 <tr>
                     <th class="px-4 py-3 text-left text-sm font-medium text-gray-300">Chọn</th>
-                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-300">Ảnh</th>
                     <th class="px-4 py-3 text-left text-sm font-medium text-gray-300">Tên bài hát</th>
                     <th class="px-4 py-3 text-left text-sm font-medium text-gray-300">Thể loại</th>
                     <th class="px-4 py-3 text-left text-sm font-medium text-gray-300">Khu vực</th>
@@ -25,9 +24,7 @@
                     <td class="px-4 py-4">
                         <input type="checkbox" class="song-checkbox">
                     </td>
-                    <td class="px-4 py-4">
-                        <img src="https://via.placeholder.com/100" alt="Song" class="h-12 w-12 rounded-full object-cover">
-                    </td>
+                   
                     <td class="px-4 py-4 text-gray-100 font-medium">Tên bài hát</td>
                     <td class="px-4 py-4 text-gray-400">Thể loại</td>
                     <td class="px-4 py-4 text-gray-400">Khu vực</td>
@@ -41,9 +38,7 @@
                     <td class="px-4 py-4">
                         <input type="checkbox" class="song-checkbox">
                     </td>
-                    <td class="px-4 py-4">
-                        <img src="https://via.placeholder.com/100" alt="Song" class="h-12 w-12 rounded-full object-cover">
-                    </td>
+                  
                     <td class="px-4 py-4 text-gray-100 font-medium">Tên bài hát 2</td>
                     <td class="px-4 py-4 text-gray-400">Thể loại</td>
                     <td class="px-4 py-4 text-gray-400">Khu vực</td>
@@ -53,7 +48,6 @@
                     <td class="px-4 py-4 text-gray-400">50</td>
                     <td class="px-4 py-4 text-gray-400">25</td>
                 </tr>
-                <!-- Thêm nhiều dòng khác -->
             </tbody>
         </table>
     </div>
@@ -77,14 +71,17 @@
                 padding-left: 2px;
                 padding-right: 2px;
             }
+
             .py-4 {
                 padding-top: 2px;
                 padding-bottom: 2px;
             }
+
             .h-12 {
                 height: 48px;
                 width: 48px;
             }
+
             .table-auto {
                 width: 100%;
                 border-collapse: collapse;

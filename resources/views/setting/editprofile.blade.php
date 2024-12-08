@@ -19,7 +19,7 @@
                     <input
                         type="file"
                         id="avatar"
-                        class="block w-full sm:w-70 text-sm text-gray-400 border border-gray-700 cursor-pointer bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        class="block w-100 sm:w-70 text-sm text-gray-400 border border-gray-700 cursor-pointer bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 <!-- Change Password Button -->
                 <div class="flex justify-end mt-4">
