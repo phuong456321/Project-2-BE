@@ -71,7 +71,10 @@
                     <a href="{{ route('playlist', ['playlist_id' => $playlist->id]) }}"
                         class="flex flex-col items-center text-white no-underline">
                         <div class="images">
-                            @if ($playlist->songs->isEmpty())
+                            @if($playlist->name == 'Liked music')
+                            <img src="https://i1.sndcdn.com/artworks-4Lu85Xrs7UjJ4wVq-vuI2zg-t500x500.jpg" alt="Default Image"
+                            class="song-image">
+                            @elseif ($playlist->songs->isEmpty())
                                 <img src="http://localhost:8000/images/profile/logo-home.png" alt="Default Image"
                                     class="song-image">
                             @else
@@ -302,30 +305,6 @@
         document.getElementById("loginOverlay").style.display = "none";
         document.getElementById("registerOverlay").style.display = "none";
     }
-    document.addEventListener('DOMContentLoaded', function() {
-        const avatar = document.querySelector('#avatar'); // Lấy phần tử #avatar
-        const popup = document.querySelector('.avatar-popup'); // Lấy phần tử pop-up
-
-        if (!avatar || !popup) return;
-
-        // Mở popup khi nhấn vào avatar
-        avatar.addEventListener('click', function(e) {
-            e.stopPropagation(); // Ngăn chặn sự kiện ngoài từ việc ẩn pop-up
-            popup.classList.toggle('block'); // Thêm hoặc xóa class 'block' cho popup
-        });
-
-        // Ẩn popup khi click ra ngoài
-        document.addEventListener('click', function(e) {
-            if (!popup.contains(e.target) && !avatar.contains(e.target)) {
-                popup.classList.remove('block'); // Ẩn pop-up
-            }
-        });
-
-        // Ngăn pop-up bị tắt khi click bên trong
-        popup.addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
-    });
     //Lyrics popup
     document.addEventListener("DOMContentLoaded", () => {
         const toggleLyricsBtn = document.getElementById("toggleLyricsIcon"); // Nút play làm trigger
@@ -370,7 +349,6 @@
         document.getElementById('overlay').classList.remove('active');
     }
     let recommendedSongs = @json($recommendedSongs ?? []);
-    let historySongs = [];
     let songs = @json($songs ?? []);
     window.recommendedSongs = recommendedSongs;
     window.songs = songs;

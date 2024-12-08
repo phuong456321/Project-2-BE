@@ -76,7 +76,8 @@
             class="{{ request()->routeIs('library') ? 'active' : '' }}">Library</a>
         <button id="createPlaylistBtn" class="btn-create-playist" onclick="NewPlaylist()"> + Create Playlist </button>
         @foreach ($playlists as $playlist)
-            <a href="{{ route('playlist', $playlist->id) }}" class="{{ request()->is('get-song-in-playlist/' . $playlist->id) ? 'active' : '' }}">{{ $playlist->name }}</a>
+            <a href="{{ route('playlist', $playlist->id) }}"
+                class="{{ request()->is('get-song-in-playlist/' . $playlist->id) ? 'active' : '' }}">{{ $playlist->name }}</a>
         @endforeach
     </div>
 
@@ -119,12 +120,13 @@
         <div class="header p-1 flex justify-between items-center">
             <!-- Search -->
             <form action="{{ route('searchsong') }}" method="get" class="search-form" id="search-form">
-                <input name="query" placeholder="Bạn đang tìm kiếm gì?" type="text" id="query" class="bg-black text-white rounded-full py-2 pl-10 pr-4 focus:outline-none" />
+                <input name="query" placeholder="Bạn đang tìm kiếm gì?" type="text" id="query"
+                    class="bg-black text-white rounded-full py-2 pl-10 pr-4 focus:outline-none" />
                 <button type="submit" class="search-song-icon">
                     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
                 </button>
             </form>
-         
+
             @if (Auth::check())
                 {{-- Nếu người dùng đã đăng nhập --}}
                 <div id="avatar" class="user">
@@ -190,7 +192,8 @@
             <!-- Playlists -->
             <div id="playlists">
                 @foreach ($playlists as $playlist)
-                    <div class="flex items-center mb-4 cursor-pointer" onclick="toggleSelection(this)" data-playlist-id="{{ $playlist->id }}">
+                    <div class="flex items-center mb-4 cursor-pointer" onclick="toggleSelection(this)"
+                        data-playlist-id="{{ $playlist->id }}">
                         <img alt="Heart icon" class="w-6 h-6 rounded mr-3"
                             src="https://storage.googleapis.com/a1aa/image/B52gnTORR458O56CfplN0UUXr2vJMWPUie257n5NYDgJkH2TA.jpg"
                             width="24" height="24" />
@@ -269,8 +272,6 @@
     document.addEventListener("DOMContentLoaded", function() {
         const avatar = document.querySelector('#avatar'); // Lấy phần tử #avatar
         const avatarPopup = document.querySelector('.avatar-popup'); // Lấy phần tử pop-up
-        console.log(avatar);  // Kiểm tra xem avatar đã được lấy đúng không
-    console.log(avatarPopup);  // Kiểm tra xem avatarPopup đã được lấy đúng không
 
         if (!avatar || !avatarPopup) return;
 
@@ -452,7 +453,8 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                        'content'),
                 },
                 body: JSON.stringify({
                     playlist_id: playlistId,
@@ -463,9 +465,6 @@
 
         // Sau khi gửi, đóng popup
         closePopup();
-    }
-    function checkSongInPlaylist(playlistId, songId) {
-        return \App\Models\InPlaylist::where('playlist_id', playlistId)->where('song_id', songId)->exists();
     }
 </script>
 

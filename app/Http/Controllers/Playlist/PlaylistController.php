@@ -51,22 +51,18 @@ class PlaylistController extends Controller
         $totalSeconds = 0;
         $playlist = Playlist::where('user_id', Auth::user()->id)->get();
         foreach ($in_playlist as $item) {
-            $song = song::find($item->song_id);
-
+            $song = Song::with('author')->find($item->song_id);
             // Truy xuất tên của tác giả
             $author_name = Author::where('id', $song->author_id)->value('author_name');
             $song->author_name = $author_name;
 
             //audio_path trả về url của file audio
             if ($song) {
-                $song->audio_path = url('storage/' . $song->audio_path);
-
                 // Tính tổng thời gian bài hát
                 $parts = explode(':', $song->duration); // duration dạng 'mm:ss'
                 $minutes = intval($parts[0]);
                 $seconds = intval($parts[1]);
                 $totalSeconds += $minutes * 60 + $seconds;
-
             }
             array_push($songs, $song);
         }

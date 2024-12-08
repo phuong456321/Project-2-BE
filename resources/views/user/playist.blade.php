@@ -7,6 +7,7 @@
     @vite('resources/css/style.css')
 @endpush
 @vite('resources/js/play.js')
+@vite('resources/js/history_play.js')
 @extends('components.footer')
 <?php
 $filledSongs = collect($songs)->take(4); //Lấy tối đa bài hát
@@ -81,7 +82,7 @@ $remainingSlots = 4 - $filledSongs->count(); // Tính số ảnh trống cần t
                                     <p id="song-artist">{{ $song->author_name }}</p>
                                     <!-- Bạn có thể thay đổi cách lấy tên nghệ sĩ theo cách bạn lưu trữ trong cơ sở dữ liệu -->
                                 </div>
-                                <audio src="{{ url($song->audio_path) }}" preload="auto" style="display:none;"
+                                <audio src="{{ url('storage/' . $song->audio_path) }}" preload="auto" style="display:none;"
                                     controls></audio>
                                 <p id="lyrics-text" class="whitespace-pre-line hidden"> {{ $song->lyric }} </p>
                             </div>
@@ -177,6 +178,6 @@ $remainingSlots = 4 - $filledSongs->count(); // Tính số ảnh trống cần t
 @endsection
 
 <script>
-    // Gán giá trị cho biến global playlistSongs
-    window.playlistSongs = @json($songs);
+    // Chuẩn hóa dữ liệu bài hát trước khi gán
+    window.playlistSongs = @json($songs)
 </script>
