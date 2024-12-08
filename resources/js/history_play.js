@@ -48,7 +48,7 @@ window.addEventListener('load', function () {
                 document.querySelector('.fa-play').classList.replace('fa-play', 'fa-pause');
             } else {
                 footerAudioElement.pause();
-                document.querySelector('.fa-pause').classList.replace('fa-pause', 'fa-play');
+                // document.querySelector('.fa-pause').classList.replace('fa-pause', 'fa-play');
                 }
             }, { once: true });
         }

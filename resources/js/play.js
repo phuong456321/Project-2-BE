@@ -65,5 +65,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 isPlayingPlaylist = false;
             }
         }
+        else if (recommendedSongs.length > 0) {
+            // Phát bài tiếp theo từ danh sách gợi ý
+            const nextRecommendedSong = recommendedSongs.shift(); // Lấy bài đầu tiên và xóa khỏi danh sách
+            playRecommendedSong(nextRecommendedSong);
+        }
+        else if (songs.length > 0) {
+            // Phát bài tiếp theo từ danh sách bài hát
+            const nextSong = songs.shift(); // Lấy bài đầu tiên và xóa khỏi danh sách
+            playRecommendedSong(nextSong);
+        }
     });
 });

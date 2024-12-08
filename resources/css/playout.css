@@ -910,9 +910,6 @@ input[type="password"] {
 }
 
 /* Class khi popup ẩn đi */
-.hidden {
-    display: none;
-}
 
 .close-btn:hover,
 .close-btn:focus {

@@ -219,4 +219,21 @@ class PlaylistController extends Controller
 
         return $liked; // Trả về true nếu bài hát đã được like, ngược lại false
     }
+    //Add song to playlist
+    public function addSongToPlaylist(Request $request)
+    {
+        $request->validate([
+            'playlist_id' => 'required|integer',
+            'song_id' => 'required|integer',
+        ]);
+        InPlaylist::where('playlist_id', $request->playlist_id)->where('song_id', $request->song_id)->delete();
+        $in_playlist = new InPlaylist();
+        $in_playlist->playlist_id = $request->playlist_id;
+        $in_playlist->song_id = $request->song_id;
+        $in_playlist->save();
+        return response()->json([
+            'message' => 'Song added to playlist successfully',
+        ], 201);
+    }
+
 }

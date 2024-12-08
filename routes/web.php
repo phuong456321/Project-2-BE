@@ -63,6 +63,7 @@ Route::middleware(['web', 'auth:sanctum', 'verified'])->group(function () {
 
     //Playlist
     Route::get('get-playlist', [PlaylistController::class, 'getPlaylist'])->name('library');
+    Route::post('add-song-to-playlist', [PlaylistController::class, 'addSongToPlaylist']);
     Route::get('get-song-in-playlist/{playlist_id}', [PlaylistController::class, 'getSongInPlaylist'])->name('playlist');
 
     Route::post('create-like-playlist', [PlaylistController::class, 'createLikePlaylist']);

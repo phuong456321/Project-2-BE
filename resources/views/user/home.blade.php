@@ -86,8 +86,8 @@
             @endforeach
         </div>
     @endif
-    @if (!empty($recommendedSongs))
-    <div class="recommended-music">
+    @if (!empty($recommendedSongs) && count($recommendedSongs) > 0)
+    <div class="trending-music">
         <h3>
             Recommended Music
         </h3>
@@ -390,7 +390,12 @@
     function closePopup() {
         document.getElementById('overlay').classList.remove('active');
     }
-    let selectedPlaylists = []; // Lưu các playlist_id đã chọn
+    let recommendedSongs = @json($recommendedSongs);
+    let historySongs = [];
+    let songs = @json($songs);
+    window.recommendedSongs = recommendedSongs;
+    window.songs = songs;
+    window.historySongs = historySongs;
 </script>
 
 </html>

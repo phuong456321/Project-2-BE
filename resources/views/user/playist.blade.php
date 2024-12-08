@@ -4,6 +4,7 @@
 
 @push('styles')
     @vite('resources/css/playist.css')
+    @vite('resources/css/style.css')
 @endpush
 @vite('resources/js/play.js')
 @extends('components.footer')
@@ -100,7 +101,7 @@ $remainingSlots = 4 - $filledSongs->count(); // Tính số ảnh trống cần t
             </div>
 
             {{-- Đề xuất --}}
-            <div class="song-list">
+            {{-- <div class="song-list">
                 <h3>
                     Đề xuất
                 </h3>
@@ -170,7 +171,7 @@ $remainingSlots = 4 - $filledSongs->count(); // Tính số ảnh trống cần t
                         </i>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 @endsection

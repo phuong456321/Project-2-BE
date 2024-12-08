@@ -115,11 +115,11 @@
     </div>
 
 
-    <div class="main-content">
+    <div class="main-content !pb-[100px]">
         <div class="header p-1 flex justify-between items-center">
             <!-- Search -->
             <form action="{{ route('searchsong') }}" method="get" class="search-form" id="search-form">
-                <input name="query" placeholder="Bạn đang tìm kiếm gì?" type="text" id="query" />
+                <input name="query" placeholder="Bạn đang tìm kiếm gì?" type="text" id="query" class="bg-black text-white rounded-full py-2 pl-10 pr-4 focus:outline-none" />
                 <button type="submit" class="search-song-icon">
                     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
                 </button>
@@ -190,21 +190,14 @@
             <!-- Playlists -->
             <div id="playlists">
                 @foreach ($playlists as $playlist)
-                    <div class="flex items-center mb-4 cursor-pointer" onclick="toggleSelection(this)">
+                    <div class="flex items-center mb-4 cursor-pointer" onclick="toggleSelection(this)" data-playlist-id="{{ $playlist->id }}">
                         <img alt="Heart icon" class="w-6 h-6 rounded mr-3"
                             src="https://storage.googleapis.com/a1aa/image/B52gnTORR458O56CfplN0UUXr2vJMWPUie257n5NYDgJkH2TA.jpg"
                             width="24" height="24" />
                         <span class="flex-1 text-white">{{ $playlist->name }}</span>
-                        <i class="fas fa-check-circle text-green-500 mr-2 hidden" style="display: none;"></i>
+                        <i class="fas fa-check-circle text-green-500 mr-2 !hidden"></i>
                     </div>
                 @endforeach
-                <div class="flex items-center mb-4 cursor-pointer" onclick="toggleSelection(this)">
-                    <img alt="Music note icon" class="w-6 h-6 rounded mr-3"
-                        src="https://storage.googleapis.com/a1aa/image/YFIUdA8GQWayP5XJap5gjCDpFVeTf1DB7k9ZhAmh1foRIPsnA.jpg"
-                        width="24" height="24" />
-                    <span class="flex-1 text-white">Danh sách phát của tôi ...</span>
-                    <i class="fas fa-check-circle text-green-500 mr-2 hidden"></i>
-                </div>
             </div>
             <!-- Buttons -->
             <div class="flex justify-between items-center mt-4">
@@ -320,7 +313,6 @@
         // Toggle popup lyrics
         toggleLyricsBtn.addEventListener("click", () => {
             isLyricsVisible = !isLyricsVisible;
-            console.log('isLyricsVisible:', isLyricsVisible);
 
             if (isLyricsVisible) {
                 // Mở popup, thêm độ trễ nhỏ để hiệu ứng trượt lên
@@ -366,7 +358,6 @@
             var popup = document.getElementById("createPlaylistPopup");
             popup.style.display = "flex";
             const form = document.getElementById('createPlaylistForm');
-            console.log('new playlist');
             form.addEventListener('submit', async function(event) {
                 event.preventDefault(); // Ngăn form reload trang
                 createNewPlaylist();
@@ -417,13 +408,15 @@
         const playlistId = element.getAttribute('data-playlist-id');
         // Kiểm tra xem dấu tích đã có class 'hidden' chưa
         if (checkIcon.classList.contains('!hidden')) {
+            deleteSongFromPlaylist = deleteSongFromPlaylist.filter(id => id !== playlistId);
             selectedPlaylists.push(playlistId);
             // Bỏ dấu tích (hiện icon check)
             checkIcon.classList.remove('!hidden');
         } else {
             selectedPlaylists = selectedPlaylists.filter(id => id !== playlistId);
+            deleteSongFromPlaylist.push(playlistId);
             // Đặt lại dấu tích (ẩn icon check)
-            checkIcon.classList.add('!hidden');
+            checkIcon.classList.toggle('!hidden');
         }
     }
 
@@ -452,9 +445,25 @@
                     console.error(`Error updating playlist ${playlistId}:`, error);
                 });
         });
+        deleteSongFromPlaylist.forEach(playlistId => {
+            fetch('/delete-song-in-playlist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                },
+                body: JSON.stringify({
+                    playlist_id: playlistId,
+                    song_id: songId,
+                })
+            });
+        });
 
         // Sau khi gửi, đóng popup
         closePopup();
+    }
+    function checkSongInPlaylist(playlistId, songId) {
+        return \App\Models\InPlaylist::where('playlist_id', playlistId)->where('song_id', songId)->exists();
     }
 </script>
 
