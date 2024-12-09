@@ -323,30 +323,7 @@
         document.getElementById("loginOverlay").style.display = "none";
         document.getElementById("registerOverlay").style.display = "none";
     }
-    document.addEventListener('DOMContentLoaded', function() {
-        const avatar = document.querySelector('#avatar'); // Lấy phần tử #avatar
-        const popup = document.querySelector('.avatar-popup'); // Lấy phần tử pop-up
-
-        if (!avatar || !popup) return;
-
-        // Mở popup khi nhấn vào avatar
-        avatar.addEventListener('click', function(e) {
-            e.stopPropagation(); // Ngăn chặn sự kiện ngoài từ việc ẩn pop-up
-            popup.classList.toggle('block'); // Thêm hoặc xóa class 'block' cho popup
-        });
-
-        // Ẩn popup khi click ra ngoài
-        document.addEventListener('click', function(e) {
-            if (!popup.contains(e.target) && !avatar.contains(e.target)) {
-                popup.classList.remove('block'); // Ẩn pop-up
-            }
-        });
-
-        // Ngăn pop-up bị tắt khi click bên trong
-        popup.addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
-    });
+    
     //Lyrics popup
     document.addEventListener("DOMContentLoaded", () => {
         const toggleLyricsBtn = document.getElementById("toggleLyricsIcon"); // Nút play làm trigger
@@ -390,7 +367,7 @@
     function closePopup() {
         document.getElementById('overlay').classList.remove('active');
     }
-    let recommendedSongs = @json($recommendedSongs);
+    let recommendedSongs = @json($recommendedSongs ?? []);
     let historySongs = [];
     let songs = @json($songs);
     window.recommendedSongs = recommendedSongs;
