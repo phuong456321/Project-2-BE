@@ -34,9 +34,6 @@ Route::get('/checkout', [PaymentController::class, 'show'])->name('checkout.show
 Route::get('/albums', function () {
     return view('user/albums'); // Trang album
 });
-Route::get('/profile', function () {
-    return view('user/profile'); // Trang profile
-});
 Route::get('/Profileuser', function () {
     return view('user/Profileuser'); // Trang profile
 });
@@ -53,8 +50,8 @@ Route::post('/save-search-history', [SearchHistoryController::class, 'store'])->
 Route::middleware(['web', 'auth:sanctum', 'verified'])->group(function () {
     // Define your protected routes here
     Route::middleware(['web'])->group(function () {
-        Route::get('link-google', [LoginGoogleController::class, 'linkGoogleAccount'])->name('link-google');
-        Route::get('link-google/callback', [LoginGoogleController::class, 'handleLinkGoogleCallback']);
+        Route::get('link-google', [LoginGoogleController::class, 'redirectToGoogle'])->name('link-google');
+        Route::get('link-google/callback', [LoginGoogleController::class, 'handleGoogleCallBack']);
     });
     Route::get('check', function (Request $request) {
         return response()->json(Auth::user(), 200);
@@ -78,7 +75,8 @@ Route::middleware(['web', 'auth:sanctum', 'verified'])->group(function () {
 
     //Profile
     Route::get('profile/{id}', [ProfileController::class, 'showProfile'])->name('profile');
-    Route::post('profile/{id}', [ProfileController::class, 'updateProfile']);
+    Route::get('editprofile', [ProfileController::class, 'editProfile'])->name('editprofile');
+    Route::post('editprofile', [ProfileController::class, 'updateProfile'])->name('updateprofile');
 
     Route::get('/library', function () {
         return view('user/library');
@@ -110,6 +108,7 @@ Route::post('/email/verification-notification', [RegisterController::class, 'res
     ->middleware(['auth:sanctum', 'throttle:6,1'])
     ->name('verification.send');
 
+Route::get('uploadedsong', [ProfileController::class, 'uploadedsong'])->name('uploadedsong');
 //Music
 Route::get('get-song/{id}', [SongController::class, 'getSong']);
 
@@ -194,16 +193,6 @@ Route::get('/storage/dash/segment/{file}', [AudioController::class, 'streamSegme
 
 //Uplaod nhạc bản quyền và sinh fingerprint
 Route::post('/upload/fingerprint', [SongController::class, 'uploadAndGenerateFingerprint'])->name('upload.fingerprint');
-
-
-//setting
-Route::get('/editprofile', function () {
-    return view('setting/editprofile');
-});
-
-Route::get('/uploadedsong', function () {
-    return view('setting/uploadedsong');
-});
 
 Route::get('/layoutsetting', function () {
     return view('setting/layoutsetting');

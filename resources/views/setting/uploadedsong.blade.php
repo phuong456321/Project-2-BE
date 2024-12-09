@@ -20,32 +20,21 @@
                 </tr>
             </thead>
             <tbody>
+                @foreach ($songs as $item)
                 <tr class="border-b border-gray-700">
                     <td class="px-4 py-4">
                         <input type="checkbox" class="song-checkbox">
                     </td>
-                    <td class="px-4 py-4 text-gray-100 font-medium">Tên bài hát</td>
-                    <td class="px-4 py-4 text-gray-400">Thể loại</td>
-                    <td class="px-4 py-4 text-gray-400">Khu vực</td>
+                    <td class="px-4 py-4 text-gray-100 font-medium">{{ $item->song_name }}</td>
+                    <td class="px-4 py-4 text-gray-400">{{ $item->genre->name }}</td>
+                    <td class="px-4 py-4 text-gray-400">{{ $item->area->name }}</td>
                     <td class="px-4 py-4">
-                        <span class="inline-block px-3 py-1 text-xs font-semibold text-green-300 bg-green-900 rounded-full">Published</span>
+                        <span class="inline-block px-3 py-1 text-xs font-semibold text-green-300 bg-green-900 rounded-full">{{ $item->status }}</span>
                     </td>
-                    <td class="px-4 py-4 text-gray-400">100</td>
-                    <td class="px-4 py-4 text-gray-400">50</td>
+                    <td class="px-4 py-4 text-gray-400">{{ $item->play_count }}</td>
+                    <td class="px-4 py-4 text-gray-400">{{ $item->likes }}</td>
                 </tr>
-                <tr class="border-b border-gray-700">
-                    <td class="px-4 py-4">
-                        <input type="checkbox" class="song-checkbox">
-                    </td>
-                    <td class="px-4 py-4 text-gray-100 font-medium">Tên bài hát 2</td>
-                    <td class="px-4 py-4 text-gray-400">Thể loại</td>
-                    <td class="px-4 py-4 text-gray-400">Khu vực</td>
-                    <td class="px-4 py-4">
-                        <span class="inline-block px-3 py-1 text-xs font-semibold text-yellow-300 bg-yellow-900 rounded-full">Pending</span>
-                    </td>
-                    <td class="px-6 py-4 text-gray-400">50</td>
-                    <td class="px-6 py-4 text-gray-400">25</td>
-                </tr>
+                @endforeach
                 <!-- Thêm nhiều dòng khác -->
             </tbody>
         </table>

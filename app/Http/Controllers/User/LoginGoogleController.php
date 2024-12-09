@@ -9,7 +9,9 @@ use App\Models\GoogleAccount;  // Model GoogleAccount mới tạo
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Socialite\Facades\Socialite;
+use Str;
 
 class LoginGoogleController extends Controller
 {
@@ -32,12 +34,20 @@ class LoginGoogleController extends Controller
                 $googleAccount = GoogleAccount::where('google_id', $user->id)->first();
 
                 if (!$googleAccount) {
+                    $imageData = file_get_contents($user->avatar);
+                    $imageName = Str::uuid() . '.webp';
+                    $image = Storage::disk('public')->put('images/' . $imageName, $imageData);
+                    $newImage = Image::create([
+                        'img_name' => $imageName,
+                        'img_path' => 'images/' . $imageName,
+                        'category' => 'avatar',
+                    ]);
                     // Nếu chưa có GoogleAccount liên kết, tạo mới
                     GoogleAccount::create([
                         'google_id' => $user->id,
                         'email' => $user->email, // Sử dụng email của người dùng hiện tại
                         'name' => $user->name,
-                        'avatar' => $user->avatar,
+                        'avatar_id' => $newImage->id,
                     ]);
 
                     // Cập nhật thông tin Google vào bảng User (nếu cần thiết)
@@ -50,14 +60,16 @@ class LoginGoogleController extends Controller
             if ($currentUser->avatar_id == 1) {
                 // Tạo hoặc tìm ảnh đại diện mới từ Google
                 $imageData = file_get_contents($user->avatar);
-                $image = Image::create([
-                    'img_name' => $user->name . ' avatar',
-                    'img_path' => $imageData,
+                $imageName = Str::uuid() . '.webp';
+                $image = Storage::disk('public')->put('images/' . $imageName, $imageData);
+                $newImage = Image::create([
+                    'img_name' => $imageName,
+                    'img_path' => 'images/' . $imageName,
                     'category' => 'avatar',
                 ]);
 
                 // Cập nhật avatar_id cho người dùng
-                $currentUser->avatar_id = $image->id;
+                $currentUser->avatar_id = $newImage->id;
                 $currentUser->save();
             }
 
@@ -74,9 +86,11 @@ class LoginGoogleController extends Controller
 
                 if (!$checkUser) {
                     $imageData = file_get_contents($user->avatar);
+                    $imageName = Str::uuid() . '.webp';
+                    $image = Storage::disk('public')->put('images/' . $imageName, $imageData);
                     $newImage = Image::create([
-                        'img_name' => $user->name . ' avatar',
-                        'img_path' => $imageData,
+                        'img_name' => $imageName,
+                        'img_path' => 'images/' . $imageName,
                         'category' => 'avatar',
                     ]);
 

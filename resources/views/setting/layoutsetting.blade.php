@@ -100,8 +100,8 @@
         <div class="text-2xl font-bold p-6">Cài đặt</div>
         <ul class="space-y-4 p-6">
             <li><a href="/editprofile" class="block py-2 px-4 rounded hover:bg-gray-700">Chỉnh sửa hồ sơ</a></li>
-            <li><a href="/uploadedsong" class="block py-2 px-4 rounded hover:bg-gray-700">Danh sách bài hát</a></li>
-            <li><a href="/Profileuser" class="block py-2 px-4 rounded hover:bg-gray-700">Quay lại trang hồ sơ</a></li>
+            <li><a href="{{ route('uploadedsong') }}" class="block py-2 px-4 rounded hover:bg-gray-700">Danh sách bài hát</a></li>
+            <li><a href="{{ route('profile', Auth::user()->id) }}" class="block py-2 px-4 rounded hover:bg-gray-700">Quay lại trang hồ sơ</a></li>
         </ul>
         <div class="absolute bottom-8 left-6 w-100">
             <a href="{{ route('logout') }}" class="text-base font-semibold block py-2 px-4 bg-red-600 text-white rounded text-center hover:bg-red-700">
