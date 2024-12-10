@@ -1,14 +1,11 @@
 @extends('user.layout')
 
-@section('title', 'Playist')
+@section('title', 'Playlist')
 
 @push('styles')
     @vite('resources/css/playist.css')
     @vite('resources/css/style.css')
 @endpush
-@vite('resources/js/play.js')
-@vite('resources/js/history_play.js')
-@extends('components.footer')
 <?php
 $filledSongs = collect($songs)->take(4); //Lấy tối đa bài hát
 $remainingSlots = 4 - $filledSongs->count(); // Tính số ảnh trống cần thêm
@@ -176,8 +173,9 @@ $remainingSlots = 4 - $filledSongs->count(); // Tính số ảnh trống cần t
         </div>
     </div>
 @endsection
-
+@push("scripts")
 <script>
     // Chuẩn hóa dữ liệu bài hát trước khi gán
     window.playlistSongs = @json($songs)
 </script>
+@endpush
