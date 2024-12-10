@@ -49,15 +49,13 @@
         <section
             class="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-6">
             <img
-                src="https://placehold.co/50x50"
-                alt="Profile picture placeholder"
+                src="{{ url('image/' . $user->avatar_id) }}"
+                alt="Profile picture"
                 class="rounded-full h-48 w-48 object-cover" />
             <div>
-                <h2 class="text-4xl font-bold mt-10">User Name</h2>
-                <p class="text-gray-400">user@example.com</p>
-                <p class="mt-2 text-gray-300">
-                    This is the user's bio. It can contain a brief introduction or any other details about the user.
-                </p>
+                <h2 class="text-4xl font-bold mt-10">{{ $user->name}}</h2>
+                <p class="text-gray-400">{{ $user->email}}</p>
+                <p class="mt-2 text-gray-300">{{ $user->author->author_name}}</p>
             </div>
         </section>
 
@@ -65,47 +63,17 @@
         <section class="mt-10">
             <h3 class="text-2xl font-bold">Your Playlist</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                @foreach ($playlists as $playlist)
                 <div class="flex items-center space-x-4">
                     <img
-                        src="https://placehold.co/50x50"
+                        src="{{ $playlist->name == 'Liked music' ? 'https://i1.sndcdn.com/artworks-4Lu85Xrs7UjJ4wVq-vuI2zg-t500x500.jpg' : 'http://localhost:8000/images/profile/logo-home.png' }}"
                         alt="Track 1 image placeholder"
                         class="h-16 w-16 object-cover" />
                     <div>
-                        <p class="font-bold">Playlist 1</p>
-                        <p class="text-gray-400">Artist 1</p>
+                        <p class="font-bold">{{ $playlist->name }}</p>
                     </div>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <img
-                        src="https://placehold.co/50x50"
-                        alt="Track 2 image placeholder"
-                        class="h-16 w-16 object-cover" />
-                    <div>
-                        <p class="font-bold">Playlist 2</p>
-                        <p class="text-gray-400">Artist 2</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Artists Section -->
-        <section class="mt-10">
-            <h3 class="text-2xl font-bold">Nghệ sĩ</h3>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mt-4">
-                <div class="flex flex-col items-center">
-                    <img
-                        src="https://placehold.co/50x50"
-                        alt="Artist 1 image placeholder"
-                        class="rounded-full h-24 w-24 object-cover" />
-                    <p class="mt-2">HIEUTHUHAI</p>
-                </div>
-                <div class="flex flex-col items-center">
-                    <img
-                        src="https://placehold.co/50x50"
-                        alt="Artist 2 image placeholder"
-                        class="rounded-full h-24 w-24 object-cover" />
-                    <p class="mt-2">SƠN TÙNG MTP</p>
-                </div>
+                @endforeach
             </div>
         </section>
 
@@ -113,6 +81,7 @@
         <section class="mt-10">
             <h2 class="text-3xl font-bold">Các bài hát được tải lên</h2>
             <ul class="mt-6 space-y-4">
+                @foreach ($songs as $song)
                 <li class="flex items-center space-x-6">
                     <img
                         src="https://storage.googleapis.com/a1aa/image/Vh5OymOlhzrpGNSyzTrQJDAuYen3bRBW76631QVNglJuQ87JA.jpg"
@@ -120,11 +89,12 @@
                         class="w-16 h-16 object-cover" />
                     <div>
                         <p class="text-lg text-white">
-                            BÍCH THƯỢNG QUAN x VẠN SỰ TÙY DUYÊN - Đức Tư Remix
+                            {{ $song->song_name }} - {{ $song->author->author_name}}
                         </p>
-                        <p class="text-gray-500 text-base">Đức Tư Remix • 12 lượt phát</p>
+                        <p class="text-gray-500 text-base">{{ $song->play_count }} lượt nghe - {{ $song->likes }} lượt thích</p>
                     </div>
                 </li>
+                @endforeach
                 <!-- Add more song items here -->
             </ul>
         </section>

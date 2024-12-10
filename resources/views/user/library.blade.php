@@ -14,7 +14,7 @@
                 <div class="flex flex-col items-center cursor-pointer">
                     <a href="{{ route('playlist', ['playlist_id' => $playlist->id]) }}" class="flex flex-col items-center">
                         <img alt="{{ $playlist->name }} cover" class="w-24 h-24 rounded-lg cursor-pointer" height="100"
-                            src="{{ $playlist->name == 'Liked music' ? 'https://i1.sndcdn.com/artworks-4Lu85Xrs7UjJ4wVq-vuI2zg-t500x500.jpg' : 'https://storage.googleapis.com/a1aa/image/9qspU7uk9yqCJ5dWUy5geXbUOz5novf4SoEcAR6lBaVxzgzTA.jpg' }}"
+                            src="{{ $playlist->name == 'Liked music' ? 'https://i1.sndcdn.com/artworks-4Lu85Xrs7UjJ4wVq-vuI2zg-t500x500.jpg' : 'http://localhost:8000/images/profile/logo-home.png' }}"
                             width="100" />
                         <span class="mt-2 cursor-pointer">
                             {{ $playlist->name }}

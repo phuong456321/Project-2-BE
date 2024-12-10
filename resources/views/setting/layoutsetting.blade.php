@@ -60,16 +60,17 @@
 <body class="bg-gray-900">
     <!-- Header -->
     <header class="bg-black p-2 flex justify-between items-center border-b border-gray-700 fixed top-0 left-0 w-full z-20 h-16">
+        <!-- Logo -->
         <div class="flex items-center">
             <a href="{{ route('home') }}">
                 <img alt="Logo" height="50" src="http://localhost:8000/images/profile/logo-home.png" width="60" />
             </a>
         </div>
 
-         <!-- Search Bar -->
-         <div class="flex-grow mx-4 mt-1">
+        <!-- Search Bar -->
+        <div class="flex-grow mx-4 mt-1">
             <form class="relative max-w-lg mx-auto w-full sm:w-1/4 md:w-1/2 lg:max-w-lg">
-                <input
+              <input
                     type="text"
                     placeholder="Tìm kiếm..."
                     class="w-full bg-black text-white py-2 px-4 rounded-full border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500" />
@@ -81,6 +82,7 @@
             </form>
         </div>
 
+        <!-- Profile -->
         <div class="flex items-center space-x-4 mr-5">
             <button id="menuToggle" class="sm:hidden text-white p-2 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-gray-500">
                 <i class="fa-solid fa-bars"></i>
@@ -98,8 +100,8 @@
         <div class="text-2xl font-bold p-6">Cài đặt</div>
         <ul class="space-y-4 p-6">
             <li><a href="/editprofile" class="block py-2 px-4 rounded hover:bg-gray-700">Chỉnh sửa hồ sơ</a></li>
-            <li><a href="/uploadedsong" class="block py-2 px-4 rounded hover:bg-gray-700">Danh sách bài hát</a></li>
-            <li><a href="/Profileuser" class="block py-2 px-4 rounded hover:bg-gray-700">Quay lại trang hồ sơ</a></li>
+            <li><a href="{{ route('uploadedsong') }}" class="block py-2 px-4 rounded hover:bg-gray-700">Danh sách bài hát</a></li>
+            <li><a href="{{ route('profile', Auth::user()->id) }}" class="block py-2 px-4 rounded hover:bg-gray-700">Quay lại trang hồ sơ</a></li>
         </ul>
         <div class="absolute bottom-8 left-6 w-100">
             <a href="{{ route('logout') }}" class="text-base font-semibold block py-2 px-4 bg-red-600 text-white rounded text-center hover:bg-red-700">
@@ -111,7 +113,6 @@
     <main id="content" class="ml-0 sm:ml-64 bg-gray-900 p-6 mt-[50px] transition-all duration-300 ease-in-out">
         @yield('content')
     </main>
-
 </body>
 
 </html>

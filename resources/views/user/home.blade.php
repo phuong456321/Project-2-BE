@@ -1,17 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Music</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-
-    @vite('resources/css/style.css')
-    @vite('resources/js/app.js')
-    @vite('resources/css/app.css')
-    @vite('resources/js/play.js')
+@extends('user.layout')
+@push('styles')
     <style>
         .search-form input[type="text"] {
             height: 2rem;
@@ -34,8 +22,7 @@
             height: 2.5rem;
         }
     </style>
-</head>
-@extends('user.layout')
+@endpush
 @section('content')
     <div class="prevalent song-item cursor-pointer" data-song-id="{{ $topSongs[0]->id }}">
         <div class="info">
@@ -71,7 +58,10 @@
                     <a href="{{ route('playlist', ['playlist_id' => $playlist->id]) }}"
                         class="flex flex-col items-center text-white no-underline">
                         <div class="images">
-                            @if ($playlist->songs->isEmpty())
+                            @if($playlist->name == 'Liked music')
+                            <img src="https://i1.sndcdn.com/artworks-4Lu85Xrs7UjJ4wVq-vuI2zg-t500x500.jpg" alt="Default Image"
+                            class="song-image">
+                            @elseif ($playlist->songs->isEmpty())
                                 <img src="http://localhost:8000/images/profile/logo-home.png" alt="Default Image"
                                     class="song-image">
                             @else
@@ -178,8 +168,8 @@
             @endif
             <form id="login-form" action="{{ route('login') }}" method="POST">
                 @csrf
-                <input type="text" placeholder="Email" @error('email') is-invalid @enderror" id="email"
-                    name="email" value="{{ old('email') }}">
+                <input type="text" placeholder="Email" @error('email') is-invalid @enderror id="email"
+                    name="email" value="{{ old('email') }}" autocomplete="email">
                 @error('email')
                     <p class="invalid-feedback">{{ $message }}</p>
                     <script>
@@ -188,8 +178,8 @@
                         });
                     </script>
                 @enderror
-                <input type="password" placeholder="Password" @error('password') is-invalid @enderror" id="password"
-                    name="password" value="{{ old('password') }}">
+                <input type="password" placeholder="Password" @error('password') is-invalid @enderror id="password"
+                    name="password" value="{{ old('password') }}" autocomplete="current-password">
                 @error('password')
                     <p class="invalid-feedback">{{ $message }}</p>
                     <script>
@@ -234,9 +224,9 @@
             <form action="{{ route('register') }}" method="POST">
                 @csrf
                 <input type="text" name="name" placeholder="Name" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="password" name="password" placeholder="Password" required>
-                <input type="password" name="password_confirmation" placeholder="Confirm Password" required>
+                <input type="email" name="email" placeholder="Email" required autocomplete="email">
+                <input type="password" name="password" placeholder="Password" required autocomplete="new-password">
+                <input type="password" name="password_confirmation" placeholder="Confirm Password" required autocomplete="new-password">
 
                 <button class="action-btn" type="submit">Register</button>
             </form>
@@ -248,131 +238,17 @@
         </div>
     </div>
 @endsection
-@extends('components.footer')
+@if ($errors->any())
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Đảm bảo cả hai overlay đều ẩn khi tải trang
-        document.getElementById("loginOverlay").style.display = "none";
-        document.getElementById("registerOverlay").style.display = "none";
-
-        // Xử lý avatar popup
-        const avatar = document.querySelector('#avatar');
-        const popup = document.querySelector('.avatar-popup');
-        if (avatar && popup) {
-            avatar.addEventListener('click', function(e) {
-                e.stopPropagation(); // Ngăn chặn sự kiện ngoài để popup không đóng
-                popup.classList.toggle('block');
-            });
-
-            // Ẩn popup khi click bên ngoài
-            document.addEventListener('click', function(e) {
-                if (!popup.contains(e.target) && !avatar.contains(e.target)) {
-                    popup.classList.remove('block');
-                }
-            });
-
-            popup.addEventListener('click', function(e) {
-                e.stopPropagation(); // Ngăn chặn sự kiện bên trong popup
-            });
-        }
+        showLoginForm(); // Hiển thị form đăng nhập
     });
-
-    // Hiển thị form đăng nhập
-    function showLoginForm() {
-        document.getElementById("registerOverlay").style.display = "none"; // Ẩn form đăng ký
-        document.getElementById("loginOverlay").style.display = "flex"; // Hiển thị form đăng nhập
-    }
-
-    // Hiển thị form đăng ký
-    function showRegisterForm() {
-        document.getElementById("loginOverlay").style.display = "none"; // Ẩn form đăng nhập
-        document.getElementById("registerOverlay").style.display = "flex"; // Hiển thị form đăng ký
-    }
-
-    // Đóng các overlay
-    function closeOverlay() {
-        document.getElementById("loginOverlay").style.display = "none";
-        document.getElementById("registerOverlay").style.display = "none";
-    }
-
-    // Đóng overlay khi nhấn ra ngoài
-    window.onclick = function(event) {
-        if (event.target === document.getElementById("loginOverlay") || event.target === document.getElementById(
-                "registerOverlay")) {
-            closeOverlay();
-        }
-    };
-    document.addEventListener('DOMContentLoaded', function() {
-        // Đảm bảo cả hai overlay đều ẩn khi tải trang
-        document.getElementById("loginOverlay").style.display = "none";
-        document.getElementById("registerOverlay").style.display = "none";
-    });
-
-    function showLoginForm() {
-        document.getElementById("registerOverlay").style.display = "none"; // Ẩn form đăng ký
-        document.getElementById("loginOverlay").style.display = "flex"; // Hiển thị form đăng nhập
-    }
-
-    function showRegisterForm() {
-        document.getElementById("loginOverlay").style.display = "none"; // Ẩn form đăng nhập
-        document.getElementById("registerOverlay").style.display = "flex"; // Hiển thị form đăng ký
-    }
-
-    function closeOverlay() {
-        // Đóng tất cả overlay
-        document.getElementById("loginOverlay").style.display = "none";
-        document.getElementById("registerOverlay").style.display = "none";
-    }
-    
-    //Lyrics popup
-    document.addEventListener("DOMContentLoaded", () => {
-        const toggleLyricsBtn = document.getElementById("toggleLyricsIcon"); // Nút play làm trigger
-        const lyricPopup = document.getElementById("lyricPopup");
-
-        let isLyricsVisible = false; // Trạng thái hiển thị lyrics
-
-        // Toggle popup lyrics
-        toggleLyricsBtn.addEventListener("click", () => {
-            isLyricsVisible = !isLyricsVisible;
-            console.log('isLyricsVisible:', isLyricsVisible);
-
-            if (isLyricsVisible) {
-                // Mở popup, thêm độ trễ nhỏ để hiệu ứng trượt lên
-                lyricPopup.classList.remove("hidden");
-                setTimeout(() => {
-                        lyricPopup.classList.add("show");
-                    },
-                    10
-                ); // Thêm chút độ trễ nhỏ để cho phép class 'hidden' thay đổi trước khi 'show' được áp dụng
-                // Khi popup mở, thêm lớp no-scroll vào body để ngừng cuộn trang
-                document.body.classList.add("no-scroll");
-            } else {
-                // Đóng popup, thêm độ trễ nhỏ để hiệu ứng trượt xuống
-                lyricPopup.classList.remove("show");
-                setTimeout(() => {
-                    lyricPopup.classList.add("hidden");
-                }, 500); // Đảm bảo cho animation trượt xuống hoàn thành trước khi ẩn đi
-                // Khi popup đóng, xóa lớp no-scroll để khôi phục cuộn trang
-                document.body.classList.remove("no-scroll");
-            }
-        });
-    });
-    //add song
-    // Open popup
-    function openPopup() {
-        document.getElementById('overlay').classList.add('active');
-    }
-
-    // Close popup
-    function closePopup() {
-        document.getElementById('overlay').classList.remove('active');
-    }
-    let recommendedSongs = @json($recommendedSongs ?? []);
-    let historySongs = [];
-    let songs = @json($songs);
-    window.recommendedSongs = recommendedSongs;
-    window.songs = songs;
-    window.historySongs = historySongs;
 </script>
-
-</html>
+@endif
+@push("scripts")
+    <script>
+        recommendedSongs = @json($recommendedSongs ?? []);
+        songs = @json($songs ?? []);
+        
+    </script>
+@endpush
