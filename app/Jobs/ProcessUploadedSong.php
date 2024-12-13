@@ -4,12 +4,14 @@ namespace App\Jobs;
 
 use App\Models\Image;
 use App\Models\Song;
+use App\Notifications\SongProcessedNotification;
 use getID3;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use App\Models\Genre;
+use App\Models\User;
 use Illuminate\Support\Str;
 use FFMpeg\FFMpeg;
 use FFMpeg\Format\Audio\Mp3;
@@ -106,6 +108,15 @@ class ProcessUploadedSong implements ShouldQueue
             Log::info("Xử lý bài hát '{$song->song_name}' thành công!");
         }
         Log::info("Xử lý bài hát '{$song->song_name}' thành công!");
+        // Lấy người dùng từ `author_id`
+        $user = User::find($this->data['author_id']);
+        if ($user) {
+            $user->notify(new SongProcessedNotification(
+                $song->song_name,
+                $status,
+                $message
+            ));
+        }
     }
 
     private function processDash($audioPath)

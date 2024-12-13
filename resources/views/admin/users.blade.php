@@ -24,24 +24,26 @@
             </div>
         </div>
         <!-- Table for users -->
-        <table class="w-full table-auto bg-gray-800">
-            <thead>
-                <tr class="bg-gray-700">
-                    <th class="px-4 py-2">Avatar</th>
-                    <th class="px-4 py-2">Name</th>
-                    <th class="px-4 py-2">Email</th>
-                    <th class="px-4 py-2">Plan</th>
-                    <th class="px-4 py-2">Status</th>
-                    <th class="px-4 py-2">Verify</th>
-                    <th class="px-4 py-2">Role</th>
-                    <th class="px-4 py-2">Restricted Tracks</th>
-                    <th class="px-4 py-2">Actions</th>
-                </tr>
-            </thead>
-            <tbody id="users-list">
-                <!-- Content will be loaded here -->
-            </tbody>
-        </table>
+        <div class="overflow-x-auto">
+            <table class="w-full table-auto bg-gray-800">
+                <thead>
+                    <tr class="bg-gray-700">
+                        <th class="px-4 py-2">Avatar</th>
+                        <th class="px-4 py-2">Name</th>
+                        <th class="px-4 py-2">Email</th>
+                        <th class="px-4 py-2">Plan</th>
+                        <th class="px-4 py-2">Status</th>
+                        <th class="px-4 py-2">Verify</th>
+                        <th class="px-4 py-2">Role</th>
+                        <th class="px-4 py-2">Restricted Tracks</th>
+                        <th class="px-4 py-2">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="users-list">
+                    <!-- Content will be loaded here -->
+                </tbody>
+            </table>
+        </div>
         <div id="loading" style="display:none;">
             Loading more users...
         </div>

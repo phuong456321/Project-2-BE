@@ -197,3 +197,8 @@ Route::post('/upload/fingerprint', [SongController::class, 'uploadAndGenerateFin
 Route::get('/layoutsetting', function () {
     return view('setting/layoutsetting');
 });
+
+Route::get('/notifications', function () {
+    $notifications = Auth::user()->notifications;
+    return view('user.noti', compact('notifications'));
+});

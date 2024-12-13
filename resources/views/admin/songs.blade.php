@@ -165,21 +165,21 @@
                                 <td class="px-4 py-2">{{ $song->author ? $song->author->author_name : 'Unknown' }}</td>
                                 <td class="px-4 py-2">{{ $song->genre ? $song->genre->name : 'Unknown' }}</td>
                                 <td class="px-4 py-2">
-                                    <!-- Status Dropdown -->
                                     <form action="{{ route('admin.updateStatus', $song->id) }}" method="POST">
                                         @csrf
                                         @method('PATCH')
-                                        <select name="status" onchange="this.form.submit()"
-                                            class="bg-gray-800 text-white rounded px-2 py-1">
-                                            <option value="published"
-                                                {{ $song->status == 'published' ? 'selected' : '' }}>
-                                                Published</option>
-                                            <option value="deleted" {{ $song->status == 'deleted' ? 'selected' : '' }}>
-                                                Deleted</option>
-                                            <option value="inactive" {{ $song->status == 'inactive' ? 'selected' : '' }}>
-                                                Inactive</option>
-                                            <option value="pending" {{ $song->status == 'pending' ? 'selected' : '' }}>
-                                                Pending</option>
+                                        <select name="status" onchange="this.form.submit()" 
+                                            class="rounded px-2 py-1 
+                                                @if ($song->status == 'published') bg-green-600 text-white 
+                                                @elseif ($song->status == 'deleted') bg-red-600 text-white 
+                                                @elseif ($song->status == 'inactive') bg-yellow-600 text-black 
+                                                @elseif ($song->status == 'pending') bg-gray-600 text-white 
+                                                @else bg-gray-800 text-white 
+                                                @endif">
+                                            <option value="published" {{ $song->status == 'published' ? 'selected' : '' }}>Published</option>
+                                            <option value="deleted" {{ $song->status == 'deleted' ? 'selected' : '' }}>Deleted</option>
+                                            <option value="inactive" {{ $song->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                            <option value="pending" {{ $song->status == 'pending' ? 'selected' : '' }}>Pending</option>
                                         </select>
                                     </form>
                                 </td>
