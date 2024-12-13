@@ -4,7 +4,6 @@
 
 @push('styles')
     @vite('resources/css/playist.css')
-    @vite('resources/css/style.css')
 @endpush
 <?php
 $filledSongs = collect($songs)->take(4); //Lấy tối đa bài hát

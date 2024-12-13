@@ -44,7 +44,6 @@
         <button class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-800" onclick="removeSelectedSongs()">Gỡ bài hát đã chọn</button>
     </div>
 
-
     <script>
         function removeSelectedSongs() {
             const selectedSongs = document.querySelectorAll('.song-checkbox:checked'); // Lấy các checkbox đã chọn
@@ -75,5 +74,6 @@
         }
     </style>
 </body>
+
 
 @endsection

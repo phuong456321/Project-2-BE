@@ -21,6 +21,18 @@
         .search-form input[type="text"] {
             height: 2.5rem;
         }
+
+        /* Thêm vào file CSS nếu không dùng plugin */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            /* IE */
+            scrollbar-width: none;
+            /* Firefox */
+        }
     </style>
 @endpush
 @section('content')
@@ -47,100 +59,112 @@
             <img src="{{ url('image/' . $topSongs[0]->img_id) }}" alt="Song Image" class="song-image">
         </div>
     </div>
-    
+
     @if (count($playlists) > 0)
-        <div class="playlists">
-            <h3>
+        <div class="playlists mt-5">
+            <h3 class="mb-[10px]">
                 Playlists for you
             </h3>
-            @foreach ($playlists as $playlist)
-                <div class="playlist cursor-pointer">
-                    <a href="{{ route('playlist', ['playlist_id' => $playlist->id]) }}"
-                        class="flex flex-col items-center text-white no-underline">
-                        <div class="images">
-                            @if($playlist->name == 'Liked music')
-                            <img src="https://i1.sndcdn.com/artworks-4Lu85Xrs7UjJ4wVq-vuI2zg-t500x500.jpg" alt="Default Image"
-                            class="song-image">
-                            @elseif ($playlist->songs->isEmpty())
-                                <img src="http://localhost:8000/images/profile/logo-home.png" alt="Default Image"
-                                    class="song-image">
-                            @else
-                                @foreach ($playlist->songs as $song)
-                                    <img src="{{ url('image/' . $song->img_id) }}" alt="Song Image" class="song-image">
-                                @endforeach
-                            @endif
-                        </div>
-                        <h3>{{ $playlist->name }}</h3>
-                    </a>
-                </div>
-            @endforeach
+            <div class="flex overflow-x-auto scrollbar-hide scroll-smooth gap-4 space-x-4">
+                @foreach ($playlists as $playlist)
+                    <div class="playlist cursor-pointer inline-block text-center flex-shrink-0">
+                        <a href="{{ route('playlist', ['playlist_id' => $playlist->id]) }}"
+                            class="flex flex-col items-center text-white no-underline">
+                            <div class="images h-28 w-28 lg:h-36 lg:w-36 flex items-center justify-center">
+                                @if ($playlist->name == 'Liked music')
+                                    <img src="https://i1.sndcdn.com/artworks-4Lu85Xrs7UjJ4wVq-vuI2zg-t500x500.jpg"
+                                        alt="Default Image" class="song-image w-full h-full object-cover rounded-lg">
+                                @elseif ($playlist->songs->isEmpty())
+                                    <img src="http://localhost:8000/images/profile/logo-home.png" alt="Default Image"
+                                        class="song-image w-full h-full object-cover rounded-lg">
+                                @else
+                                    @foreach ($playlist->songs as $song)
+                                        <img src="{{ url('image/' . $song->img_id) }}" alt="Song Image"
+                                            class="song-image w-full h-full object-cover rounded-lg">
+                                    @endforeach
+                                @endif
+                            </div>
+                            <h3 class="mb-[10px] w-full truncate">{{ $playlist->name }}</h3>
+                        </a>
+                    </div>
+                @endforeach
+            </div>
         </div>
     @endif
     @if (!empty($recommendedSongs) && count($recommendedSongs) > 0)
-    <div class="trending-music">
-        <h3>
-            Recommended Music
-        </h3>
-        @foreach ($recommendedSongs as $song)
-            <div class="music song-item max-h-[200px] min-h-[200px] overflow-hidden cursor-pointer"
-                data-song-id="{{ $song->id }}">
-                <img alt="{{ $song->song_name }}" height="150" src="{{ url('image/' . $song->img_id) }}" width="150" />
-                <p id="song-name">
-                    {{ $song->song_name }}
-                </p>
-                <p id="song-artist">
-                    {{ $song->author->author_name }}
-                </p>
-                <audio src="{{ url('storage/' . $song->audio_path) }}" preload="auto" style="display:none;"
-                    controls></audio>
-                <p id="lyrics-text" class="whitespace-pre-line"> {{ $song->lyric }} </p>
+        <div class="trending-music mt-5">
+            <h3 class="mb-[10px]">
+                Recommended Music
+            </h3>
+            <div class="flex overflow-x-auto scrollbar-hide scroll-smooth gap-4 space-x-4">
+                @foreach ($recommendedSongs as $song)
+                    <div class="music song-item cursor-pointer inline-block text-center flex-shrink-0"
+                        data-song-id="{{ $song->id }}">
+                        <img alt="{{ $song->song_name }}" height="150" src="{{ url('image/' . $song->img_id) }}"
+                            class="h-28 w-28 lg:h-36 lg:w-36 object-cover rounded-lg" />
+                        <p id="song-name">
+                            {{ $song->song_name }}
+                        </p>
+                        <p id="song-artist">
+                            {{ $song->author->author_name }}
+                        </p>
+                        <audio src="{{ url('storage/' . $song->audio_path) }}" preload="auto" style="display:none;"
+                            controls></audio>
+                        <p id="lyrics-text" class="hidden whitespace-pre-line"> {{ $song->lyric }} </p>
+                    </div>
+                @endforeach
             </div>
-        @endforeach
-    </div>
+        </div>
     @endif
     @if (count($topSongs) > 0)
-    <div class="trending-music">
-        <h3>
-            Trending Music
-        </h3>
-        @foreach ($topSongs as $song)
-            <div class="music song-item max-h-[200px] min-h-[200px] overflow-hidden cursor-pointer"
-                data-song-id="{{ $song->id }}">
-                <img alt="{{ $song->song_name }}" height="150" src="{{ url('image/' . $song->img_id) }}" width="150" />
-                <p id="song-name">
-                    {{ $song->song_name }}
-                </p>
-                <p id="song-artist">
-                    {{ $song->author->author_name }}
-                </p>
-                <audio src="{{ url('storage/' . $song->audio_path) }}" preload="auto" style="display:none;"
-                    controls></audio>
-                <p id="lyrics-text" class="whitespace-pre-line"> {{ $song->lyric }} </p>
+        <div class="trending-music mt-5">
+            <h3 class="mb-[10px]">
+                Trending Music
+            </h3>
+            <div class="flex overflow-x-auto scrollbar-hide scroll-smooth gap-4 space-x-4">
+                @foreach ($topSongs as $song)
+                    <div class="music song-item cursor-pointer inline-block text-center flex-shrink-0"
+                        data-song-id="{{ $song->id }}">
+                        <img alt="{{ $song->song_name }}" height="150" src="{{ url('image/' . $song->img_id) }}"
+                            class="h-28 w-28 lg:h-36 lg:w-36 object-cover rounded-lg" />
+                        <p id="song-name">
+                            {{ $song->song_name }}
+                        </p>
+                        <p id="song-artist">
+                            {{ $song->author->author_name }}
+                        </p>
+                        <audio src="{{ url('storage/' . $song->audio_path) }}" preload="auto" style="display:none;"
+                            controls></audio>
+                        <p id="lyrics-text" class="hidden  whitespace-pre-line "> {{ $song->lyric }} </p>
+                    </div>
+                @endforeach
             </div>
-        @endforeach
-    </div>
+        </div>
     @endif
     @if (count($songs) > 0)
-    <div class="trending-music">
-        <h3>
-            Music
-        </h3>
-        @foreach ($songs as $song)
-            <div class="music song-item max-h-[200px] min-h-[200px] overflow-hidden cursor-pointer"
-                data-song-id="{{ $song->id }}">
-                <img alt="{{ $song->song_name }}" height="150" src="{{ url('image/' . $song->img_id) }}" width="150" />
-                <p id="song-name">
-                    {{ $song->song_name }}
-                </p>
-                <p id="song-artist">
-                    {{ $song->author->author_name }}
-                </p>
-                <audio src="{{ url('storage/' . $song->audio_path) }}" preload="auto" style="display:none;"
-                    controls></audio>
-                <p id="lyrics-text" class="whitespace-pre-line"> {{ $song->lyric }} </p>
+        <div class="trending-music mt-5">
+            <h3 class="mb-[10px]">
+                Music
+            </h3>
+            <div class="flex overflow-x-auto scrollbar-hide scroll-smooth gap-4 space-x-4">
+                @foreach ($songs as $song)
+                    <div class="music song-item cursor-pointer inline-block text-center flex-shrink-0"
+                        data-song-id="{{ $song->id }}">
+                        <img alt="{{ $song->song_name }}" height="150" src="{{ url('image/' . $song->img_id) }}"
+                            class="h-28 w-28 lg:h-36 lg:w-36 object-cover rounded-lg" />
+                        <p id="song-name">
+                            {{ $song->song_name }}
+                        </p>
+                        <p id="song-artist">
+                            {{ $song->author->author_name }}
+                        </p>
+                        <audio src="{{ url('storage/' . $song->audio_path) }}" preload="auto" style="display:none;"
+                            controls></audio>
+                        <p id="lyrics-text" class="hidden whitespace-pre-line"> {{ $song->lyric }} </p>
+                    </div>
+                @endforeach
             </div>
-        @endforeach
-    </div>
+        </div>
     @endif
 
     <!-- Overlay Login Form -->
@@ -226,7 +250,8 @@
                 <input type="text" name="name" placeholder="Name" required>
                 <input type="email" name="email" placeholder="Email" required autocomplete="email">
                 <input type="password" name="password" placeholder="Password" required autocomplete="new-password">
-                <input type="password" name="password_confirmation" placeholder="Confirm Password" required autocomplete="new-password">
+                <input type="password" name="password_confirmation" placeholder="Confirm Password" required
+                    autocomplete="new-password">
 
                 <button class="action-btn" type="submit">Register</button>
             </form>
@@ -239,16 +264,15 @@
     </div>
 @endsection
 @if ($errors->any())
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        showLoginForm(); // Hiển thị form đăng nhập
-    });
-</script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            showLoginForm(); // Hiển thị form đăng nhập
+        });
+    </script>
 @endif
-@push("scripts")
+@push('scripts')
     <script>
         recommendedSongs = @json($recommendedSongs ?? []);
         songs = @json($songs ?? []);
-        
     </script>
 @endpush

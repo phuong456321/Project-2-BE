@@ -27,7 +27,6 @@
                 });
             });
         });
-
         document.addEventListener('DOMContentLoaded', () => {
             // Lấy các thành phần cần thiết
             const menuToggle = document.getElementById('menuToggle');
@@ -55,6 +54,7 @@
             }
         });
     </script>
+
 </head>
 
 <body class="bg-gray-900">
@@ -114,6 +114,5 @@
         @yield('content')
     </main>
 </body>
-
 
 </html>
