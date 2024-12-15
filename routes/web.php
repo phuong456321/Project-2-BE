@@ -90,6 +90,9 @@ Route::middleware(['web', 'auth:sanctum', 'verified'])->group(function () {
     Route::get('/upload-song', [SongController::class, 'index'])->name('upload');
 
     Route::get('/recommend-songs', [RecommendSongs::class, 'index'])->name('recommend-songs');
+
+    Route::post('/notifications/{id}/mark-as-read', [ProfileController::class, 'markAsRead']);
+    Route::post('/notifications/mark-all-as-read', [ProfileController::class, 'markAllAsRead']);
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {

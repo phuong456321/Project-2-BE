@@ -26,7 +26,7 @@ class ProfileController extends Controller
         $user = User::with('author')->where('id', Auth::user()->id)->first();
         $notifications = Auth::user()->notifications;
         $song = Song::where('author_id', $user->author_id)->get();
-        return view('user/Profileuser', ['user' => $user, 'playlists' => $playlists, 'songs' => $song]);
+        return view('user/Profileuser', ['user' => $user, 'playlists' => $playlists, 'songs' => $song, 'notifications' => $notifications]);
     }
 
     public function editProfile()
@@ -92,5 +92,18 @@ class ProfileController extends Controller
         $songs = Song::where('author_id', Auth::user()->author_id)->with('genre', 'area')->get();
         return view('setting/uploadedsong', ['songs' => $songs]);
     }
+    public function markAsRead($id)
+    {
+        $notification = Auth::user()->notifications()->find($id);
+        if ($notification) {
+            $notification->markAsRead();
+        }
+        return response()->json(['success' => true]);
+    }
 
+    public function markAllAsRead()
+    {
+        Auth::user()->unreadNotifications->markAsRead();
+        return response()->json(['success' => true]);
+    }
 }
