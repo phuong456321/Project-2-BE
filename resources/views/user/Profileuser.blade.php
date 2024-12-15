@@ -35,11 +35,38 @@
         </div>
 
         <!-- Navigation Links -->
-        <nav class="flex items-center space-x-2 sm:space-x-4">
-            <a href="/editprofile" class="flex items-center space-x-2 hover:text-green-500">
+        <nav class="flex items-center space-x-1 sm:space-x-4">
+            <!-- Notification Button -->
+            <button
+                id="notificationButton"
+                class="relative text-white rounded-full px-2 py-2 hover:bg-gray-600 text-sm sm:text-base">
+                <i class="fa-solid fa-bell"></i>
+            </button>
+            <a
+                href="/editprofile"
+                class="flex items-center space-x-2 hover:text-green-500">
                 <i class="fa-solid fa-gear text-lg"></i>
-                <span class="text-sm sm:text-base">Setting</span>
             </a>
+
+            <!-- Popup Notification -->
+            <div
+                id="notificationPopup"
+                class="hidden absolute top-14 right-4 bg-gray-800 text-white p-4 rounded-lg shadow-lg w-[14rem] sm:w-60 md:w-72">
+                <p class="font-bold mb-2">Đã đọc tất cả thông báo</p>
+                <ul>
+                    @foreach($notifications as $notification)
+                    <li>
+                        <strong>{{ $notification->data['song_name'] }}</strong>: {{ $notification->data['message'] }}
+                        <small>{{ $notification->created_at->diffForHumans() }}</small>
+                    </li>
+                    @endforeach
+                </ul>
+                <button
+                    id="closePopup"
+                    class="mt-3 text-sm text-gray-300 hover:text-gray-200">
+                    Đóng
+                </button>
+            </div>
         </nav>
     </header>
 
@@ -98,22 +125,27 @@
                 <!-- Add more song items here -->
             </ul>
         </section>
+
     </main>
 
     <!-- Footer -->
     <footer class="bg-gray-800 p-4 mt-10 text-center">
         <p class="text-gray-500">© 2024 Nulltifly Website</p>
     </footer>
-    <ul>
-        @foreach($notifications as $notification)
-        <li>
-            <strong>{{ $notification->data['song_name'] }}</strong>:
-            {{ $notification->data['message'] }}
-            <small>{{ $notification->created_at->diffForHumans() }}</small>
-        </li>
-        @endforeach
-    </ul>
-</body>
+    <script>
+        const notificationButton = document.getElementById("notificationButton");
+        const notificationPopup = document.getElementById("notificationPopup");
+        const closePopup = document.getElementById("closePopup");
 
+        notificationButton.addEventListener("click", () => {
+            notificationPopup.classList.toggle("hidden");
+        });
+
+        closePopup.addEventListener("click", () => {
+            notificationPopup.classList.add("hidden");
+        });
+    </script>
+
+</body>
 
 </html>
