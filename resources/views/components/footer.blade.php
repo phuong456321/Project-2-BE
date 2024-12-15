@@ -11,7 +11,7 @@
     </style>
 @endpush
 <div id="footer"
-    class="hidden fixed bottom-0 left-0 w-full bg-gray-900 text-white shadow-md flex items-center px-4 py-2 z-10 space-x-4"
+    class="hidden fixed bottom-0 left-0 w-full bg-gray-900 text-white shadow-md flex items-center px-4 py-2 z-50 space-x-4"
     data-song-id="">
 
     <!-- Music Image -->

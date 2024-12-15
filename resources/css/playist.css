@@ -1,8 +1,8 @@
-.container {
+/* .container {
     display: flex;
     flex-direction: row;
     padding: 20px;
-}
+} */
 .left-panel {
     width: 40%;
     padding: 20px;
@@ -80,4 +80,38 @@
 .song-item .song-actions i {
     margin-left: 10px;
     cursor: pointer;
+}
+
+/* Media Query cho thiết bị có màn hình nhỏ hơn 768px (di động nhỏ) */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        padding: 10px;
+    }
+    .left-panel, .right-panel {
+        width: 100%;
+        padding: 10px;
+    }
+    .playlist-info {
+        text-align: center;
+        position: relative;
+        left: 0rem;
+    }
+    /* Các điều chỉnh khác cho song-item, để các phần tử hiển thị gọn gàng trên di động */
+    .song-item {
+        flex-direction: column;
+        margin-bottom: 20px;
+        position: relative;
+        /* left: -5rem; */
+        right: 6rem;
+    }
+    .song-item .song-info {
+        margin-bottom: 10px;
+    }
+    .song-item .song-actions {
+        margin-top: 10px;
+        position: relative;
+        left: 15rem;
+        bottom: 3rem;
+    }
 }

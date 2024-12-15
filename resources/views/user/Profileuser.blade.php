@@ -104,6 +104,15 @@
     <footer class="bg-gray-800 p-4 mt-10 text-center">
         <p class="text-gray-500">© 2024 Nulltifly Website</p>
     </footer>
+    <ul>
+        @foreach($notifications as $notification)
+        <li>
+            <strong>{{ $notification->data['song_name'] }}</strong>:
+            {{ $notification->data['message'] }}
+            <small>{{ $notification->created_at->diffForHumans() }}</small>
+        </li>
+        @endforeach
+    </ul>
 </body>
 
 
