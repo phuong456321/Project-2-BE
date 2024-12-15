@@ -138,7 +138,7 @@
             <i class="fa-solid fa-magnifying-glass text-[16px] md:text-[20px] text-[#f5efef]"></i>
         </button>
     </form>
-    <button id="theme-toggle" class="px-4 py-2 bg-gray-700 text-white font-medium rounded-full hover:bg-gray-600 transition absolute left-[87.5rem] top-3">
+    <button id="theme-toggle" class="px-4 py-2 bg-gray-700 text-white font-medium rounded-full hover:bg-gray-600 transition absolute left-[76.5rem] top-3">
        Light 
     </button>
 
