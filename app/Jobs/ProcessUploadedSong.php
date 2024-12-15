@@ -68,25 +68,27 @@ class ProcessUploadedSong implements ShouldQueue
         $status = 'published';
         if ($this->isSimilarSongName($this->data['song_name'])) {
             $status = 'pending';
-        } elseif ($this->isCopyrightedAudio($this->audioPath)) {
+        }
+        if ($this->isCopyrightedAudio($this->audioPath)) {
             $status = 'deleted';
         }
 
         // Tạo bài hát mới
         $song = new Song();
         $song->song_name = $this->data['song_name'];
-        $song->author_id = $this->data['author_id'];
-        $song->area_id = $this->data['area_id'];
-        $song->genre_id = $this->data['genre_id'];
-        $song->description = $this->data['description'];
+        $song->author_id = $this->data['author'];
+        $song->area_id = $this->data['area'];
+        $song->genre_id = $this->data['genre'];
         $song->audio_path = $this->audioPath;  // Store the path to audio file
         $song->img_id = $img->id;
+        $song->waveform_path = null;
+        $song->lyric_path = null;
         $song->status = $status;
         $song->lyric = $this->data['lyric'];
         $song->duration = $duration;
 
         // Nếu bài hát được duyệt bản quyền
-        if ($status === 'published') {
+        if ($status === 'published' || $status === 'pending') {
             // Xử lý DASH
             $dashPath = $this->processDash($this->audioPath);
             $song->audio_path = $dashPath; // Lưu đường dẫn file manifest
@@ -107,9 +109,8 @@ class ProcessUploadedSong implements ShouldQueue
         } else {
             Log::info("Xử lý bài hát '{$song->song_name}' thành công!");
         }
-        Log::info("Xử lý bài hát '{$song->song_name}' thành công!");
         // Lấy người dùng từ `author_id`
-        $user = User::find($this->data['author_id']);
+        $user = User::where('author_id', $this->data['author'])->first();
         if ($user) {
             $user->notify(new SongProcessedNotification(
                 $song->song_name,

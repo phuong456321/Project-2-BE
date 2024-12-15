@@ -67,6 +67,7 @@ Route::middleware(['web', 'auth:sanctum', 'verified'])->group(function () {
     Route::post('create-playlist', [PlaylistController::class, 'createPlaylist']);
     Route::post('delete-song-in-playlist', [PlaylistController::class, 'removeSongFromPlaylist']);
     Route::post('delete-playlist', [PlaylistController::class, 'deletePlaylist'])->name('delete');
+    Route::get('get-playlist-songs/{playlist_id}', [PlaylistController::class, 'getPlaylistSongs'])->name('get-playlist-songs');
 
     //Song (like,....)
     Route::post('like-song', [PlaylistController::class, 'likeSong']);

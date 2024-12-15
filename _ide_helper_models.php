@@ -39,7 +39,7 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $author_name
- * @property string $bio
+ * @property string|null $bio
  * @property int $img_id
  * @property int $area_id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -374,7 +374,7 @@ namespace App\Models{
  * @property int $author_id
  * @property int $area_id
  * @property int $genre_id
- * @property string $description
+ * @property string|null $description
  * @property string $audio_path
  * @property string|null $duration
  * @property int $img_id

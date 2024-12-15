@@ -346,13 +346,13 @@
             // Mở popup khi nhấn vào avatar
             avatar.addEventListener('click', function(e) {
                 e.stopPropagation(); // Ngăn chặn sự kiện ngoài từ việc ẩn pop-up
-                avatarPopup.classList.toggle('block'); // Thêm hoặc xóa class 'block' cho popup
+                avatarPopup.classList.toggle('!block'); // Thêm hoặc xóa class 'block' cho popup
             });
 
             // Ẩn popup khi click ra ngoài
             document.addEventListener('click', function(e) {
                 if (!avatarPopup.contains(e.target) && !avatar.contains(e.target)) {
-                    avatarPopup.classList.remove('block'); // Ẩn pop-up
+                    avatarPopup.classList.remove('!block'); // Ẩn pop-up
                 };
             });
 

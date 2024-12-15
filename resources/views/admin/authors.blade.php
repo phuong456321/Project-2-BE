@@ -76,6 +76,7 @@
                 <div class="mb-4">
                     <label for="author-area" class="block text-white mb-2">Area</label>
                     <select id="author-area" name="area" class="w-full bg-gray-700 text-white py-2 px-4 rounded-md">
+                        <option value="">Select Area</option>
                         @foreach ($areas as $area)
                             <option value="{{ $area->id }}">{{ $area->name }}</option>
                         @endforeach

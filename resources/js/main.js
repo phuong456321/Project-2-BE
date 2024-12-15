@@ -42,8 +42,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    footerAudioElement.addEventListener('canplay', function () {
+    footerAudioElement.addEventListener('canplay', async function () {
         try {
+            if (song.lyric_path) {
+                await fetch(`/storage/${song.lyric_path}`).then(response => response.json()).then(data => {
+                    window.lyrics = data;
+                    renderLyrics();
+                });
+            }
+            let lastUpdateTime = 0;
             // Đăng ký sự kiện `timeupdate`
             footerAudioElement.addEventListener('timeupdate', function () {
                 const currentTime = footerAudioElement.currentTime;
@@ -54,8 +61,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     currentTimeDisplay.textContent = formatTime(currentTime);
                     totalTimeDisplay.textContent = formatTime(duration);
 
-                    // Cập nhật thanh tiến trình
-                    progressBar.value = (currentTime / duration) * 100 || 0;
+                    // Cập nhật progress bar mỗi giây
+                    if (Math.floor(currentTime) !== lastUpdateTime) {
+                        lastUpdateTime = Math.floor(currentTime);
+
+                        // Cập nhật thanh tiến trình
+                        progressBar.value = (currentTime / duration) * 100 || 0;
+                    }
+                }
+                if (song.lyric_path) {
+                    displayLyrics(currentTime);
                 }
             });
         } catch (error) {
@@ -124,11 +139,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     window.addEventListener('beforeunload', function () {
         try {
-            const footerSongImg = document.getElementById('footerSongImg').getAttribute('src');
-            const footerSongTitle = document.getElementById('footerSongTitle').innerText;
-            const footerSongArtist = document.getElementById('footerSongArtist').innerText;
-            const footerLyricsText = document.getElementById('footer-lyrics-text').innerText;
-            const footerLyricsImg = document.getElementById('footer-lyrics-img').getAttribute('src');
             const dataSongId = document.getElementById('footer').getAttribute('data-song-id');
             const currentTime = footerAudioElement.currentTime;
             const isPlaying = !footerAudioElement.paused;
@@ -142,16 +152,13 @@ document.addEventListener('DOMContentLoaded', function () {
             // Lưu trạng thái playlist nếu đang phát playlist
             if (isPlayingPlaylist) {
                 localStorage.setItem('playlistData', JSON.stringify({ playlistSongs, currentSongIndex }));
+            } else {
+                localStorage.removeItem('playlistData');
             }
 
             // Lưu trạng thái trình phát vào localStorage
             localStorage.setItem('playerState', JSON.stringify({
                 dataSongId,
-                footerSongImg,
-                footerSongTitle,
-                footerSongArtist,
-                footerLyricsText,
-                footerLyricsImg,
                 currentTime,
                 isPlaying,
                 audioPath,
@@ -162,18 +169,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    window.addEventListener('load', function () {
+    window.addEventListener('load', async function () {
         try {
             const playerState = JSON.parse(localStorage.getItem('playerState'));
-
             if (playerState) {
                 const {
                     dataSongId,
-                    footerSongImg,
-                    footerSongTitle,
-                    footerSongArtist,
-                    footerLyricsText,
-                    footerLyricsImg,
                     currentTime,
                     isPlaying,
                     audioPath,
@@ -182,21 +183,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Khôi phục bài hát
                 if (dataSongId) {
+                    window.song = await fetch(`/get-song/${playerState.dataSongId}`).then(response => response.json());
+                    historySongs.push(song);
                     // Khôi phục playlist nếu có
                     if (isPlayingPlaylist) {
                         const playlistData = JSON.parse(localStorage.getItem('playlistData'));
                         if (playlistData) {
-                            player.setPlaylistSongs(playlistData.playlistSongs);
-                            player.setCurrentSongIndex(playlistData.currentSongIndex);
+                            window.isPlayingPlaylist = true;
+                            window.playlistSongs = playlistData.playlistSongs;
+                            window.currentSongIndex = playlistData.currentSongIndex;
                         }
                     }
 
                     // Cập nhật thông tin footer player
-                    document.getElementById('footerSongImg').setAttribute('src', footerSongImg);
-                    document.getElementById('footerSongTitle').innerText = footerSongTitle;
-                    document.getElementById('footerSongArtist').innerText = footerSongArtist;
-                    document.getElementById('footer-lyrics-text').innerText = footerLyricsText;
-                    document.getElementById('footer-lyrics-img').setAttribute('src', footerLyricsImg);
+                    updateFooterPlayer(song);
                     document.getElementById('footer').setAttribute('data-song-id', dataSongId);
 
                     player.attachSource(audioPath);
@@ -253,24 +253,21 @@ document.addEventListener('DOMContentLoaded', function () {
     // Toggle popup lyrics
     toggleLyricsBtn.addEventListener("click", () => {
         isLyricsVisible = !isLyricsVisible;
-        console.log('isLyricsVisible:', isLyricsVisible);
 
         if (isLyricsVisible) {
             // Mở popup, thêm độ trễ nhỏ để hiệu ứng trượt lên
-            lyricPopup.classList.remove("hidden");
+            lyricPopup.classList.remove('hidden', 'translate-y-full');
             setTimeout(() => {
-                lyricPopup.classList.add("show");
+                lyricPopup.classList.add('translate-y-0');
             },
                 10
             ); // Thêm chút độ trễ nhỏ để cho phép class 'hidden' thay đổi trước khi 'show' được áp dụng
             // Khi popup mở, thêm lớp no-scroll vào body để ngừng cuộn trang
             document.body.classList.add("no-scroll");
         } else {
-            // Đóng popup, thêm độ trễ nhỏ để hiệu ứng trượt xuống
-            lyricPopup.classList.remove("show");
-            setTimeout(() => {
-                lyricPopup.classList.add("hidden");
-            }, 500); // Đảm bảo cho animation trượt xuống hoàn thành trước khi ẩn đi
+            lyricPopup.classList.remove('translate-y-0');
+            lyricPopup.classList.add('translate-y-full');
+            setTimeout(() => lyricPopup.classList.add('hidden'), 300); // Đợi animation kết thúc
             // Khi popup đóng, xóa lớp no-scroll để khôi phục cuộn trang
             document.body.classList.remove("no-scroll");
         }
@@ -367,9 +364,9 @@ export function checkLikedStatus(songId) {
 };
 
 // Di chuyển các hàm ra ngoài để có thể truy cập global
-export function playAllSongs() {
+export async function playAllSongs(playlistId) {
     try {
-        const songs = window.playlistSongs;
+        const songs = await fetch(`/get-playlist-songs/${playlistId}`).then(response => response.json());
         if (typeof songs !== 'undefined' && songs.length > 0) {
             isPlayingPlaylist = true;
             currentSongIndex = 0;
@@ -384,23 +381,17 @@ export function playAllSongs() {
 
 export function playCurrentSong() {
     try {
+        footerAudioElement.pause();
         if (!playlistSongs || playlistSongs.length === 0) return;
-        console.log('playCurrentSong');
-        const currentSong = playlistSongs[currentSongIndex];
+        window.song = playlistSongs[currentSongIndex];
         // Cập nhật thông tin footer player
-        document.getElementById('footerSongImg').setAttribute('src', `/image/${currentSong.img_id}`);
-        document.getElementById('footerSongTitle').innerText = currentSong.song_name;
-        document.getElementById('footerSongArtist').innerText = currentSong.author_name;
-        document.getElementById('footer-lyrics-text').innerText = currentSong.lyric || '';
-        document.getElementById('footer-lyrics-img').setAttribute('src', `/image/${currentSong.img_id}`);
-        document.getElementById('footer').setAttribute('data-song-id', currentSong.id);
-        document.getElementById('footerAudioPlayer').setAttribute('src', `/storage/${currentSong.audio_path}`);
+        updateFooterPlayer(song);
 
         // Thêm bài hát vào lịch sử
-        historySongs.push(currentSong);
+        historySongs.push(song);
 
         // Sử dụng đường dẫn đã được chuẩn hóa
-        playAudioWithAd(`/storage/${currentSong.audio_path}`);
+        playAudioWithAd(`/storage/${song.audio_path}`);
 
         document.getElementById('footer').style.display = 'flex';
     } catch (error) {
@@ -437,6 +428,13 @@ if (typeof window !== 'undefined') {
 
 export function playPreviousSong() {
     try {
+        if (isPlayingPlaylist) {
+            if (currentSongIndex > 0) {
+                currentSongIndex--;
+                playCurrentSong();
+                return;
+            }
+        }
         if (historySongs.length > 1) {
             // Loại bỏ bài hiện tại khỏi lịch sử
             historySongs.pop();
@@ -444,9 +442,9 @@ export function playPreviousSong() {
             // Lấy bài trước đó
             const previousSong = historySongs[historySongs.length - 1];
             updateFooterPlayer(previousSong);
-            playAudioWithAd('storage/' + previousSong.audio_path);
+            playAudioWithAd(`/storage/${previousSong.audio_path}`);
         } else {
-            flash('Không còn bài nào trước đó!', 'error');
+            footerAudioElement.currentTime = 0;
         }
     } catch (error) {
         console.error('Error playing previous song:', error);
@@ -455,20 +453,20 @@ export function playPreviousSong() {
 
 
 export function playNextSong() {
-        if (isPlayingPlaylist && currentSongIndex < playlistSongs.length - 1) {
-            currentSongIndex++;
-            playCurrentSong();
-            return;
-        } else if (recommendedSongs.length > 0) {
-            // Phát bài tiếp theo từ danh sách gợi ý
-            const nextRecommendedSong = recommendedSongs.shift(); // Lấy bài đầu tiên và xóa khỏi danh sách
-            playRecommendedSong(nextRecommendedSong);
-            return;
-        } else if (songs.length > 0) {
-            // Phát bài tiếp theo từ danh sách bài hát
-            const nextSong = songs.shift(); // Lấy bài đầu tiên và xóa khỏi danh sách
-            playRecommendedSong(nextSong);
-            return;
+    if (isPlayingPlaylist && currentSongIndex < playlistSongs.length - 1) {
+        currentSongIndex++;
+        playCurrentSong();
+        return;
+    } else if (recommendedSongs.length > 0) {
+        // Phát bài tiếp theo từ danh sách gợi ý
+        const nextRecommendedSong = recommendedSongs.shift(); // Lấy bài đầu tiên và xóa khỏi danh sách
+        playRecommendedSong(nextRecommendedSong);
+        return;
+    } else if (songs.length > 0) {
+        // Phát bài tiếp theo từ danh sách bài hát
+        const nextSong = songs.shift(); // Lấy bài đầu tiên và xóa khỏi danh sách
+        playRecommendedSong(nextSong);
+        return;
     }
 };
 
@@ -497,8 +495,15 @@ export function playPause() {
 };
 
 export function seekToTime() {
+    footerAudioElement.pause();  // Dừng âm thanh khi tua
     const newTime = (progressBar.value / 100) * footerAudioElement.duration;
     footerAudioElement.currentTime = newTime;
+
+    // Sau khi tua xong, bắt đầu phát lại và cho phép timeupdate tiếp tục
+    setTimeout(() => {
+        footerAudioElement.play();
+        isSeeking = false;
+    }, 100);
 };
 
 export function repeatSong() {
@@ -522,11 +527,12 @@ export function shuffleSong() {
 };
 export function playRecommendedSong(recommendedSong) {
     try {
+        footerAudioElement.pause();
         updateFooterPlayer(recommendedSong);
         // Thêm bài hát gợi ý vào lịch sử
         historySongs.push(recommendedSong);
 
-        playAudioWithAd('storage/' + recommendedSong.audio_path);
+        playAudioWithAd(`/storage/${recommendedSong.audio_path}`);
     } catch (error) {
         console.error('Error playing recommended song:', error);
     }
@@ -536,10 +542,15 @@ export function updateFooterPlayer(song) {
     document.getElementById('footerSongImg').setAttribute('src', song.img_id ? `/image/${song.img_id}` : '');
     document.getElementById('footerSongTitle').innerText = song.song_name;
     document.getElementById('footerSongArtist').innerText = song.author.author_name;
-    document.getElementById('footer-lyrics-text').innerText = song.lyric || '';
+    document.getElementById('footer-lyrics-text').innerText = song.lyric || 'The lyrics are not available';
     document.getElementById('footer-lyrics-img').setAttribute('src', song.img_id ? `/image/${song.img_id}` : '');
     document.getElementById('footer').setAttribute('data-song-id', song.id);
-    document.getElementById('footerAudioPlayer').setAttribute('src', 'storage/' + song.audio_path);
+    document.getElementById('footerAudioPlayer').setAttribute('src', `/storage/${song.audio_path}`);
+    if (!isPlayingPlaylist) {
+        document.querySelector('.fas.fa-random').classList.add('!hidden');
+    } else {
+        document.querySelector('.fas.fa-random').classList.remove('!hidden');
+    }
 };
 
 // Hàm cập nhật biểu tượng âm lượng
@@ -554,24 +565,14 @@ export function updateVolumeIcon(volume) {
 };
 
 // Lắng nghe sự kiện click vào các bài hát
-export function handleSongClick(songItem) {
+export async function handleSongClick(songItem) {
     const songId = songItem.getAttribute('data-song-id');
-    const songName = songItem.querySelector('#song-name').innerText;
-    const songArtist = songItem.querySelector('#song-artist').innerText;
-    const songImage = songItem.querySelector('img').getAttribute('src');
-    const audioElement = songItem.querySelector('audio');
-    const audioSrc = audioElement ? audioElement.getAttribute('src') : null;
-    const lyricsText = songItem.querySelector('#lyrics-text').innerText;
+    window.song = await fetch(`/get-song/${songId}`).then(response => response.json());
     // Cập nhật thông tin vào footer
-    document.getElementById('footerSongImg').setAttribute('src', songImage);
-    document.getElementById('footerSongTitle').innerText = songName;
-    document.getElementById('footerSongArtist').innerText = songArtist;
-    document.getElementById('footer-lyrics-text').innerText = lyricsText;
-    document.getElementById('footer-lyrics-img').setAttribute('src', songImage);
-    document.getElementById('footer').setAttribute('data-song-id', songId);
+    updateFooterPlayer(song);
     // Cập nhật nguồn âm thanh vào footer và kiểm tra nếu không có âm thanh
-    if (audioSrc) {
-        footerAudioElement.setAttribute('src', audioSrc);
+    if (song.audio_path) {
+        footerAudioElement.setAttribute('src', `/storage/${song.audio_path}`);
         document.getElementById('footer').style.display = 'flex'; // Hiển thị footer khi có âm thanh
         footerAudioElement.currentTime = 0;
         progressBar.value = 0;
@@ -580,7 +581,7 @@ export function handleSongClick(songItem) {
             playButton.classList.replace('fa-play', 'fa-pause');
         }
         checkLikedStatus(songId);
-        playAudioWithAd(audioSrc);
+        playAudioWithAd(`/storage/${song.audio_path}`);
     } else {
         footerAudioElement.removeAttribute('src');
         document.getElementById('footer').style.display = 'none'; // Ẩn footer nếu không có âm thanh

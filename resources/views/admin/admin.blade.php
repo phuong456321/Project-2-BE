@@ -8,6 +8,7 @@
     <title>Admin Dashboard</title>
     @vite('resources/css/app.css') <!-- Laravel Mix -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
     @yield('head')
     <style>
         .sidebar {

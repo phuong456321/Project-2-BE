@@ -48,7 +48,7 @@
             <h2 class="text-center text-2xl font-bold mb-6">Upload</h2>
             <form action="{{ route('uploadSong') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <input type="hidden" name="author_id" value="{{ Auth::user()->id }}">
+                <input type="hidden" name="author" value="{{ Auth::user()->id }}">
                 <input type="hidden" name="status" value="pending">
                 <div class="mb-4">
                     <label for="songName" class="block text-sm font-medium mb-2">Tên bài hát</label>
@@ -60,7 +60,7 @@
 
                 <div class="mb-4">
                     <label for="region" class="block text-sm font-medium mb-2">Khu vực</label>
-                    <select id="region" name="area_id"
+                    <select id="region" name="area"
                         class="w-full p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required>
                         <option value="" disabled selected>Chọn khu vực</option>
@@ -72,7 +72,7 @@
 
                 <div class="mb-4">
                     <label for="genre" class="block text-sm font-medium mb-2">Thể loại</label>
-                    <select id="genre" name="genre_id"
+                    <select id="genre" name="genre"
                         class="w-full p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required>
                         <option value="" disabled selected>Chọn thể loại</option>
@@ -80,13 +80,6 @@
                             <option value="{{ $genre->id }}">{{ $genre->name }}</option>
                         @endforeach
                     </select>
-                </div>
-
-                <div class="mb-4">
-                    <label for="description" class="block text-sm font-medium mb-2">Mô tả</label>
-                    <textarea id="description" name="description"
-                        class="w-full p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        rows="3" placeholder="Nhập mô tả bài hát" required></textarea>
                 </div>
 
                 <div class="mb-4">

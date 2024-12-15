@@ -50,7 +50,7 @@
                 </div>
             </form>
             <!-- Popup Form for Creating New Song -->
-            <div x-data="{ open: false }" class="self-end w-full sm:w-auto">
+            <div x-data="{ open: {{ $errors->any() ? 'true' : 'false' }} }" x-init="open = {{ $errors->any() ? 'true' : 'false' }}" class="self-end w-full sm:w-auto">
                 <!-- Button to open the popup -->
                 <button @click="open = true"
                     class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 whitespace-nowrap w-full sm:w-auto">
@@ -60,7 +60,7 @@
                 <!-- Popup -->
                 <div x-show="open" @keydown.escape.window="open = false"
                     class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                    <div class="bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg max-h-[80vh] overflow-y-auto">
+                    <div class="bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg max-h-[80vh] overflow-y-auto scrollbar-none">
                         <!-- Header -->
                         <div class="flex justify-between items-center mb-4">
                             <h2 class="text-xl font-bold text-white">Create New Song</h2>
@@ -74,52 +74,72 @@
                             <div class="mb-4">
                                 <label for="song_name" class="block text-white font-bold mb-2">Song Name</label>
                                 <input type="text" id="song_name" name="song_name"
-                                    class="w-full px-3 py-2 bg-gray-700 text-white rounded" required>
+                                    class="w-full px-3 py-2 bg-gray-700 text-white rounded @error('song_name') is-invalid @enderror" value="{{ old('song_name') }}">
+                                @error('song_name')
+                                    <p class="invalid-feedback text-red-500">*{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="mb-4">
                                 <label for="author_id" class="block text-white font-bold mb-2">Author</label>
-                                <select id="author_id" name="author_id"
-                                    class="w-full px-3 py-2 bg-gray-700 text-white rounded" required>
+                                <select id="author_id" name="author"
+                                    class="w-full px-3 py-2 bg-gray-700 text-white rounded @error('author') is-invalid @enderror">
+                                    <option value="">Select Author</option>
                                     @foreach ($authors as $author)
-                                        <option value="{{ $author->id }}">{{ $author->author_name }}</option>
+                                        <option value="{{ $author->id }}" {{ old('author_id') == $author->id ? 'selected' : '' }}>{{ $author->author_name }}</option>
                                     @endforeach
                                 </select>
+                                @error('author')
+                                    <p class="invalid-feedback text-red-500">*{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="mb-4">
-                                <label for="description" class="block text-white font-bold mb-2">Description</label>
-                                <textarea id="description" name="description" class="w-full px-3 py-2 bg-gray-700 text-white rounded"></textarea>
-                            </div>
-                            <div class="mb-4">
-                                <label for="genre_id" class="block text-white font-bold mb-2">Genre</label>
-                                <select id="genre_id" name="genre_id"
-                                    class="w-full px-3 py-2 bg-gray-700 text-white rounded" required>
+                                <label for="genre" class="block text-white font-bold mb-2">Genre</label>
+                                <select id="genre" name="genre"
+                                    class="w-full px-3 py-2 bg-gray-700 text-white rounded @error('genre') is-invalid @enderror">
+                                    <option value="">Select Genre</option>
                                     @foreach ($genres as $genre)
-                                        <option value="{{ $genre->id }}">{{ $genre->name }}</option>
+                                        <option value="{{ $genre->id }}" {{ old('genre') == $genre->id ? 'selected' : '' }}>{{ $genre->name }}</option>
                                     @endforeach
                                 </select>
+                                @error('genre')
+                                    <p class="invalid-feedback text-red-500">*{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="mb-4">
-                                <label for="area_id" class="block text-white font-bold mb-2">Area</label>
-                                <select id="area_id" name="area_id"
-                                    class="w-full px-3 py-2 bg-gray-700 text-white rounded" required>
+                                <label for="area" class="block text-white font-bold mb-2">Area</label>
+                                <select id="area" name="area"
+                                    class="w-full px-3 py-2 bg-gray-700 text-white rounded @error('area') is-invalid @enderror">
+                                    <option value="">Select Area</option>
                                     @foreach ($areas as $area)
-                                        <option value="{{ $area->id }}">{{ $area->name }}</option>
+                                        <option value="{{ $area->id }}" {{ old('area') == $area->id ? 'selected' : '' }}>{{ $area->name }}</option>
                                     @endforeach
                                 </select>
+                                @error('area')
+                                    <p class="invalid-feedback text-red-500">*{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="mb-4">
                                 <label for="image" class="block text-white font-bold mb-2">Song Image</label>
                                 <input type="file" id="image" name="image"
-                                    class="w-full px-3 py-2 bg-gray-700 text-white rounded" required>
+                                    class="w-full px-3 py-2 bg-gray-700 text-white rounded @error('image') is-invalid @enderror" accept=".jpeg, .png, .jpg" value="{{ old('image') }}">
+                                @error('image')
+                                    <p class="invalid-feedback text-red-500">*{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="mb-4">
                                 <label for="audio" class="block text-white font-bold mb-2">Song Audio</label>
                                 <input type="file" id="audio" name="audio"
-                                    class="w-full px-3 py-2 bg-gray-700 text-white rounded" required>
+                                    class="w-full px-3 py-2 bg-gray-700 text-white rounded @error('audio') is-invalid @enderror" accept=".mp3, .wav, .ogg" value="{{ old('audio') }}">
+                                @error('audio')
+                                    <p class="invalid-feedback text-red-500">*{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="mb-4">
                                 <label for="lyric" class="block text-white font-bold mb-2">Song Lyrics</label>
-                                <textarea id="lyric" name="lyric" class="w-full px-3 py-2 bg-gray-700 text-white rounded"></textarea>
+                                <textarea id="lyric" name="lyric" class="w-full px-3 py-2 bg-gray-700 text-white rounded @error('lyric') is-invalid @enderror">{{ old('lyric') }}</textarea>
+                                @error('lyric')
+                                    <p class="invalid-feedback text-red-500">*{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="flex justify-end">
                                 <button type="button" @click="open = false"
@@ -143,7 +163,8 @@
                     <tr>
                         <th class="px-4 py-2 text-left">Image</th>
                         <th class="px-4 py-2 text-left">Title</th>
-                        <th class="px-4 py-2 text-left">Artist</th>
+                        <th class="px-4 py-2 text-left">Author</th>
+                        <th class="px-4 py-2 text-left">Area</th>
                         <th class="px-4 py-2 text-left">Genre</th>
                         <th class="px-4 py-2 text-left">Status</th>
                         <th class="px-4 py-2 text-left">Actions</th>
@@ -163,6 +184,7 @@
                                 </td>
                                 <td class="px-4 py-2">{{ $song->song_name }}</td>
                                 <td class="px-4 py-2">{{ $song->author ? $song->author->author_name : 'Unknown' }}</td>
+                                <td class="px-4 py-2">{{ $song->area ? $song->area->name : 'Unknown' }}</td>
                                 <td class="px-4 py-2">{{ $song->genre ? $song->genre->name : 'Unknown' }}</td>
                                 <td class="px-4 py-2">
                                     <form action="{{ route('admin.updateStatus', $song->id) }}" method="POST">
@@ -217,14 +239,37 @@
                                                             Name</label>
                                                         <input type="text" id="song_name" name="song_name"
                                                             value="{{ $song->song_name }}"
-                                                            class="w-full px-3 py-2 bg-gray-700 text-white rounded">
+                                                            class="w-full px-3 py-2 bg-gray-700 text-white rounded" required>
                                                     </div>
 
-                                                    <!-- Description -->
+                                                    <!-- Author -->
                                                     <div class="mb-4">
-                                                        <label for="description"
-                                                            class="block text-white font-bold mb-2">Description</label>
-                                                        <textarea id="description" name="description" class="w-full px-3 py-2 bg-gray-700 text-white rounded">{{ $song->description }}</textarea>
+                                                        <label for="author_id"
+                                                            class="block text-white font-bold mb-2">Author</label>
+                                                        <select id="author_id" name="author_id"
+                                                            class="w-full px-3 py-2 bg-gray-700 text-white rounded">
+                                                            @foreach ($authors as $author)
+                                                                <option value="{{ $author->id }}"
+                                                                    {{ $song->author_id == $author->id ? 'selected' : '' }}>
+                                                                    {{ $author->author_name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+                                                    <!-- Area -->
+                                                    <div class="mb-4">
+                                                        <label for="area_id"
+                                                            class="block text-white font-bold mb-2">Area</label>
+                                                        <select id="area_id" name="area_id"
+                                                            class="w-full px-3 py-2 bg-gray-700 text-white rounded">
+                                                            @foreach ($areas as $area)
+                                                                <option value="{{ $area->id }}"
+                                                                    {{ $song->area_id == $area->id ? 'selected' : '' }}>
+                                                                    {{ $area->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
                                                     </div>
 
                                                     <!-- Genre -->

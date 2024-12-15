@@ -890,32 +890,6 @@ input[type="password"] {
     line-height: 1.6;
   }
 
-  /* Popup lyrics */
-  .popup-lyrics {
-    position: fixed;
-    bottom: -100%;
-    left: 58%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: 1283px;
-    background-color: #282828;
-    color: white;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-    overflow-y: auto;
-    max-height: 89vh;
-    transition: bottom 0.3s ease-in-out;
-    z-index: 1500;
-    overflow-y: hidden;
-  }
-  
-  .popup-lyrics.show {
-    bottom: 11%; /* Trượt lên */
-  }
-  
-  .popup-lyrics.hidden {
-    bottom: -100%; /* Trượt xuống */
-  }
-
   #searchInput {
     position: relative;
     left: 0;

@@ -10,6 +10,8 @@ use App\Models\Author;
 use App\Models\Genre;
 use App\Models\Song;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class AdminSongsController extends Controller
 {
@@ -71,13 +73,14 @@ class AdminSongsController extends Controller
 
         // Validate input
         $request->validate([
-            'song_name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'genre_id' => 'required|exists:genres,id',
+            'song_name' => 'sometimes|string|max:255',
+            'genre_id' => 'sometimes|exists:genres,id',
+            'author_id' => 'sometimes|exists:authors,id',
+            'area_id' => 'sometimes|exists:areas,id',
         ]);
 
         // Cập nhật thông tin bài hát
-        $song->update($request->only('song_name', 'description', 'genre_id'));
+        $song->update($request->only('song_name', 'genre_id', 'author_id', 'area_id'));
 
         return redirect()->route('admin.songs')->with('success', 'Song updated successfully.');
     }
@@ -86,18 +89,20 @@ class AdminSongsController extends Controller
     {
         try {
             // Validate input
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 'song_name' => 'required|string',
-                'author_id' => 'required|integer',
-                'area_id' => 'required|integer',
-                'genre_id' => 'required|integer',
-                'description' => 'nullable|string',
+                'author' => 'required|integer',
+                'area' => 'required|integer',
+                'genre' => 'required|integer',
                 'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
                 'status' => 'required|string',
                 'lyric' => 'nullable|string',
                 'audio' => 'required|mimes:mp3,wav,ogg|max:20240', // Max 20MB
             ]);
-
+            // Kiểm tra lỗi validate
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
 
             $imagePath = $request->file('image')->store('temp', 'public');
             $audioPath = $request->file('audio')->store('temp', 'public');
@@ -105,10 +110,9 @@ class AdminSongsController extends Controller
             // Lấy các dữ liệu khác từ request
             $songData = $request->only([
                 'song_name',
-                'author_id',
-                'area_id',
-                'genre_id',
-                'description',
+                'author',
+                'area',
+                'genre',
                 'status',
                 'lyric',
             ]);
@@ -116,9 +120,19 @@ class AdminSongsController extends Controller
             ProcessUploadedSong::dispatch($songData, $imagePath, $audioPath);
             $absolutePath = storage_path("app/public/$audioPath");
             UploadAndGenerateFingerprint::dispatch($audioPath, $absolutePath, $request->file('audio')->getClientOriginalName());
+            $this->isSimilarSongName($request->song_name);
             return redirect()->back()->with('success', 'Bài hát đang được xử lý');
         } catch (\Exception $e) {
-            return response()->json(['Lỗi khi upload' => $e->getMessage()], 400);
+            return redirect()->back()->withErrors(['error' => $e->getMessage()])->withInput();
         }
+    }
+    private function isSimilarSongName(string $songName){
+        $songNames = Storage::disk('public')->get('copyrighted_song_names.json');
+        if($songNames){
+            $ArraySongNames = json_decode($songNames, true);
+            $ArraySongNames[] = $songName;
+            Storage::disk('public')->put('copyrighted_song_names.json', json_encode($ArraySongNames));
+        }
+        return;
     }
 }

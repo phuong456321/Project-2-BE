@@ -20,6 +20,8 @@ class Song extends Model
         'likes',
         'play_count',
         'lyric',
+        'waveform_path',
+        'lyric_path',
     ];
 
     // Mối quan hệ giữa Song và Author

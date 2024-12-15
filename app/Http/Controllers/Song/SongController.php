@@ -37,10 +37,9 @@ class SongController extends Controller
             // Validate input
             $request->validate([
                 'song_name' => 'required|string',
-                'author_id' => 'required|integer',
-                'area_id' => 'required|integer',
-                'genre_id' => 'required|integer',
-                'description' => 'nullable|string',
+                'author' => 'required|integer',
+                'area' => 'required|integer',
+                'genre' => 'required|integer',
                 'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
                 'status' => 'required|string',
                 'lyric' => 'nullable|string',
@@ -54,10 +53,9 @@ class SongController extends Controller
             // Lấy các dữ liệu khác từ request
             $songData = $request->only([
                 'song_name',
-                'author_id',
-                'area_id',
-                'genre_id',
-                'description',
+                'author',
+                'area',
+                'genre',
                 'status',
                 'lyric',
             ]);
@@ -73,10 +71,9 @@ class SongController extends Controller
 
     public function getSong($id)
     {
-        $song = Song::find($id);
+        $song = Song::with('author')->find($id);
         if ($song) {
-            $absolutePath = url('storage/' . $song->audio_path);
-            return response()->json($absolutePath, 200);
+            return response()->json($song, 200);
         } else {
             return response()->json(['message' => 'Song not found'], 404);
         }

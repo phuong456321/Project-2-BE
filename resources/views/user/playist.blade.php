@@ -45,7 +45,7 @@ $remainingSlots = 4 - $filledSongs->count(); // Tính số ảnh trống cần t
                     <button class="p-2 bg-gray-700 hover:bg-gray-600 text-white rounded-full">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="p-2 bg-blue-600 hover:bg-blue-500 text-white rounded-full" onclick="playAllSongs()">
+                    <button class="p-2 bg-blue-600 hover:bg-blue-500 text-white rounded-full" onclick="playAllSongs({{ $playlist_id }})">
                         <i class="fas fa-play"></i>
                     </button>
                     <button class="p-2 bg-gray-700 hover:bg-gray-600 text-white rounded-full">

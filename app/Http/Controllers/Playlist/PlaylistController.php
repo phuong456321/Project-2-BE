@@ -232,4 +232,9 @@ class PlaylistController extends Controller
         ], 201);
     }
 
+    public function getPlaylistSongs($playlist_id)
+    {
+        $songs = InPlaylist::where('playlist_id', $playlist_id)->get();
+        return response()->json($songs, 200);
+    }
 }
