@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('songs', function (Blueprint $table) {
-            $table->string('waveform_path')->nullable()->after('audio_path');
             $table->string('lyric_path')->nullable()->after('waveform_path');
         });
     }
@@ -23,7 +22,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('songs', function (Blueprint $table) {
-            $table->dropColumn('waveform_path');
             $table->dropColumn('lyric_path');
         });
     }

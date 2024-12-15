@@ -24,6 +24,7 @@ class ProfileController extends Controller
 
         $playlists = Playlist::where('user_id', Auth::user()->id)->get();
         $user = User::with('author')->where('id', Auth::user()->id)->first();
+        $notifications = Auth::user()->notifications;
         $song = Song::where('author_id', $user->author_id)->get();
         return view('user/Profileuser', ['user' => $user, 'playlists' => $playlists, 'songs' => $song]);
     }
@@ -58,6 +59,8 @@ class ProfileController extends Controller
                 'img_path' => 'images/' . $imageName,
                 'category' => 'avatar',
             ]);
+
+            Storage::disk('public')->delete($user->avatar->img_path);
 
             $avatarId = $newImage->id; // Cập nhật avatar mới
         }

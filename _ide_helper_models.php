@@ -376,6 +376,8 @@ namespace App\Models{
  * @property int $genre_id
  * @property string|null $description
  * @property string $audio_path
+ * @property string|null $waveform_path
+ * @property string|null $lyric_path
  * @property string|null $duration
  * @property int $img_id
  * @property string $status
@@ -383,7 +385,7 @@ namespace App\Models{
  * @property int $play_count
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string $lyric
+ * @property string|null $lyric
  * @property-read \App\Models\Area $area
  * @property-read \App\Models\Author $author
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Comment> $comments
@@ -406,10 +408,12 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Song whereImgId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Song whereLikes($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Song whereLyric($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Song whereLyricPath($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Song wherePlayCount($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Song whereSongName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Song whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Song whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Song whereWaveformPath($value)
  */
 	class Song extends \Eloquent {}
 }

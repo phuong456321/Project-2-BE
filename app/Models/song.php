@@ -13,7 +13,6 @@ class Song extends Model
         'author_id',
         'area_id',
         'genre_id',
-        'description',
         'audio_path',
         'img_id',
         'status',
