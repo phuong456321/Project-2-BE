@@ -98,13 +98,7 @@
         left: 0rem;
     }
     /* Các điều chỉnh khác cho song-item, để các phần tử hiển thị gọn gàng trên di động */
-    .song-item {
-        flex-direction: column;
-        margin-bottom: 20px;
-        position: relative;
-        /* left: -5rem; */
-        right: 6rem;
-    }
+
     .song-item .song-info {
         margin-bottom: 10px;
     }
