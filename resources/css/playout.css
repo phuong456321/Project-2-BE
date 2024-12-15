@@ -35,7 +35,7 @@
     #search-form button {
       
         right: 10px;
-        left: 16rem; /* Loại bỏ căn trái */
+        left: 18rem; /* Loại bỏ căn trái */
         width: 36px;
         height: 36px;
         top: 1.2rem;
@@ -45,21 +45,25 @@
     #avatar {
         margin-top: 10px; /* Tạo khoảng cách bên trên */
         right: 0; /* Đặt lại vị trí avatar */
-        top: -2.5rem;
+        top: -1rem;
         display: inline-block;
         text-align: center;
-        left: 8rem;
+        left: 10.2rem;
+    }
+    .nameavatar{
+        display: none;
     }
 
     #avatar img {
         width: 36px; /* Giảm kích thước ảnh đại diện */
         height: 36px;
+        
     }
 
     .auth-links {
         position: relative;
-        top: -0.5rem;
-        left: 8.5rem;
+        top: -0.6rem;
+        left: 10.5rem;
         margin-top: 10px; /* Tạo khoảng cách trên */
         text-align: center; /* Canh giữa text */
     }
