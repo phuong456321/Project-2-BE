@@ -11,7 +11,7 @@
 
 <div class="likesong-container">
     <div class="likesong-sidebar">
-        <img alt="Album cover with a thumbs up icon" height="200" src="https://storage.googleapis.com/a1aa/image/BQzvfqyszhze70CvcHcRjyBtiiHfaeT5f65gbjJB4YNEle38E.jpg" width="200" />
+        <img class="" alt="Album cover with a thumbs up icon" height="200" src="https://storage.googleapis.com/a1aa/image/BQzvfqyszhze70CvcHcRjyBtiiHfaeT5f65gbjJB4YNEle38E.jpg" width="200" />
         <h1>
             Nhạc đã thích
         </h1>

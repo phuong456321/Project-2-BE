@@ -48,8 +48,11 @@
         #search-form input[type="text"] {
             height: 2.5rem;
             width: 100%;
-            font-size: 1.5rem;
-            border-radius: 20px;
+            font-size: 12px;
+            border-radius: 6px;
+            position: relative;
+            left: 5rem;
+            top: 1rem;
         }
 
         /* #sidebar {
@@ -62,14 +65,14 @@
     </style>
 </head>
 
-<body class="m-0 font-sans bg-[#202938] text-white overflow-x-hidden w-screen">
+<body class="m-0 font-sans bg-backround-color text-black overflow-x-hidden w-screen dark:bg-gradient-to-r from-gray-800 via-gray-900 to-black dark:text-white transition-colors duration-300">
 
     <!-- Nút mở sidebar trên điện thoại -->
-    <button id="toggleSidebar" class="lg:hidden text-white fixed top-6 left-4 z-50 text-2xl">☰</button>
+    <button id="toggleSidebar" class="lg:hidden text-black absolute top-[2.2rem] left-4 z-50 text-2xl dark:text-white">☰</button>
     <div id="overlayphone" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40"></div>
     {{-- SideBar --}}
     <div id="sidebar"
-        class="sidebar w-[250px] bg-[#1a1616] min-h-screen fixed pt-5 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ">
+        class="sidebar border-r border-gray-500 p-4 w-[250px] bg-black min-h-screen fixed pt-5 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
         <a class="no-hover block text-white px-8 py-[11px] no-underline text-[18px] hover:bg-[#1a1616]"
             href="{{ route('home') }}">
             <img class="block mx-auto mb-5 w-36 cursor-pointer" alt="Logo" height="100"
@@ -123,56 +126,56 @@
         </div>
     </div>
 
-    <div class="main-content !pb-[100px] ml-[250px] p-5">
-        <div class="header pb-3 flex justify-between items-center">
-            <!-- Search -->
-            <form action="{{ route('searchsong') }}" method="get"
-                class="relative relative flex items-center justify-center w-full max-w-[15rem] lg:max-w-[45rem] px-4 md:px-0" id="search-form">
-                <input name="query" placeholder="Bạn đang tìm kiếm gì?" type="text" id="query"
-                    class="bg-black text-white rounded-full h-[2.5rem] w-full text-lg lg:text-xl pl-4 sm:pl-10 p-3 focus:outline-none placeholder:text-sm lg:placeholder:text-xl placeholder:translate-y-[-5px] lg:placeholder:translate-y-[-3px]" />
-                <button type="submit"
-                    class="absolute right-4 flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-transparent border-none cursor-pointer">
-                    <i class="fa-solid fa-magnifying-glass text-[16px] md:text-[20px] text-[#f5efef]"></i>
-                </button>
-            </form>
+    <div class="main-content !pb-[250px] ml-[100px] p-5">
+    <div class="header w-full pb-3 flex justify-between items-center relative right-20  ">
+    <!-- Search -->
+    <form action="{{ route('searchsong') }}" method="get"
+        class="relative flex items-center w-full max-w-[20rem] md:max-w-[30rem] lg:max-w-[40rem] pl-8 pr-12" id="search-form">
+        <input name="query" placeholder="Bạn đang tìm kiếm gì?" type="text" id="query"
+            class="bg-gray-500 text-gray-black rounded-full h-12 w-full text-sm md:text-base pl-12 pr-14 focus:outline-none placeholder:text-xs md:placeholder:text-sm dark:bg-gray-700 dark:text-white placeholder:text-white transition-colors duration-300" />
+        <button type="submit"
+            class="absolute right-4 top-[16px] left-[39rem] flex items-center justify-center w-8 h-8 md:w-10 md:h-10 bg-transparent cursor-pointer">
+            <i class="fa-solid fa-magnifying-glass text-[16px] md:text-[20px] text-[#f5efef]"></i>
+        </button>
+    </form>
+    <button id="theme-toggle" class="px-4 py-2 bg-gray-700 text-white font-medium rounded-full hover:bg-gray-600 transition absolute left-[87.5rem] top-3">
+       Light 
+    </button>
 
-            @if (Auth::check())
-                {{-- Nếu người dùng đã đăng nhập --}}
-                <div id="avatar" class="user">
-                    <span>{{ Auth::user()->name }}</span>
-                    <img alt="User Avatar" class="rounded-full" height="40"
-                        src="{{ url('image/' . Auth::user()->avatar_id) }}" width="40" />
-                </div>
-                <!-- Popup Profile / Logout -->
-                <div id="popup" class="avatar-popup hidden">
-                    <ul>
-                        <li>
-                            <i class="fa-solid fa-user"></i>
-                            <a href="/profile/{{ Auth::user()->id }}">
-                                Profile
-                            </a>
-                        </li>
-                        <li>
-                            <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                                @csrf
-                                <div class="icon-wrapper">
-                                    <i class="fa-solid fa-right-from-bracket"></i>
-                                </div>
-                                <button type="submit" class="logout-btn">Logout</button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
-            @else
-                {{-- Nếu người dùng chưa đăng nhập --}}
-                <div class="auth-links flex justify-between items-center mb-3">
-                    <a onclick="showLoginForm()" class="text-[#e3e3ea] text-base no-underline hover:text-[#68aee0]">Login</a>
-                </div>
-                
-            @endif
+    @if (Auth::check())
+        <!-- Nếu người dùng đã đăng nhập -->
+        <div id="avatar" class="user flex items-center space-x-2 relative top-3 right-10">
+            <span class="text-black text-sm md:text-base dark:text-white transition-colors duration-300 ">{{ Auth::user()->name }}</span>
+            <img alt="User Avatar" class="rounded-full border border-gray-500"
+                src="{{ url('image/' . Auth::user()->avatar_id) }}" width="40" height="40" />
         </div>
+        <!-- Popup Profile / Logout -->
+        <div id="popup" class="avatar-popup hidden bg-gray-800 text-white p-4 rounded-lg shadow-lg relative right-[16px] top-2 z-10">
+            <ul class="space-y-2">
+                <li class="flex items-center space-x-2">
+                    <i class="fa-solid fa-user"></i>
+                    <a href="/profile/{{ Auth::user()->id }}" class="hover:text-gray-300">Profile</a>
+                </li>
+                <li class="flex items-center space-x-2">
+                    <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                        @csrf
+                        <button type="submit"
+                            class="flex items-center space-x-2 hover:text-gray-300">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            <span>Logout</span>
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    @else
+        <!-- Nếu người dùng chưa đăng nhập -->
+        <div class="auth-links flex justify-between items-center absolute top-[26px] left-[75rem] cursor-pointer ">
+            <a onclick="showLoginForm()" class="text-[#e3e3ea] text-sm md:text-base no-underline hover:text-[#68aee0]">Login</a>
+        </div>
+    @endif
+</div>
         @yield('content')
-    </div>
 
     <!-- Overlay and Modal -->
     <div id="overlay" class="overlay">
@@ -346,7 +349,7 @@
             // Mở popup khi nhấn vào avatar
             avatar.addEventListener('click', function(e) {
                 e.stopPropagation(); // Ngăn chặn sự kiện ngoài từ việc ẩn pop-up
-                avatarPopup.classList.toggle('!block'); // Thêm hoặc xóa class 'block' cho popup
+                avatarPopup.classList.toggle('hidden'); // Thêm hoặc xóa class 'block' cho popup
             });
 
             // Ẩn popup khi click ra ngoài

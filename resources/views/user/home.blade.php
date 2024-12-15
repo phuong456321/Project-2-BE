@@ -36,7 +36,7 @@
     </style>
 @endpush
 @section('content')
-    <div class="prevalent song-item cursor-pointer" data-song-id="{{ $topSongs[0]->id }}">
+    <div class="mt-10 prevalent song-item cursor-pointer" data-song-id="{{ $topSongs[0]->id }}">
         <div class="info">
             <h1 class="text-white">
                 Prevalent
@@ -65,12 +65,12 @@
             <h3 class="mb-[10px]">
                 Playlists for you
             </h3>
-            <div class="flex overflow-x-auto scrollbar-hide scroll-smooth gap-4 space-x-4">
+            <div class="flex overflow-x-auto scrollbar-hide scroll-smooth gap-4 space-x-4 ">
                 @foreach ($playlists as $playlist)
-                    <div class="playlist cursor-pointer inline-block text-center flex-shrink-0">
+                    <div class="playlist cursor-pointer inline-block text-center flex-shrink-0 ">
                         <a href="{{ route('playlist', ['playlist_id' => $playlist->id]) }}"
                             class="flex flex-col items-center text-white no-underline">
-                            <div class="images h-28 w-28 lg:h-36 lg:w-36 flex items-center justify-center">
+                            <div class="images h-28 w-28 lg:h-36 lg:w-36 flex items-center justify-center ">
                                 @if ($playlist->name == 'Liked music')
                                     <img src="https://i1.sndcdn.com/artworks-4Lu85Xrs7UjJ4wVq-vuI2zg-t500x500.jpg"
                                         alt="Default Image" class="song-image w-full h-full object-cover rounded-lg">
@@ -84,7 +84,7 @@
                                     @endforeach
                                 @endif
                             </div>
-                            <h3 class="mb-[10px] w-full truncate">{{ $playlist->name }}</h3>
+                            <h3 class="mb-[10px] w-full truncate text-black dark:text-white ">{{ $playlist->name }}</h3>
                         </a>
                     </div>
                 @endforeach

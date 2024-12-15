@@ -1,5 +1,5 @@
 /* Định dạng chung cho sidebar */
-.sidebar {
+/* .sidebar {
     width: 20%;
     background-color: #1a1a1a;
     color: #fff;
@@ -8,7 +8,7 @@
     flex-direction: column;
     justify-content: flex-start;
     height: auto;
-}
+} */
 
 /* Định dạng logo */
 .logo h2 {
