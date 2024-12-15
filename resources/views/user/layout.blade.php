@@ -170,8 +170,8 @@
         </div>
     @else
         <!-- Nếu người dùng chưa đăng nhập -->
-        <div class="auth-links flex justify-between items-center absolute top-[21px] left-[75rem] cursor-pointer ">
-            <a onclick="showLoginForm()" class="text-[#e3e3ea] text-sm md:text-base no-underline hover:text-[#68aee0]">Login</a>
+        <div class="auth-links flex justify-between items-center absolute top-[21px] left-[72rem] cursor-pointer ">
+            <a onclick="showLoginForm()" class="text-black text-sm md:text-base no-underline hover:text-[#68aee0] dark:text-white">Login</a>
         </div>
     @endif
 </div>

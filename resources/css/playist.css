@@ -87,6 +87,7 @@
     .container {
         flex-direction: column;
         padding: 10px;
+        left: 1rem;
     }
     .left-panel, .right-panel {
         width: 100%;
@@ -102,8 +103,7 @@
         flex-direction: column;
         margin-bottom: 20px;
         position: relative;
-        /* left: -5rem; */
-        right: 6rem;
+        right: 8rem;
     }
     .song-item .song-info {
         margin-bottom: 10px;
