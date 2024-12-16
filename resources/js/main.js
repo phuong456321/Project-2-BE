@@ -604,9 +604,11 @@ export function playAudio(filePath) {
     player.attachSource(filePath); // Đính kèm nguồn DASH (MPD   file)
     footerAudioElement.load();
     footerAudioElement.play();
-    const playIcon = document.querySelector('.fa-play');
+    const playIcon = document.querySelectorAll('.fa-play');
     if (playIcon) {
-        playIcon.classList.replace('fa-play', 'fa-pause');
+        playIcon.forEach(icon => {
+            icon.classList.replace('fa-play', 'fa-pause');
+        });
     }
 };
 

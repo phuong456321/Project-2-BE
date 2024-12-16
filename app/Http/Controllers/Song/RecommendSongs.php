@@ -34,7 +34,6 @@ class RecommendSongs extends Controller
         $recommendedSongsByBehavior = $this->getCollaborativeRecommendations($userId);
         // Gộp kết quả
         $recommendedSongs = $this->combineRecommendations($recommendedSongsByContent, $recommendedSongsByBehavior);
-
         return view('user.home')->with(['songs' => $songs, 'playlists' => $playlists, 'topSongs' => $topSongs, 'recommendedSongs' => $recommendedSongs]);
     }
 

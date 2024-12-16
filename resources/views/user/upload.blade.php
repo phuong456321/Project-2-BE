@@ -65,7 +65,7 @@
                         required>
                         <option value="" disabled selected>Chọn khu vực</option>
                         @foreach ($areas as $area)
-                            <option value="{{ $area->id }}">{{ $area->name }}</option>
+                        <option value="{{ $area->id }}">{{ $area->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -77,7 +77,7 @@
                         required>
                         <option value="" disabled selected>Chọn thể loại</option>
                         @foreach ($genres as $genre)
-                            <option value="{{ $genre->id }}">{{ $genre->name }}</option>
+                        <option value="{{ $genre->id }}">{{ $genre->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -102,7 +102,13 @@
                         class="w-full p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         accept="audio/*" required>
                 </div>
-
+                <div style="margin: 10px 0;">
+                    <input type="checkbox" name="terms" id="terms" required>
+                    <label for="terms">
+                        I agree to the
+                        <a href="/musicservice" target="_blank" class="decoration-none font-size-medium color-blue cursor-pointer">terms and conditions</a>.
+                    </label>
+                </div>
 
                 <button id="btn-upload" type="submit"
                     class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition duration-200">

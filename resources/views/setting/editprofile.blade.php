@@ -48,7 +48,7 @@
                     id="bio" name="bio"
                     class="w-full bg-gray-800 text-gray-300 border border-gray-700 rounded p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     rows="3"
-                    placeholder="Viết một chút về bản thân bạn...">{{ $user->author->bio }}</textarea>
+                    placeholder="Viết một chút về bản thân bạn...">{{ $user->author ? $user->author->bio : '' }}</textarea>
             </div>
 
             <!-- Google Link Section -->

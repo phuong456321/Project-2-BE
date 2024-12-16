@@ -106,15 +106,16 @@
         <!-- Quảng cáo AdSense -->
         <div class="popup-content">
             <span id="closePopup" class="close-btn">&times;</span>
+            <h1 class="text-2xl font-bold mb-4">Quảng cáo</h1>
             <!-- Chèn mã quảng cáo Google AdSense -->
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4089886839959004"
+            {{-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4089886839959004"
                 crossorigin="anonymous"></script>
             <!-- Nulltifly-home -->
             <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4089886839959004"
                 data-ad-slot="5674451393" data-ad-format="auto" data-full-width-responsive="true"></ins>
             <script>
                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
+            </script> --}}
         </div>
 
         <button onclick="closeAdPopup()"

@@ -31,6 +31,12 @@ Route::get('/', [RecommendSongs::class, 'index'])->name('home')->middleware('web
 
 Route::get('/checkout', [PaymentController::class, 'show'])->name('checkout.show');
 
+Route::get('/loginservice', function () {
+    return view('user/loginservice'); 
+});
+Route::get('/musicservice', function () {
+    return view('user/musicservice'); 
+});
 Route::get('/albums', function () {
     return view('user/albums'); // Trang album
 });

@@ -44,6 +44,9 @@
         <!-- Navigation Links -->
         <nav class="flex items-center space-x-1 sm:space-x-4">
             <!-- Notification Button -->
+            <a href="/premium" class="flex items-center space-x-2 hover:text-green-500 hover:bg-gray-600 rounded-full w-10 h-10 flex justify-center items-center" title="Premium">
+                <i class="fa-solid fa-crown text-lg"></i>
+            </a>
             <a href="/upload-song" class="flex items-center space-x-2 hover:text-green-500 hover:bg-gray-600 rounded-full w-10 h-10 flex justify-center items-center" title="Tải lên bài hát">
                 <i class="fa-solid fa-upload text-lg"></i>
             </a>
@@ -89,7 +92,7 @@
             <div>
                 <h2 class="text-4xl font-bold mt-10">{{ $user->name }}</h2>
                 <p class="text-gray-400">{{ $user->email }}</p>
-                <p class="mt-2 text-gray-300">{{ $user->author->author_name }}</p>
+                {{-- <p class="mt-2 text-gray-300">{{ $user->author ? $user->author->author_name : 'Không có tên tác giả' }}</p> --}}
             </div>
         </section>
 
@@ -113,8 +116,11 @@
         <section class="mt-10">
             <h2 class="text-3xl font-bold">Các bài hát được tải lên</h2>
             <ul class="mt-6 space-y-4">
-                @foreach ($songs as $song)
-                    <li class="flex items-center space-x-6">
+                @if ($songs->isEmpty())
+                    <li class="text-gray-500">Không có bài hát nào được tải lên.</li>
+                @else
+                    @foreach ($songs as $song)
+                        <li class="flex items-center space-x-6">
                         <img src="https://storage.googleapis.com/a1aa/image/Vh5OymOlhzrpGNSyzTrQJDAuYen3bRBW76631QVNglJuQ87JA.jpg"
                             alt="Album cover" class="w-16 h-16 object-cover" />
                         <div>
@@ -126,6 +132,7 @@
                         </div>
                     </li>
                 @endforeach
+                @endif
                 <!-- Add more song items here -->
             </ul>
         </section>
