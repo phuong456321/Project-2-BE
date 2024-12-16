@@ -68,7 +68,7 @@
         </div>
 
         <!-- Search Bar -->
-        <div class="flex-grow mx-4 mt-1">
+        {{-- <div class="flex-grow mx-4 mt-1">
             <form class="relative max-w-lg mx-auto w-full sm:w-1/4 md:w-1/2 lg:max-w-lg">
               <input
                     type="text"
@@ -80,7 +80,7 @@
                     <i class="fa-solid fa-search"></i>
                 </button>
             </form>
-        </div>
+        </div> --}}
 
         <!-- Profile -->
         <div class="flex items-center space-x-4 mr-5">

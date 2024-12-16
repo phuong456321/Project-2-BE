@@ -30,7 +30,7 @@
         </div>
 
         <!-- Search Bar -->
-        <div class="flex-grow mx-4 mt-5">
+        {{-- <div class="flex-grow mx-4 mt-5">
             <form class="relative max-w-lg mx-auto w-full sm:w-1/4 md:w-1/2 lg:max-w-lg">
                 <input type="text" placeholder="Tìm kiếm..."
                     class="w-full bg-black text-white py-2 px-4 rounded-full border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500" />
@@ -39,16 +39,19 @@
                     <i class="fa-solid fa-search"></i>
                 </button>
             </form>
-        </div>
+        </div> --}}
 
         <!-- Navigation Links -->
         <nav class="flex items-center space-x-1 sm:space-x-4">
             <!-- Notification Button -->
+            <a href="/upload-song" class="flex items-center space-x-2 hover:text-green-500 hover:bg-gray-600 rounded-full w-10 h-10 flex justify-center items-center" title="Tải lên bài hát">
+                <i class="fa-solid fa-upload text-lg"></i>
+            </a>
             <button id="notificationButton"
-                class="relative text-white rounded-full px-2 py-2 hover:bg-gray-600 text-sm sm:text-base">
+                class="relative text-white rounded-full w-10 h-10 flex justify-center items-center hover:bg-gray-600" title="Thông báo">
                 <i class="fa-solid fa-bell"></i>
             </button>
-            <a href="/editprofile" class="flex items-center space-x-2 hover:text-green-500">
+            <a href="/editprofile" class="flex items-center space-x-2 hover:text-green-500 hover:bg-gray-600 rounded-full w-10 h-10 flex justify-center items-center" title="Cài đặt">
                 <i class="fa-solid fa-gear text-lg"></i>
             </a>
 

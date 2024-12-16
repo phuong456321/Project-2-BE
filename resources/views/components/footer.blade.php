@@ -76,7 +76,7 @@
 
 <!-- Popup lyrics -->
 <div id="lyricPopup" 
-    class="popup-lyrics fixed right-0 top-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden w-full transition-transform transform translate-y-full lg:max-w-[83%] max-h-[89%] overflow-y-auto scrollbar-none">
+    class="popup-lyrics fixed right-0 top-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden w-full transition-transform transform translate-y-full lg:max-w-[83%] max-h-[89%] overflow-y-auto scrollbar-none overflow-x-hidden">
     <div class="bg-gray-800 text-white rounded-lg shadow-lg overflow-hidden w-full h-[80%] mt-16">
         <div class="lyrics-container flex flex-col md:flex-row h-full">
             <!-- Album Cover -->
@@ -86,7 +86,7 @@
                     class="w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 object-cover rounded-md" />
             </div>
             <!-- Lyrics -->
-            <div class="flex-1 p-4 md:overflow-y-auto scrollbar-none">
+            <div class="flex-1 p-4 overflow-y-auto scrollbar-none">
                 <!-- Tabs -->
                 <div class="tabs flex space-x-4 border-b border-gray-600 mb-4">
                     <div class="tab active font-semibold text-base md:text-lg pb-2 border-b-2 border-blue-500">LYRIC</div>
