@@ -106,7 +106,7 @@
                     <input type="checkbox" name="terms" id="terms" required>
                     <label for="terms">
                         I agree to the
-                        <a href="/musicservice" target="_blank" class="decoration-none font-size-medium color-blue cursor-pointer">terms and conditions</a>.
+                        <a href="/musicservice" target="_blank" class="decoration-none font-size-medium color-blue cursor-pointer no-underline text-blue-500 hover:text-blue-700">terms and conditions</a>.
                     </label>
                 </div>
 

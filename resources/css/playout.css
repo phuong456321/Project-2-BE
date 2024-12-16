@@ -210,7 +210,9 @@ aside.now-playing {
 }
 
 .prevalent {
-    background-color: #9da8b8;
+    background: linear-gradient(45deg, #1b86c4, #d2d7db, #132cba, #031520, #021018);
+    background-size: 400% 400%;
+    animation: gradient 10s ease infinite;
     padding: 20px;
     border-radius: 10px;
     display: flex;
@@ -908,3 +910,8 @@ input[type="password"] {
   }
 
 
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
