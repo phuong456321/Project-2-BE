@@ -62,7 +62,7 @@
 
 @if (count($playlists) > 0)
 <div class="playlists mt-5">
-    <h3 class="mb-[10px]">
+    <h3 class="text-2xl font-bold mb-4">
         Playlists for you
     </h3>
     <div class="flex overflow-x-auto scrollbar-hide scroll-smooth gap-4 space-x-4 ">
@@ -93,7 +93,7 @@
 @endif
 @if (!empty($recommendedSongs) && count($recommendedSongs) > 0)
 <div class="trending-music mt-5">
-    <h3 class="mb-[10px]">
+    <h3 class="text-2xl font-bold mb-4">
         Recommended Music
     </h3>
     <div class="flex overflow-x-auto scrollbar-hide scroll-smooth gap-4 space-x-4">
@@ -118,7 +118,7 @@
 @endif
 @if (count($topSongs) > 0)
 <div class="trending-music mt-5">
-    <h3 class="mb-[10px]">
+    <h3 class="text-2xl font-bold mb-4">
         Trending Music
     </h3>
     <div class="flex overflow-x-auto scrollbar-hide scroll-smooth gap-4 space-x-4">
@@ -143,7 +143,7 @@
 @endif
 @if (count($songs) > 0)
 <div class="trending-music mt-5">
-    <h3 class="mb-[10px]">
+    <h3 class="text-2xl font-bold mb-4">
         Music
     </h3>
     <div class="flex overflow-x-auto scrollbar-hide scroll-smooth gap-4 space-x-4">
@@ -166,6 +166,148 @@
     </div>
 </div>
 @endif
+<div class="mb-6">
+    <h2 class="text-2xl font-bold mb-4">Music</h2>
+    <div class="w-full overflow-x-auto">
+        <div
+            class="grid grid-rows-4 grid-flow-col gap-4 min-w-max p-4 sm:grid-rows-2 lg:grid-rows-4">
+            <!-- Bài hát 1 -->
+            <div class="flex items-center gap-4">
+                <img
+                    alt="Album cover"
+                    class="w-12 h-12 sm:w-16 sm:h-16 rounded"
+                    src="https://storage.googleapis.com/a1aa/image/Q0I8OgnNQbb1Bx9rqoXzWonG4Nml4bOzLXtumcZ2wjfQuu9JA.jpg" />
+                <div>
+                    <h3 class="font-bold text-sm sm:text-base lg:text-lg">
+                        Dưới Tán Cây Khô Hoa Nở
+                    </h3>
+                    <p class="text-xs sm:text-sm">Jack - J97 • 4.9M</p>
+                </div>
+            </div>
+
+            <!-- Bài hát 2 -->
+            <div class="flex items-center gap-4">
+                <img
+                    alt="Album cover"
+                    class="w-12 h-12 sm:w-16 sm:h-16 rounded"
+                    src="https://storage.googleapis.com/a1aa/image/gwvm5rSwpf1QGKy4CtRJTBM1mtaGBTeteqnMCeaHOdp5x1tPB.jpg" />
+                <div>
+                    <h3 class="font-bold text-sm sm:text-base lg:text-lg">
+                        Mắt Kết Nối
+                    </h3>
+                    <p class="text-xs sm:text-sm">Dương Domic • 16</p>
+                </div>
+            </div>
+
+            <!-- Bài hát 3 -->
+            <div class="flex items-center gap-4">
+                <img
+                    alt="Album cover"
+                    class="w-12 h-12 sm:w-16 sm:h-16 rounded"
+                    src="https://storage.googleapis.com/a1aa/image/UKO9z9eePqjXk09Qf4vUYEvlgefrsbIYDIO7mG8Moyd9irbfE.jpg" />
+                <div>
+                    <h3 class="font-bold text-sm sm:text-base lg:text-lg">
+                        Chúng Ta Của Hiện Tại
+                    </h3>
+                    <p class="text-xs sm:text-sm">Sơn Tùng M-TP</p>
+                </div>
+            </div>
+
+            <!-- Bài hát 4 -->
+            <div class="flex items-center gap-4">
+                <img
+                    alt="Album cover"
+                    class="w-12 h-12 sm:w-16 sm:h-16 rounded"
+                    src="https://storage.googleapis.com/a1aa/image/q9E7VrwGTm6iMN89XMeYqglDuAMWVtthWmd62H3paBegcd7TA.jpg" />
+                <div>
+                    <h3 class="font-bold text-sm sm:text-base lg:text-lg">
+                        Exit Sign
+                    </h3>
+                    <p class="text-xs sm:text-sm">HIEUTHUHAI • 5</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <img
+                    alt="Album cover"
+                    class="w-12 h-12 sm:w-16 sm:h-16 rounded"
+                    src="https://storage.googleapis.com/a1aa/image/q9E7VrwGTm6iMN89XMeYqglDuAMWVtthWmd62H3paBegcd7TA.jpg" />
+                <div>
+                    <h3 class="font-bold text-sm sm:text-base lg:text-lg">
+                        Exit Sign
+                    </h3>
+                    <p class="text-xs sm:text-sm">HIEUTHUHAI • 5</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <img
+                    alt="Album cover"
+                    class="w-12 h-12 sm:w-16 sm:h-16 rounded"
+                    src="https://storage.googleapis.com/a1aa/image/q9E7VrwGTm6iMN89XMeYqglDuAMWVtthWmd62H3paBegcd7TA.jpg" />
+                <div>
+                    <h3 class="font-bold text-sm sm:text-base lg:text-lg">
+                        Exit Sign
+                    </h3>
+                    <p class="text-xs sm:text-sm">HIEUTHUHAI • 5</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <img
+                    alt="Album cover"
+                    class="w-12 h-12 sm:w-16 sm:h-16 rounded"
+                    src="https://storage.googleapis.com/a1aa/image/q9E7VrwGTm6iMN89XMeYqglDuAMWVtthWmd62H3paBegcd7TA.jpg" />
+                <div>
+                    <h3 class="font-bold text-sm sm:text-base lg:text-lg">
+                        Exit Sign
+                    </h3>
+                    <p class="text-xs sm:text-sm">HIEUTHUHAI • 5</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <img
+                    alt="Album cover"
+                    class="w-12 h-12 sm:w-16 sm:h-16 rounded"
+                    src="https://storage.googleapis.com/a1aa/image/q9E7VrwGTm6iMN89XMeYqglDuAMWVtthWmd62H3paBegcd7TA.jpg" />
+                <div>
+                    <h3 class="font-bold text-sm sm:text-base lg:text-lg">
+                        Exit Sign
+                    </h3>
+                    <p class="text-xs sm:text-sm">HIEUTHUHAI • 5</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <img
+                    alt="Album cover"
+                    class="w-12 h-12 sm:w-16 sm:h-16 rounded"
+                    src="https://storage.googleapis.com/a1aa/image/q9E7VrwGTm6iMN89XMeYqglDuAMWVtthWmd62H3paBegcd7TA.jpg" />
+                <div>
+                    <h3 class="font-bold text-sm sm:text-base lg:text-lg">
+                        Exit Sign
+                    </h3>
+                    <p class="text-xs sm:text-sm">HIEUTHUHAI • 5</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <img
+                    alt="Album cover"
+                    class="w-12 h-12 sm:w-16 sm:h-16 rounded"
+                    src="https://storage.googleapis.com/a1aa/image/q9E7VrwGTm6iMN89XMeYqglDuAMWVtthWmd62H3paBegcd7TA.jpg" />
+                <div>
+                    <h3 class="font-bold text-sm sm:text-base lg:text-lg">
+                        Exit Sign
+                    </h3>
+                    <p class="text-xs sm:text-sm">HIEUTHUHAI • 5</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="flex justify-end mt-4">
+        <button class="bg-gray-800 px-4 py-2 rounded">Phát tất cả</button>
+        <button class="bg-gray-800 px-4 py-2 rounded ml-2">
+            <i class="fas fa-chevron-right"> </i>
+        </button>
+    </div> -->
+</div>
 
 <!-- Overlay Login Form -->
 <div id="loginOverlay" class="overlay" style="display: none;">

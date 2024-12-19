@@ -1,28 +1,21 @@
 @push('css')
-    <style>
-        .footer img {
-            position: absolute;
-            margin-left: 2rem;
-        }
+<style>
+    .footer img {
+        position: absolute;
+        margin-left: 2rem;
+    }
 
-        .footer .current-song {
-            margin-right: 0;
-        }
+    .footer .current-song {
+        margin-right: 0;
+    }
 
-        .lyrics-text p {
-            color: #999;
-            /* Màu chữ mặc định */
-            font-size: 16px;
-            margin: 5px 0;
-        }
-
-        .lyrics-text p.active {
-            color: #ff5722;
-            /* Màu chữ nổi bật cho lyric hiện tại */
-            font-weight: bold;
-            font-size: 18px;
-        }
-    </style>
+    .tab.active {
+        background-color: #1f2937;
+        /* Màu nền cho tab active */
+        color: white;
+        /* Màu chữ cho tab active */
+    }
+</style>
 @endpush
 <div id="footer"
     class="hidden fixed bottom-0 left-0 w-full bg-gray-900 text-white shadow-md flex items-center px-4 py-2 z-10 space-x-4 sm:space-x-2 lg:space-x-6"
@@ -89,17 +82,34 @@
             <div class="flex-1 p-4 overflow-y-auto scrollbar-none">
                 <!-- Tabs -->
                 <div class="tabs flex space-x-4 border-b border-gray-600 mb-4">
-                    <div class="tab active font-semibold text-base md:text-lg pb-2 border-b-2 border-blue-500">LYRIC</div>
+                    <div class="tab active font-semibold text-base md:text-lg pb-2 border-b-2 border-blue-500" onclick="showTab('lyrics')">LYRIC</div>
+                    <div class="tab font-semibold text-base md:text-lg pb-2" onclick="showTab('playlist')">DANH SÁCH PHÁT</div>
                 </div>
                 <!-- Lyrics Text -->
                 <div class="lyrics font-monospace text-sm md:text-base lg:text-xl leading-relaxed overflow-y-auto">
                     <p id="footer-lyrics-text" class="lyrics-text whitespace-pre-line"></p>
                 </div>
+                <!-- Nội dung Danh sách phát -->
+                <div class="playlist tab-content hidden" id="playlist">
+                    <ul>
+                        <div class="flex items-center gap-4">
+                            <img
+                                alt="Album cover"
+                                class="w-12 h-12 sm:w-16 sm:h-16 rounded"
+                                src="https://storage.googleapis.com/a1aa/image/Q0I8OgnNQbb1Bx9rqoXzWonG4Nml4bOzLXtumcZ2wjfQuu9JA.jpg" />
+                            <div>
+                                <h3 class="font-bold text-sm sm:text-base lg:text-lg">
+                                    NƠI NÀY CÓ EM
+                                </h3>
+                                <p class="text-xs sm:text-sm">SON TUNG MTP • 4.9M</p>
+                            </div>
+                        </div>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
 
 <div id="adPopup" class="hidden fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center">
     <div class="!bg-white !p-6 !rounded-lg !w-4/5 !max-w-md !text-center">
@@ -169,5 +179,23 @@
         function renderLyrics() {
             lyricsContainer.innerHTML = lyrics.map(lyric => `<p>${lyric.text.replace(/\n/g, '<br>')}</p>`).join('');
         }
+        function showTab(tabName) {
+        // Ẩn tất cả các tab content
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.add('hidden');
+        });
+
+        // Loại bỏ trạng thái active khỏi tất cả các tab
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+
+        // Hiển thị nội dung tab được chọn
+        document.getElementById(tabName).classList.remove('hidden');
+
+        // Thêm class active cho tab hiện tại
+        const activeTab = document.querySelector(`[onclick="showTab('${tabName}')"]`);
+        activeTab.classList.add('active');
+    }
     </script>
 @endpush

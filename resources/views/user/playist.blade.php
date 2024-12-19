@@ -58,7 +58,7 @@ $remainingSlots = 4 - $filledSongs->count(); // Tính số ảnh trống cần t
 <div class="right-panel">
     <div class="song-list">
         <h3>
-            Sắp xếp
+        Arrange
         </h3>
         @if (count($songs) == 0)
         <p>

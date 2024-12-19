@@ -32,7 +32,9 @@
         <!-- Search Bar -->
         {{-- <div class="flex-grow mx-4 mt-5">
             <form class="relative max-w-lg mx-auto w-full sm:w-1/4 md:w-1/2 lg:max-w-lg">
-                <input type="text" placeholder="Tìm kiếm..."
+                <input
+                    type="text"
+                    placeholder="Search..."
                     class="w-full bg-black text-white py-2 px-4 rounded-full border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500" />
                 <button type="submit"
                     class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
@@ -61,7 +63,7 @@
             <!-- Popup Notification -->
             <div id="notificationPopup"
                 class="hidden absolute top-14 right-4 bg-gray-800 text-white p-4 rounded-lg shadow-lg w-[14rem] sm:w-60 md:w-96">
-                <p class="font-bold mb-2">Thông báo</p>
+                <p class="font-bold mb-2">Notifications</p>
                 <ul>
                     @foreach ($notifications as $notification)
                         <li class="notification-item {{ $notification->read_at ? '' : 'unread' }}"
@@ -73,10 +75,10 @@
                     @endforeach
                 </ul>
                 <button id="markAllAsRead" class="mt-3 text-sm text-gray-300 hover:text-gray-200">
-                    Đánh dấu tất cả là đã đọc
+                    Mark all as read
                 </button>
                 <button id="closePopup" class="mt-3 text-sm text-gray-300 hover:text-gray-200">
-                    Đóng
+                    Close
                 </button>
             </div>
 
@@ -114,10 +116,10 @@
 
         <!-- Uploaded Songs Section -->
         <section class="mt-10">
-            <h2 class="text-3xl font-bold">Các bài hát được tải lên</h2>
+            <h2 class="text-3xl font-bold">Uploaded Songs</h2>
             <ul class="mt-6 space-y-4">
                 @if ($songs->isEmpty())
-                    <li class="text-gray-500">Không có bài hát nào được tải lên.</li>
+                    <li class="text-gray-500">No uploaded songs found</li>
                 @else
                     @foreach ($songs as $song)
                         <li class="flex items-center space-x-6">
@@ -127,8 +129,8 @@
                             <p class="text-lg text-white">
                                 {{ $song->song_name }} - {{ $song->author->author_name }}
                             </p>
-                            <p class="text-gray-500 text-base">{{ $song->play_count }} lượt nghe - {{ $song->likes }}
-                                lượt thích</p>
+                            <p class="text-gray-500 text-base">{{ $song->play_count }} views - {{ $song->likes }}
+                                likes</p>
                         </div>
                     </li>
                 @endforeach
