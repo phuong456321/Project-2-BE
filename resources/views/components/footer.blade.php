@@ -85,10 +85,18 @@
                 <!-- Nội dung Danh sách phát -->
                 <div class="playlist tab-content hidden" id="playlist">
                     <ul>
-                        <li>Bài hát 1 - Ca sĩ A</li>
-                        <li>Bài hát 2 - Ca sĩ B</li>
-                        <li>Bài hát 3 - Ca sĩ C</li>
-                        <li>Bài hát 4 - Ca sĩ D</li>
+                        <div class="flex items-center gap-4">
+                            <img
+                                alt="Album cover"
+                                class="w-12 h-12 sm:w-16 sm:h-16 rounded"
+                                src="https://storage.googleapis.com/a1aa/image/Q0I8OgnNQbb1Bx9rqoXzWonG4Nml4bOzLXtumcZ2wjfQuu9JA.jpg" />
+                            <div>
+                                <h3 class="font-bold text-sm sm:text-base lg:text-lg">
+                                    NƠI NÀY CÓ EM
+                                </h3>
+                                <p class="text-xs sm:text-sm">SON TUNG MTP • 4.9M</p>
+                            </div>
+                        </div>
                     </ul>
                 </div>
             </div>
