@@ -24,7 +24,7 @@
             <form class="relative max-w-lg mx-auto w-full sm:w-1/4 md:w-1/2 lg:max-w-lg">
                 <input
                     type="text"
-                    placeholder="Tìm kiếm..."
+                    placeholder="Search..."
                     class="w-full bg-black text-white py-2 px-4 rounded-full border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500" />
                 <button
                     type="submit"
@@ -52,7 +52,7 @@
             <div
                 id="notificationPopup"
                 class="hidden absolute top-14 right-4 bg-gray-800 text-white p-4 rounded-lg shadow-lg w-[14rem] sm:w-60 md:w-72">
-                <p class="font-bold mb-2">Đã đọc tất cả thông báo</p>
+                <p class="font-bold mb-2">Read all notifications</p>
                 <ul>
                     @foreach($notifications as $notification)
                     <li>
@@ -64,7 +64,7 @@
                 <button
                     id="closePopup"
                     class="mt-3 text-sm text-gray-300 hover:text-gray-200">
-                    Đóng
+                    Close
                 </button>
             </div>
         </nav>
@@ -106,7 +106,7 @@
 
         <!-- Uploaded Songs Section -->
         <section class="mt-10">
-            <h2 class="text-3xl font-bold">Các bài hát được tải lên</h2>
+            <h2 class="text-3xl font-bold">Uploaded Songs</h2>
             <ul class="mt-6 space-y-4">
                 @foreach ($songs as $song)
                 <li class="flex items-center space-x-6">

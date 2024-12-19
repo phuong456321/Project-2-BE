@@ -15,25 +15,25 @@
                 NULLTIFLY MUSIC
             </a>
             <a class="text-gray-400 no-underline hover:text-white hover:transition duration-100" href="/library">
-                THƯ VIỆN
+                LIBRARY
             </a>
         </div>
         <!-- Filter Buttons -->
         <div class="flex space-x-2 mb-4">
             <button class="bg-gray-800 text-white px-4 py-2 rounded-full hover:text-blue-300 hover:transition duration-100">
-                Bài hát
+                Song
             </button>
             <button class="bg-gray-800 text-white px-4 py-2 rounded-full hover:text-blue-300 hover:transition duration-100">
-                Nghệ sĩ
+                Artist
             </button>
             <button class="bg-gray-800 text-white px-4 py-2 rounded-full hover:text-blue-300 hover:transition duration-100">
-                Hồ sơ
+                Profile
             </button>
         </div>
         <!-- Top Result -->
         <div class="mb-4">
             <h2 class="text-xl font-bold mb-2">
-                Kết quả hàng đầu
+            Top results
             </h2>
             @if (!$songs->isEmpty())
             @php $topSong = $songs->first(); @endphp
@@ -56,25 +56,25 @@
            
                 <div class="flex flex-row sm:flex-col space-x-2 sm:space-x-0 sm:space-y-2 ml-auto">
                     <button class="bg-white text-black px-4 py-2 rounded-full text-sm sm:text-base">
-                        Phát
+                        Play 
                     </button>
                     <button class="bg-gray-700 text-white px-4 py-2 rounded-full text-sm sm:text-base">
-                        Lưu
+                        Save 
                     </button>
                 </div>
             </div>
             @else
-            <p class="text-gray-400">Không có kết quả nào hàng đầu.</p>
+            <p class="text-gray-400">There are no top results.</p>
             @endif
         </div>
         <!-- Songs List -->
         <div>
             <h2 class="text-xl font-bold mb-2">
-                Bài hát
+                Song 
             </h2>
             <!-- Display a message if no songs are found -->
             @if ($songs->isEmpty())
-            <p class="text-gray-400">Không tìm thấy bài hát nào phù hợp với từ khóa của bạn.</p>
+            <p class="text-gray-400">No songs were found that matched your keywords.</p>
             @else
             <div class="space-y-4">
                 @foreach ($songs as $song)

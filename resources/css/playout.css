@@ -15,14 +15,14 @@
     }
 
     #search-form {
-        width: 67%; /* Chiếm toàn bộ chiều rộng */
-        max-width: 100%; /* Không giới hạn chiều rộng */
-        margin-bottom: 10px; /* Tạo khoảng cách với các phần tử bên dưới */
+        width: 87%;
+        max-width: 100%;
+        margin-bottom: 10px;
         padding-left: 0;
         padding-right: 0;
-        position: absolute;
-        right: 9rem;
-        top: -1rem;
+        position: relative;
+        right: 3.5rem;
+        top: -1.5rem;
     }
 
     #query {
@@ -33,9 +33,8 @@
     }
 
     #search-form button {
-      
-        right: 10px;
-        left: 18rem; /* Loại bỏ căn trái */
+        position: relative;
+        left: 2rem; 
         width: 36px;
         height: 36px;
         top: 1.2rem;
@@ -55,9 +54,11 @@
     }
 
     #avatar img {
-        width: 36px; /* Giảm kích thước ảnh đại diện */
+        width: 36px;
         height: 36px;
-        
+        position: relative;
+        bottom: 3rem;
+        left: 0rem;
     }
 
     .auth-links {

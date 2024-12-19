@@ -68,7 +68,7 @@
 <body class="m-0 font-sans bg-backround-color text-black overflow-x-hidden w-screen dark:bg-gradient-to-r from-gray-800 via-gray-900 to-black dark:text-white transition-colors duration-300">
 
     <!-- Nút mở sidebar trên điện thoại -->
-    <button id="toggleSidebar" class="lg:hidden text-black absolute top-[2.4rem] left-4 z-50 text-2xl dark:text-white">☰</button>
+    <button id="toggleSidebar" class="lg:hidden text-black absolute top-[2.5rem] left-[1.4rem] z-50 text-2xl dark:text-white">☰</button>
     <div id="overlayphone" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40"></div>
     {{-- SideBar --}}
     <div id="sidebar"
@@ -131,7 +131,7 @@
     <!-- Search -->
     <form action="{{ route('searchsong') }}" method="get"
         class="relative flex items-center w-full max-w-[20rem] md:max-w-[30rem] lg:max-w-[40rem] pl-8 pr-12" id="search-form">
-        <input name="query" placeholder="Bạn đang tìm kiếm gì?" type="text" id="query"
+        <input name="query" placeholder="What are you looking for?" type="text" id="query"
             class="bg-gray-500 text-gray-black rounded-full h-12 w-full text-sm md:text-base pl-12 pr-14 focus:outline-none placeholder:text-xs md:placeholder:text-sm dark:bg-gray-700 dark:text-white placeholder:text-white transition-colors duration-300" />
         <button type="submit"
             class="absolute right-4 top-[16px] left-[38rem] flex items-center justify-center w-8 h-8 md:w-10 md:h-10 bg-transparent cursor-pointer">

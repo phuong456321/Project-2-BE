@@ -265,3 +265,4 @@ function playRecommendedSong(recommendedSong) {
 let selectedPlaylists = []; // Lưu các playlist_id đã chọn
 let deleteSongFromPlaylist = [];
 let historySongs = [];
+

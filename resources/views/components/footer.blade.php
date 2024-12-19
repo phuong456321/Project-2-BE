@@ -1,14 +1,21 @@
 @push('css')
-    <style>
-        .footer img {
-            position: absolute;
-            margin-left: 2rem;
-        }
+<style>
+    .footer img {
+        position: absolute;
+        margin-left: 2rem;
+    }
 
-        .footer .current-song {
-            margin-right: 0;
-        }
-    </style>
+    .footer .current-song {
+        margin-right: 0;
+    }
+
+    .tab.active {
+        background-color: #1f2937;
+        /* Màu nền cho tab active */
+        color: white;
+        /* Màu chữ cho tab active */
+    }
+</style>
 @endpush
 <div id="footer"
     class="hidden fixed bottom-0 left-0 w-full bg-gray-900 text-white shadow-md flex items-center px-4 py-2 z-50 space-x-4"
@@ -33,7 +40,7 @@
     <!-- Progress -->
     <div class="flex items-center space-x-2 w-[30rem] max-w-full">
         <input id="progressBar" type="range" max="100" min="0" value="0"
-            class="w-full h-1 bg-gray-700 rounded-lg accent-blue-500" onclick="seekToTime()"/>
+            class="w-full h-1 bg-gray-700 rounded-lg accent-blue-500" onclick="seekToTime()" />
         <span id="currentTime" class="text-xs">0:00</span>
         <span>/</span>
         <span id="totalTime" class="text-xs">0:00</span>
@@ -69,15 +76,26 @@
             </div>
             <div class="right">
                 <div class="tabs">
-                    <div class="tab active">LYRIC</div>
+                    <div class="tab active" onclick="showTab('lyrics')">LYRIC</div>
+                    <div class="tab" onclick="showTab('playlist')">DANH SÁCH PHÁT</div>
                 </div>
-                <div class="lyrics">
+                <div class="lyrics tab-content" id="lyrics">
                     <p id="footer-lyrics-text" style="white-space: pre-line;"></p>
+                </div>
+                <!-- Nội dung Danh sách phát -->
+                <div class="playlist tab-content hidden" id="playlist">
+                    <ul>
+                        <li>Bài hát 1 - Ca sĩ A</li>
+                        <li>Bài hát 2 - Ca sĩ B</li>
+                        <li>Bài hát 3 - Ca sĩ C</li>
+                        <li>Bài hát 4 - Ca sĩ D</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <div id="adPopup" class="hidden fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center">
     <div class="!bg-white !p-6 !rounded-lg !w-4/5 !max-w-md !text-center">
         <!-- Quảng cáo AdSense -->
@@ -100,3 +118,24 @@
         </button>
     </div>
 </div>
+
+<script>
+    function showTab(tabName) {
+        // Ẩn tất cả các tab content
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.add('hidden');
+        });
+
+        // Loại bỏ trạng thái active khỏi tất cả các tab
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+
+        // Hiển thị nội dung tab được chọn
+        document.getElementById(tabName).classList.remove('hidden');
+
+        // Thêm class active cho tab hiện tại
+        const activeTab = document.querySelector(`[onclick="showTab('${tabName}')"]`);
+        activeTab.classList.add('active');
+    }
+</script>
