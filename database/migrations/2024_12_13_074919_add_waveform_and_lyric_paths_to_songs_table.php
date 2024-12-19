@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('songs', function (Blueprint $table) {
-            $table->string('lyric_path')->nullable()->after('waveform_path');
+            $table->string('lyric_path')->nullable();
         });
     }
 
