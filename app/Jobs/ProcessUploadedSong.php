@@ -81,7 +81,7 @@ class ProcessUploadedSong implements ShouldQueue
         $song->genre_id = $this->data['genre'];
         $song->audio_path = $this->audioPath;  // Store the path to audio file
         $song->img_id = $img->id;
-        $song->waveform_path = null;
+        // $song->waveform_path = null;
         $song->lyric_path = null;
         $song->status = $status;
         $song->lyric = $this->data['lyric'];

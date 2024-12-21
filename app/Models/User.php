@@ -74,9 +74,9 @@ class User extends Authenticatable implements MustVerifyEmailContract
 
     // Mối quan hệ giữa User và Author
     public function author()
-{
-    return $this->hasOne(Author::class, 'id', 'author_id');
-}
+    {
+        return $this->hasOne(Author::class, 'id', 'author_id');
+    }
     public function products()
     {
         return $this->belongsToMany(Product::class, 'user_product')
@@ -117,6 +117,21 @@ class User extends Authenticatable implements MustVerifyEmailContract
                 'user_id' => $user->id,
                 'name' => 'Liked music',
             ]);
+        });
+
+        //Tạo author mới khi user mới được tạo (nếu user có role là 'user')
+        static::created(function ($user) {
+            if ($user->role === 'user') {
+                $author = \App\Models\Author::create([
+                    'author_name' => $user->name,        // Lấy tên User làm tên Author
+                    'img_id' => $user->avatar_id,       // Lấy avatar của User
+                    'area_id' => 1,                     // Giá trị mặc định cho area_id
+                    'bio' => 'New author',              // Giá trị mặc định cho bio
+                ]);
+
+                $user->author_id = $author->id;
+                $user->save();
+            }
         });
     }
 }

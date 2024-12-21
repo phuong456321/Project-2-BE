@@ -39,7 +39,7 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $author_name
- * @property string|null $bio
+ * @property string $bio
  * @property int $img_id
  * @property int $area_id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -374,10 +374,7 @@ namespace App\Models{
  * @property int $author_id
  * @property int $area_id
  * @property int $genre_id
- * @property string|null $description
  * @property string $audio_path
- * @property string|null $waveform_path
- * @property string|null $lyric_path
  * @property string|null $duration
  * @property int $img_id
  * @property string $status
@@ -385,7 +382,8 @@ namespace App\Models{
  * @property int $play_count
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string|null $lyric
+ * @property string $lyric
+ * @property string|null $lyric_path
  * @property-read \App\Models\Area $area
  * @property-read \App\Models\Author $author
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Comment> $comments
@@ -401,7 +399,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Song whereAudioPath($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Song whereAuthorId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Song whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Song whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Song whereDuration($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Song whereGenreId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Song whereId($value)
@@ -413,7 +410,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Song whereSongName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Song whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Song whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Song whereWaveformPath($value)
  */
 	class Song extends \Eloquent {}
 }
