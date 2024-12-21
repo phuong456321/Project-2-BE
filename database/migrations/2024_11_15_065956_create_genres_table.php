@@ -13,9 +13,7 @@ return new class extends Migration
     {
         Schema::create('genres', function (Blueprint $table) {
             $table->id();
-            $table->string("name");
-            $table->unsignedBigInteger('parents_id')->nullable();
-            $table->foreign('parents_id')->references('id')->on('genres');
+            $table->string("name")->unique();
         });
     }
 

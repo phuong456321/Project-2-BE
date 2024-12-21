@@ -11,7 +11,21 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->web([\App\Http\Middleware\Authenticate::class]);
+        $middleware->alias([
+            'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
+            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+        ]);
+        $middleware->validateCsrfTokens(except: [ //Tạm thời bỏ qua CSRF token
+            '/create-playlist',
+            'upload-song',
+            'add-song-to-playlist',
+            'delete-song-in-playlist',
+            'delete-playlist',
+            '/upload/fingerprint',
+            'like-song',
+        ]);
+
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

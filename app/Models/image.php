@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-class image extends Model
+class Image extends Model
 {
     use HasFactory;
 
@@ -26,6 +26,11 @@ class image extends Model
 
     public function songs()
     {
-        return $this->hasMany(song::class, 'img_id');
+        return $this->hasMany(Song::class, 'img_id');
+    }
+
+    public function googleAccounts()
+    {
+        return $this->hasMany(GoogleAccount::class, 'avatar_id');
     }
 }

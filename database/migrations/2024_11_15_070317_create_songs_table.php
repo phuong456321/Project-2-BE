@@ -17,14 +17,14 @@ return new class extends Migration
             $table->unsignedBigInteger('author_id');
             $table->unsignedBigInteger('area_id');
             $table->unsignedBigInteger('genre_id');
-            $table->string('description');
             $table->string('audio_path');
+            $table->string('duration')->nullable();
             $table->unsignedBigInteger('img_id');
             $table->enum('status', ['published', 'deleted', 'inactive', 'pending']);
             $table->integer('likes')->default(0);
             $table->integer('play_count')->default(0);
             $table->timestamps();
-            $table->string('lyric');
+            $table->text('lyric');
             $table->foreign('author_id')->references('id')->on('authors');
             $table->foreign('area_id')->references('id')->on('areas');
             $table->foreign('genre_id')->references('id')->on('genres');

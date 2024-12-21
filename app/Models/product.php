@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-class product extends Model
+class Product extends Model
 {
     use HasFactory;
 
@@ -17,6 +17,12 @@ class product extends Model
 
     public function payments()
     {
-        return $this->hasMany(payment::class);
+        return $this->hasMany(Payment::class);
+    }
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_product')
+            ->withPivot('purchased_at', 'expired_at')
+            ->withTimestamps();
     }
 }

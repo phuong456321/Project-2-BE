@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('cycles');
-            $table->integer('price');
-            $table->string('description');
+            $table->enum('cycles', ['monthly', 'six_months', 'yearly', 'free']);
+            $table->float('price', 2);
+            $table->text('description')->nullable();
+            $table->timestamps();
         });
     }
 

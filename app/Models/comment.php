@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-class comment extends Model
+class Comment extends Model
 {
     use HasFactory;
 
@@ -16,7 +16,7 @@ class comment extends Model
 
     public function song()
     {
-        return $this->belongsTo(song::class);
+        return $this->belongsTo(Song::class);
     }
 
     public function user()

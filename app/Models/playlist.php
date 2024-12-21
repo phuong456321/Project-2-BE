@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-class playlist extends Model
+class Playlist extends Model
 {
     use HasFactory;
 
@@ -20,6 +20,12 @@ class playlist extends Model
 
     public function inPlaylists()
     {
-        return $this->hasMany(in_playlist::class);
+        return $this->hasMany(InPlaylist::class);
     }
+    public function songs()
+{
+    return $this->belongsToMany(Song::class, 'in_playlists', 'playlist_id', 'song_id')
+                ->withPivot('created_at');
+}
+
 }

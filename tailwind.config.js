@@ -18,3 +18,21 @@ export default {
     },
     plugins: [],
 };
+module.exports = {
+    darkMode: 'class', 
+    content: [
+      './resources/**/*.blade.php',
+      './resources/**/*.js',
+      './resources/**/*.vue',
+    ],
+    theme: {
+      extend: {
+        colors: {
+            'backround-color': 'rgb(184 198 210)',
+           'black-white-gradient': 'linear-gradient(to right, #ffffff 70%, #000000 30%)',
+          },
+      },
+    },
+    plugins: [require('tailwind-scrollbar')],
+  };
+  

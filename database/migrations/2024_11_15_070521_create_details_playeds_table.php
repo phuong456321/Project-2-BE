@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('recently_id');
             $table->unsignedBigInteger('song_id');
             $table->timestamps();
-            $table->foreign('recently_id')->references('id')->on('recently_playeds');
-            $table->foreign('song_id')->references('id')->on('songs');
+            $table->foreign('recently_id')->references('id')->on('recently_playeds')->onDelete('cascade');
+            $table->foreign('song_id')->references('id')->on('songs')->onDelete('cascade');
         });
     }
 

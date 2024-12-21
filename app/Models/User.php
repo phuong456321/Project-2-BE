@@ -27,42 +27,62 @@ class User extends Authenticatable implements MustVerifyEmailContract
         'plan',
         'status',
         'google_id',
-        'avatar_id'
+        'avatar_id',
+        'email_verification_token',
+        'email_verification_sent_at',
     ];
+
+    protected $casts = [
+        'email_verification_sent_at' => 'datetime',
+    ];
+
 
     public function avatar()
     {
-        return $this->belongsTo(image::class, 'avatar_id');
+        return $this->belongsTo(Image::class, 'avatar_id', 'img_id');
+    }    
+
+
+    public function googleAccount()
+    {
+        return $this->hasOne(GoogleAccount::class, 'google_id');
     }
 
     public function playlists()
     {
-        return $this->hasMany(playlist::class);
+        return $this->hasMany(Playlist::class);
     }
 
     public function recentlyPlayed()
     {
-        return $this->hasMany(recently_played::class);
+        return $this->hasMany(RecentlyPlayed::class);
     }
 
     public function searchHistories()
     {
-        return $this->hasMany(search_history::class);
+        return $this->hasMany(SearchHistory::class);
     }
 
     public function comments()
     {
-        return $this->hasMany(comment::class);
+        return $this->hasMany(Comment::class);
     }
 
     public function payments()
     {
-        return $this->hasMany(payment::class);
+        return $this->hasMany(Payment::class);
     }
 
+    // Mối quan hệ giữa User và Author
     public function author()
+{
+    return $this->hasOne(Author::class, 'id', 'author_id');
+}
+    public function products()
     {
-        return $this->hasOne(author::class);
+        return $this->belongsToMany(Product::class, 'user_product')
+            ->withPivot('purchased_at', 'expired_at') // Thêm thông tin từ bảng pivot nếu cần
+            ->withTimestamps(); // Nếu muốn lấy thông tin thời gian
     }
 
     /**
@@ -86,5 +106,18 @@ class User extends Authenticatable implements MustVerifyEmailContract
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+
+    // *Trigger here*
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            // Tạo một playlist mặc định khi user mới được tạo
+            \App\Models\Playlist::create([
+                'user_id' => $user->id,
+                'name' => 'Liked music',
+            ]);
+        });
     }
 }

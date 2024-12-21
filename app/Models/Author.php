@@ -18,21 +18,21 @@ class Author extends Model
 
     public function image()
     {
-        return $this->belongsTo(image::class, 'img_id');
+        return $this->belongsTo(Image::class, 'img_id', 'img_id');
     }
 
     public function area()
     {
-        return $this->belongsTo(area::class, 'area_id');
+        return $this->belongsTo(Area::class, 'area_id');
     }
-
     public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+{
+    return $this->belongsTo(User::class, 'author_id', 'id');
+}
 
+    // Mối quan hệ giữa Author và Song
     public function songs()
-    {
-        return $this->hasMany(song::class);
-    }
+{
+    return $this->hasMany(Song::class, 'author_id', 'id');
+}
 }

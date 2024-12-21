@@ -3,24 +3,14 @@
 namespace App\Providers;
 
 // use Illuminate\Support\ServiceProvider;
+
+use App\Console\Commands\UpdateUserPlans;
 use Illuminate\Support\Facades\Route;
-// use Illuminate\Routing\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
-use Illuminate\Http\Request;
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Artisan;
 
 class AppServiceProvider extends ServiceProvider
 {
-
-    // public const HOME = '/home';
-    
-    // protected function configureRateLimiting(){
-    //     RateLimiter::for('api', function(Request $request){
-    //         return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
-    //     });
-    // }
-
     /**
      * Bootstrap any application services.
      */
@@ -30,5 +20,9 @@ class AppServiceProvider extends ServiceProvider
         $this->routes(function(){
             Route::middleware('web')->group(base_path('routes/web.php'));
         });
+
+        Artisan::command('user:update-plans', function () {
+            $this->call(UpdateUserPlans::class);
+        })->daily(); // Chạy hàng ngày
     }
 }
