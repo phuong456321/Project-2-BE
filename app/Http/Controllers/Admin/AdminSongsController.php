@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ProcessLyrics;
 use App\Jobs\ProcessUploadedSong;
 use App\Jobs\UploadAndGenerateFingerprint;
 use App\Models\Area;
@@ -134,5 +135,23 @@ class AdminSongsController extends Controller
             Storage::disk('public')->put('copyrighted_song_names.json', json_encode($ArraySongNames));
         }
         return;
+    }
+    public function asyncLyrics(Request $request)
+    {
+        $request->validate([
+            'lyrics' => 'required|string',
+            'song_id' => 'required|integer',
+        ]);
+
+        // Lấy lời bài hát từ form
+        $lyrics = $request->input('lyrics');
+
+        // Lấy ID bài hát
+        $songId = $request->input('song_id');
+
+        // Gọi job xử lý lyrics
+        dispatch(new ProcessLyrics($lyrics, $songId));
+
+        return redirect()->route('admin.songs')->with('success', 'Lyrics processed successfully.');
     }
 }

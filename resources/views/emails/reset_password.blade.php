@@ -1,7 +1,7 @@
-<p>Chào bạn,</p>
-<p>Chúng tôi nhận được yêu cầu đặt lại mật khẩu của bạn. Nhấp vào liên kết bên dưới để đặt lại mật khẩu:</p>
+<p>Hello,</p>
+<p>We have received a request to reset your password. Click the link below to reset your password:</p>
 
-<a href="{{ route('password.reset.form', ['token' => $token, 'email' => $email]) }}">Đặt lại mật khẩu</a>
+<a href="{{ route('password.reset.form', ['token' => $token, 'email' => $email]) }}">Reset Password</a>
 
-<p>Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.</p>
-<p>Trân trọng,<br>Đội ngũ hỗ trợ</p>
+<p>If you did not request a password reset, please ignore this email.</p>
+<p>Best regards,<br>Support Team</p>

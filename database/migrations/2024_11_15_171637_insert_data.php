@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $imageData = file_get_contents(public_path('images/default-avatar.jpg'));
+        $imageData = file_get_contents(public_path('images/default-avatar.webp'));
         $imageName = Str::uuid() . '.webp';
         $image = Storage::disk('public')->put('images/' . $imageName, $imageData);
         DB::table('images')->insert([
@@ -23,96 +23,109 @@ return new class extends Migration
 
         DB::table('genres')->insert([
             [
-                'name' => 'Nhạc Pop',
+                'name' => 'Pop Music',
             ],
             [
-                'name' => 'Nhạc Rock',
+                'name' => 'Rock Music',
             ],
             [
-                'name' => 'Nhạc Rap/Hip-hop',
+                'name' => 'Rap/Hip-hop Music',
             ],
             [
-                'name' => 'Nhạc Trữ tình',
+                'name' => 'Romantic Music',
             ],
             [
-                'name' => 'Nhạc Cách mạng',
+                'name' => 'Revolutionary Music',
             ],
             [
-                'name' => 'Nhạc Dân ca',
+                'name' => 'Folk Music',
             ],
             [
-                'name' => 'Nhạc R&B',
+                'name' => 'R&B Music',
             ],
             [
-                'name' => 'Nhạc Đỏ',
+                'name' => 'Red Music', // Nhạc Đỏ
             ],
             [
-                'name' => 'Nhạc Bolero',
+                'name' => 'Bolero Music',
             ],
             [
-                'name' => 'Nhạc Thiếu nhi',
+                'name' => 'Children’s Music',
             ],
             [
-                'name' => 'Nhạc Dance/Electronic',
+                'name' => 'Dance/Electronic Music',
             ],
             [
-                'name' => 'Nhạc Acoustic',
+                'name' => 'Acoustic Music',
             ],
             [
-                'name' => 'Nhạc Indie Việt',
+                'name' => 'Indie Music (Vietnam)',
             ],
             [
-                'name' => 'Nhạc Cổ điển',
+                'name' => 'Classical Music',
             ],
             [
-                'name' => 'Nhạc Phật giáo',
+                'name' => 'Buddhist Music',
             ],
             [
-                'name' => 'Nhạc Phim',
+                'name' => 'Film Music',
             ],
             [
-                'name' => 'Nhạc Xuân',
+                'name' => 'Spring Music',
             ],
             [
-                'name' => 'Nhạc Thính phòng',
+                'name' => 'Chamber Music',
             ],
             [
-                'name' => 'Nhạc EDM Việt',
+                'name' => 'Vietnamese EDM',
             ],
             [
-                'name' => 'Nhạc Chill/Lo-fi',
+                'name' => 'Chill/Lo-fi Music',
             ],
             [
-                'name' => 'Nhạc Lofi Việt',
+                'name' => 'Vietnamese Lo-fi',
             ],
             [
-                'name' => 'Nhạc Thiền',
+                'name' => 'Meditation Music',
             ],
             [
-                'name' => 'Nhạc Hài kịch',
+                'name' => 'Comedy Music',
             ],
             [
-                'name' => 'Nhạc Trẻ',
+                'name' => 'Teen Music',
             ],
             [
-                'name' => 'Nhạc Hoà tấu',
+                'name' => 'Orchestral Music',
             ],
             [
-                'name' => 'Nhạc Remix',
+                'name' => 'Remix Music',
             ],
             [
-                'name' => 'Nhạc Quê hương',
+                'name' => 'Homeland Music',
             ],
             [
-                'name' => 'Nhạc Kịch',
+                'name' => 'Musical Theatre',
             ],
         ]);
+        
         
         DB::table('users')->insert([
             [
                 'name' => 'admin',
+                'email' => 'nulltifly@gmail.com',
+                'password' => Hash::make('@Phuong456321'),
+                'plan' => 'premium',
+                'email_verified_at' => now(),
+                'avatar_id' => 1,
+                'role' => 'admin',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'admin',
                 'email' => 'admin@nulltifly.com',
-                'password' => Hash::make('abcd1234'),
+                'password' => Hash::make('nulladmin1111'),
+                'plan' => 'premium',
                 'email_verified_at' => now(),
                 'avatar_id' => 1,
                 'role' => 'admin',
@@ -133,7 +146,7 @@ return new class extends Migration
                 'name' => 'Premium Monthly',
                 'cycles' => 'monthly',
                 'price' => 9.99,  // Giá cho gói 1 tháng
-                'description' => 'Gói dịch vụ Premium, thanh toán hàng tháng.',
+                'description' => 'Promotional monthly plan. \n\nNo ads.',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -141,7 +154,7 @@ return new class extends Migration
                 'name' => 'Premium 6 Months',
                 'cycles' => 'six_months',
                 'price' => 49.99,  // Giá cho gói 6 tháng
-                'description' => 'Gói dịch vụ Premium, thanh toán mỗi 6 tháng.',
+                'description' => 'Promotional 6-month plan. \n\nNo ads.',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -149,7 +162,7 @@ return new class extends Migration
                 'name' => 'Premium Yearly',
                 'cycles' => 'yearly',
                 'price' => 89.99,  // Giá cho gói 1 năm
-                'description' => 'Gói dịch vụ Premium, thanh toán hàng năm với mức giá ưu đãi.',
+                'description' => 'Promotional yearly plan. \n\nNo ads.',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

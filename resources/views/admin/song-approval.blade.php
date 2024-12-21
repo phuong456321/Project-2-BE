@@ -61,7 +61,7 @@
                         </tr>
                         @if ($song->related_songs->count() > 0)
                             <tr>
-                                <td colspan="6" class="text-center py-4 bg-gray-600">Bài hát trùng lặp</td>
+                                <td colspan="6" class="text-center py-4 bg-gray-600">Related Songs</td>
                             </tr>
                             @foreach ($song->related_songs as $related_song)
                                 <tr class="bg-gray-600">
@@ -86,7 +86,7 @@
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="6" class="text-center py-4 bg-gray-600">Không tìm thấy bài hát trùng lặp</td>
+                                <td colspan="6" class="text-center py-4 bg-gray-600">No related songs</td>
                             </tr>
                         @endif
                     @empty

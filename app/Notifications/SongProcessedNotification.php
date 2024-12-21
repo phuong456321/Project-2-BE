@@ -40,11 +40,11 @@ class SongProcessedNotification extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Thông báo xử lý bài hát')
-            ->line("Bài hát '{$this->songName}' đã được xử lý.")
+            ->subject('Song Processing Notification')
+            ->line("The song '{$this->songName}' has been processed.")
             ->line($this->message)
-            ->action('Xem chi tiết', url('/songs/' . $this->songName))
-            ->line('Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!');
+            ->action('View Details', url('/songs/' . $this->songName))
+            ->line('Thank you for using our service!');
     }
 
     /**

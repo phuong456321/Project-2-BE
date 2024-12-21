@@ -7,22 +7,16 @@
 /* Media Query cho iPhone (màn hình nhỏ hơn 768px) */
 @media (max-width: 768px) {
     .header {
-        flex-direction: column; /* Sắp xếp các phần tử theo chiều dọc */
         align-items: center;
-        padding: 10px 20px;
-        right: 0; /* Căn chỉnh lại phần tử */
-        top: 1rem;
+        padding: 10px 5px;
+        padding-top: 1rem;
     }
 
     #search-form {
-        width: 87%;
+        width: 65%;
         max-width: 100%;
-        margin-bottom: 10px;
         padding-left: 0;
         padding-right: 0;
-        position: relative;
-        right: 3.5rem;
-        top: -1.5rem;
     }
 
     #query {
@@ -32,23 +26,6 @@
         padding-right: 50px;
     }
 
-    #search-form button {
-        position: relative;
-        left: 2rem; 
-        width: 36px;
-        height: 36px;
-        top: 1.2rem;
-      
-    }
-
-    #avatar {
-        margin-top: 10px; /* Tạo khoảng cách bên trên */
-        right: 0; /* Đặt lại vị trí avatar */
-        top: -1rem;
-        display: inline-block;
-        text-align: center;
-        left: 10.2rem;
-    }
     .nameavatar{
         display: none;
     }
@@ -57,16 +34,6 @@
         width: 36px;
         height: 36px;
         position: relative;
-        bottom: 3rem;
-        left: 0rem;
-    }
-
-    .auth-links {
-        position: relative;
-        top: -0.6rem;
-        left: 10.5rem;
-        margin-top: 10px; /* Tạo khoảng cách trên */
-        text-align: center; /* Canh giữa text */
     }
 
     .auth-links a {
@@ -202,12 +169,6 @@ aside.now-playing {
 .header .user {
     display: flex;
     align-items: center;
-}
-
-.header .user img {
-    border-radius: 50%;
-    margin-left: 10px;
-    cursor: pointer;
 }
 
 .prevalent {
@@ -612,8 +573,6 @@ input[type="password"] {
     transform: translateY(-20px);
     animation: popupAnimation 0.1s ease-out forwards;
     position: absolute;
-    top: 3rem; 
-    right: 5rem; 
     padding: 10px 0; /* Thêm padding cho phần tử bên trong */
 }
 
@@ -693,7 +652,6 @@ input[type="password"] {
 @media screen and (max-width: 480px) {
     .avatar-popup {
         width: 95px; 
-        right: 2rem; 
     }
 
     .avatar-popup ul li {
@@ -847,13 +805,6 @@ input[type="password"] {
     }
   }
 
-
-  /* Lyric */
-
-  .lyrics-container {
-    display: flex;
-    height: 100vh;
-  }
   .left {
     flex: 1;
     display: flex;

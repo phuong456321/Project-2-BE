@@ -161,13 +161,13 @@
             <table class="w-full table-auto">
                 <thead class="bg-gray-700">
                     <tr>
-                        <th class="px-4 py-2 text-left">Image</th>
-                        <th class="px-4 py-2 text-left">Title</th>
-                        <th class="px-4 py-2 text-left">Author</th>
-                        <th class="px-4 py-2 text-left">Area</th>
-                        <th class="px-4 py-2 text-left">Genre</th>
-                        <th class="px-4 py-2 text-left">Status</th>
-                        <th class="px-4 py-2 text-left">Actions</th>
+                        <th class="px-4 py-2">Image</th>
+                        <th class="px-4 py-2">Title</th>
+                        <th class="px-4 py-2">Author</th>
+                        <th class="px-4 py-2">Area</th>
+                        <th class="px-4 py-2">Genre</th>
+                        <th class="px-4 py-2">Status</th>
+                        <th class="px-4 py-2">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -184,28 +184,31 @@
                                 </td>
                                 <td class="px-4 py-2">{{ $song->song_name }}</td>
                                 <td class="px-4 py-2">{{ $song->author ? $song->author->author_name : 'Unknown' }}</td>
-                                <td class="px-4 py-2">{{ $song->area ? $song->area->name : 'Unknown' }}</td>
-                                <td class="px-4 py-2">{{ $song->genre ? $song->genre->name : 'Unknown' }}</td>
-                                <td class="px-4 py-2">
+                                <td class="px-4 py-2 text-center">{{ $song->area ? $song->area->name : 'Unknown' }}</td>
+                                <td class="px-4 py-2 text-center">{{ $song->genre ? $song->genre->name : 'Unknown' }}</td>
+                                <td class="px-4 py-2 text-center">
                                     <form action="{{ route('admin.updateStatus', $song->id) }}" method="POST">
                                         @csrf
                                         @method('PATCH')
-                                        <select name="status" onchange="this.form.submit()" 
+                                        <select name="status" onchange="this.form.submit()"
                                             class="rounded px-2 py-1 
-                                                @if ($song->status == 'published') bg-green-600 text-white 
-                                                @elseif ($song->status == 'deleted') bg-red-600 text-white 
-                                                @elseif ($song->status == 'inactive') bg-yellow-600 text-black 
-                                                @elseif ($song->status == 'pending') bg-gray-600 text-white 
-                                                @else bg-gray-800 text-white 
-                                                @endif">
-                                            <option value="published" {{ $song->status == 'published' ? 'selected' : '' }}>Published</option>
-                                            <option value="deleted" {{ $song->status == 'deleted' ? 'selected' : '' }}>Deleted</option>
-                                            <option value="inactive" {{ $song->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
-                                            <option value="pending" {{ $song->status == 'pending' ? 'selected' : '' }}>Pending</option>
+                                        @if ($song->status == 'published') bg-green-600 text-white 
+                                        @elseif ($song->status == 'deleted') bg-red-600 text-white 
+                                        @elseif ($song->status == 'inactive') bg-yellow-600 text-black 
+                                        @elseif ($song->status == 'pending') bg-gray-600 text-white 
+                                        @else bg-gray-800 text-white @endif">
+                                            <option value="published"
+                                                {{ $song->status == 'published' ? 'selected' : '' }}>Published</option>
+                                            <option value="deleted" {{ $song->status == 'deleted' ? 'selected' : '' }}>
+                                                Deleted</option>
+                                            <option value="inactive" {{ $song->status == 'inactive' ? 'selected' : '' }}>
+                                                Inactive</option>
+                                            <option value="pending" {{ $song->status == 'pending' ? 'selected' : '' }}>
+                                                Pending</option>
                                         </select>
                                     </form>
                                 </td>
-                                <td class="px-4 py-2">
+                                <td class="px-4 py-2 text-center">
                                     <!-- Edit Button -->
                                     <div x-data="{ open: false }" class="relative inline-block">
                                         <button @click="open = true"
@@ -235,11 +238,11 @@
                                                     <!-- Song Name -->
                                                     <div class="mb-4">
                                                         <label for="song_name"
-                                                            class="block text-white font-bold mb-2">Song
-                                                            Name</label>
+                                                            class="block text-white font-bold mb-2">Song Name</label>
                                                         <input type="text" id="song_name" name="song_name"
                                                             value="{{ $song->song_name }}"
-                                                            class="w-full px-3 py-2 bg-gray-700 text-white rounded" required>
+                                                            class="w-full px-3 py-2 bg-gray-700 text-white rounded"
+                                                            required>
                                                     </div>
 
                                                     <!-- Author -->
@@ -285,6 +288,60 @@
                                                                 </option>
                                                             @endforeach
                                                         </select>
+                                                    </div>
+
+                                                    <!-- Lyric -->
+                                                    <div class="mb-4">
+                                                        <label for="lyric"
+                                                            class="block text-white font-bold mb-2">Lyric</label>
+                                                        <textarea id="lyric" name="lyric" class="w-full px-3 py-2 bg-gray-700 text-white rounded">{{ $song->lyric }}</textarea>
+                                                    </div>
+
+                                                    <!-- Buttons -->
+                                                    <div class="flex justify-end">
+                                                        <button type="button" @click="open = false"
+                                                            class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 mr-2">
+                                                            Cancel
+                                                        </button>
+                                                        <button type="submit"
+                                                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                                                            Save Changes
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div x-data="{ open: false }" class="relative inline-block">
+                                        <button @click="open = true"
+                                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                                            Async Lyric
+                                        </button>
+
+                                        <!-- Popup -->
+                                        <div x-show="open"
+                                            class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                                            <div class="bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg">
+                                                <!-- Header -->
+                                                <div class="flex justify-between items-center mb-4">
+                                                    <h2 class="text-xl font-bold text-white">Async Lyric Song</h2>
+                                                    <button @click="open = false"
+                                                        class="text-gray-400 hover:text-gray-200">
+                                                        ✖
+                                                    </button>
+                                                </div>
+
+                                                <!-- Form -->
+                                                <form action="{{ route('admin.asyncLyrics') }}" method="POST">
+                                                    @csrf
+                                                    <input type="text" name="song_id" value="{{ $song->id }}" hidden>
+
+                                                    <!-- Lyric -->
+                                                    <div class="mb-4">
+                                                        <label for="lyric"
+                                                            class="block text-white font-bold mb-2">Lyric</label>
+                                                        <textarea id="lyric" name="lyrics" class="w-full px-3 py-2 bg-gray-700 text-white rounded"></textarea>
                                                     </div>
 
                                                     <!-- Buttons -->
