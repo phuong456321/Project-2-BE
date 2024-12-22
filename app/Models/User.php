@@ -39,8 +39,9 @@ class User extends Authenticatable implements MustVerifyEmailContract
 
     public function avatar()
     {
-        return $this->belongsTo(Image::class, 'avatar_id');
-    }
+        return $this->belongsTo(Image::class, 'avatar_id', 'img_id');
+    }    
+
 
     public function googleAccount()
     {

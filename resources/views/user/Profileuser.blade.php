@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <link rel="icon" href="{{ asset('images/logo-home.webp') }}" type="image/webp">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Profile</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -16,6 +17,22 @@
             /* Viền màu nổi bật */
             padding-left: 8px;
         }
+          /* Đảm bảo rằng body sẽ chiếm hết chiều cao của cửa sổ */
+          html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        /* Sử dụng flexbox để căn chỉnh layout */
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Đảm bảo rằng phần nội dung chính (main) sẽ chiếm hết không gian còn lại */
+        main {
+            flex-grow: 1;
+        }
     </style>
 </head>
 
@@ -25,23 +42,9 @@
         <!-- Logo -->
         <div class="flex items-center space-x-4">
             <a href="{{ route('home') }}">
-                <img src="http://localhost:8000/images/profile/logo-home.png" alt="Logo" class="h-12 w-15" />
+                <img src="{{ asset('images/logo-home.webp') }}" alt="Logo" class="h-12 w-15" />
             </a>
         </div>
-
-        <!-- Search Bar -->
-        {{-- <div class="flex-grow mx-4 mt-5">
-            <form class="relative max-w-lg mx-auto w-full sm:w-1/4 md:w-1/2 lg:max-w-lg">
-                <input
-                    type="text"
-                    placeholder="Search..."
-                    class="w-full bg-black text-white py-2 px-4 rounded-full border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500" />
-                <button type="submit"
-                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
-                    <i class="fa-solid fa-search"></i>
-                </button>
-            </form>
-        </div> --}}
 
         <!-- Navigation Links -->
         <nav class="flex items-center space-x-1 sm:space-x-4">
@@ -94,7 +97,7 @@
             <div>
                 <h2 class="text-4xl font-bold mt-10">{{ $user->name }}</h2>
                 <p class="text-gray-400">{{ $user->email }}</p>
-                {{-- <p class="mt-2 text-gray-300">{{ $user->author ? $user->author->author_name : 'Không có tên tác giả' }}</p> --}}
+                <p class="mt-2 text-gray-300">{{ $user->author ? $user->author->bio : ''}}</p>
             </div>
         </section>
 
@@ -104,7 +107,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
                 @foreach ($playlists as $playlist)
                     <div class="flex items-center space-x-4">
-                        <img src="{{ $playlist->name == 'Liked music' ? 'https://i1.sndcdn.com/artworks-4Lu85Xrs7UjJ4wVq-vuI2zg-t500x500.jpg' : 'http://localhost:8000/images/profile/logo-home.png' }}"
+                        <img src="{{ $playlist->name == 'Liked music' ?  asset('images/like-playlist.webp') : asset('images/logo-home.webp') }}"
                             alt="Track 1 image placeholder" class="h-16 w-16 object-cover" />
                         <div>
                             <p class="font-bold">{{ $playlist->name }}</p>
@@ -123,7 +126,7 @@
                 @else
                     @foreach ($songs as $song)
                         <li class="flex items-center space-x-6">
-                        <img src="https://storage.googleapis.com/a1aa/image/Vh5OymOlhzrpGNSyzTrQJDAuYen3bRBW76631QVNglJuQ87JA.jpg"
+                        <img src="/image/{{ $song->img_id }}"
                             alt="Album cover" class="w-16 h-16 object-cover" />
                         <div>
                             <p class="text-lg text-white">

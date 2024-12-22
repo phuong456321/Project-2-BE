@@ -20,7 +20,7 @@ class PlaylistController extends Controller
     public function getPlaylist()
     {
         $user_id = Auth::user()->id;
-        $playlists = playlist::where('user_id', $user_id)->get();
+        $playlists = playlist::where('user_id', $user_id)->with('songs')->get();
         return view('user/library', compact('playlists'));
     }
 
@@ -233,8 +233,16 @@ class PlaylistController extends Controller
     }
 
     public function getPlaylistSongs($playlist_id)
-    {
-        $songs = InPlaylist::where('playlist_id', $playlist_id)->get();
-        return response()->json($songs, 200);
-    }
+{
+    $songs = Song::whereIn('id', function ($query) use ($playlist_id) {
+        $query->select('song_id')
+              ->from('in_playlists')
+              ->where('playlist_id', $playlist_id);
+    })
+    ->with('author') // Nạp quan hệ với author
+    ->get();
+
+    return response()->json($songs, 200);
+}
+
 }

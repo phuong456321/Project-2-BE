@@ -35,56 +35,55 @@ class ProfileController extends Controller
         return view('setting/editprofile', ['user' => $user]);
     }
     public function updateProfile(Request $request)
-{
-    try {
-        // Validate request
-        $request->validate([
-            'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|email|unique:users,email,' . Auth::id(),
-            'avatar' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'bio' => 'sometimes|string|max:255'
-        ]);
-
-        $user = User::with('author')->findOrFail(Auth::id());
-
-        // Xử lý avatar (nếu có)
-        $avatarId = $user->avatar_id; // Giữ avatar cũ mặc định
-        if ($request->hasFile('avatar')) {
-            $avatar = file_get_contents($request->file('avatar'));
-            $imageName = Str::uuid() . '.webp';
-            Storage::disk('public')->put('images/' . $imageName, $avatar);
-
-            $newImage = Image::create([
-                'img_name' => $imageName,
-                'img_path' => 'images/' . $imageName,
-                'category' => 'avatar',
+    {
+        try {
+            // Validate request
+            $request->validate([
+                'name' => 'sometimes|string|max:255',
+                'avatar' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'bio' => 'sometimes|string|max:255|nullable',
             ]);
 
-            Storage::disk('public')->delete($user->avatar->img_path);
+            $user = User::with('author')->findOrFail(Auth::id());
 
-            $avatarId = $newImage->id; // Cập nhật avatar mới
-        }
+            // Xử lý avatar (nếu có)
+            $avatarId = $user->avatar_id; // Giữ avatar cũ mặc định
+            if ($request->hasFile('avatar')) {
+                $avatar = file_get_contents($request->file('avatar'));
+                $imageName = Str::uuid() . '.webp';
+                Storage::disk('public')->put('images/' . $imageName, $avatar);
 
-        // Cập nhật thông tin người dùng
-        $user->update(array_merge(
-            $request->only('name', 'email'),
-            ['avatar_id' => $avatarId]
-        ));
+                $newImage = Image::create([
+                    'img_name' => $imageName,
+                    'img_path' => 'images/' . $imageName,
+                    'category' => 'avatar',
+                ]);
+                if($user->avatar_id != 1){
+                    Storage::disk('public')->delete($user->avatar->img_path);
+                }
+                $avatarId = $newImage->id; // Cập nhật avatar mới
+            }
 
-        // Cập nhật thông tin của author (nếu tồn tại)
-        if ($user->author) {
-            $user->author->update(array_merge(
-                $request->only('bio'),
-                [
-                    'author_name' => $user->name,
-                    'img_id' => $avatarId
-                ]
+            // Cập nhật thông tin người dùng
+            $user->update(array_merge(
+                $request->only('name'),
+                ['avatar_id' => $avatarId]
             ));
-        }
 
-        return redirect()->back()->with('success', 'Profile updated successfully');
-    } catch (\Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 500);
+            // Cập nhật thông tin của author (nếu tồn tại)
+            if ($user->author) {
+                $user->author->update(array_merge(
+                    $request->only('bio'),
+                    [
+                        'author_name' => $user->name,
+                        'img_id' => $avatarId
+                    ]
+                ));
+            }
+
+            return redirect()->back()->with('success', 'Profile updated successfully');
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
     public function uploadedsong()

@@ -16,11 +16,7 @@ class RecommendSongs extends Controller
         $topSongs = Song::orderBy('play_count', 'desc')->where('status', '=', 'published')->take(7)->get();
         if (Auth::check()) {
             $user = Auth::user();
-            $playlists = $user->playlists()->with([
-                'songs' => function ($query) {
-                    $query->orderBy('in_playlists.created_at')->limit(1);
-                }
-            ])->get();
+            $playlists = $user->playlists()->with('songs')->get();
         } else {
             $playlists = [];
             return view('user.home')->with(['songs' => $songs, 'playlists' => $playlists, 'topSongs' => $topSongs]);
@@ -34,7 +30,27 @@ class RecommendSongs extends Controller
         $recommendedSongsByBehavior = $this->getCollaborativeRecommendations($userId);
         // Gộp kết quả
         $recommendedSongs = $this->combineRecommendations($recommendedSongsByContent, $recommendedSongsByBehavior);
-        return view('user.home')->with(['songs' => $songs, 'playlists' => $playlists, 'topSongs' => $topSongs, 'recommendedSongs' => $recommendedSongs]);
+        return view('user.home')->with(['randomsongs' => $songs, 'playlists' => $playlists, 'topSongs' => $topSongs, 'recommendedSongs' => $recommendedSongs]);
+    }
+
+    public function getQueue()
+    {
+        if (!Auth::check()) {
+            $songs = Song::inRandomOrder()->where('status', '=', 'published')->with('author')->take(10)->get();
+            return response()->json($songs);
+        }
+        $userId = Auth::user()->id;
+        // Dữ liệu từ CBF
+        $recommendedSongsByContent = $this->getContentBasedRecommendations($userId);
+
+        // Dữ liệu từ CF
+        $recommendedSongsByBehavior = $this->getCollaborativeRecommendations($userId);
+        // Gộp kết quả
+        $songs = $this->combineRecommendations($recommendedSongsByContent, $recommendedSongsByBehavior);
+        if($songs->isEmpty()){
+            $songs = Song::inRandomOrder()->where('status', '=', 'published')->with('author')->take(10)->get();
+        }
+        return response()->json($songs);
     }
 
     protected function getContentBasedRecommendations($userId)

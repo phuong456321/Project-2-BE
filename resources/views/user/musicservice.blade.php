@@ -2,6 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ asset('images/logo-home.webp') }}" type="image/webp">
     <title>Terms and Conditions - Music Upload</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
@@ -10,7 +11,7 @@
 <body class="font-roboto bg-gray-100 text-gray-800">
     <header class="bg-gray-900 text-white p-4">
         <div class="container mx-auto flex justify-between items-center">
-        <img alt="" height="50" src="http://localhost:8000/images/profile/logo-home2.png" width="70" class="" />
+        <img alt="" height="50" src="{{ asset('images/logo-home2.webp') }}" width="70" class="" />
             <h1 class="text-2xl font-bold">Upload Terms and Conditions</h1>
             <nav>
                 <ul class="flex space-x-4">

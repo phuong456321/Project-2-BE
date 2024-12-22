@@ -28,6 +28,7 @@ use App\Http\Controllers\Song\PlayHistoryController;
 
 
 Route::get('/', [RecommendSongs::class, 'index'])->name('home')->middleware('web');
+Route::get('/get-queue', [RecommendSongs::class, 'getQueue']);
 
 Route::get('/checkout', [PaymentController::class, 'show'])->name('checkout.show');
 
@@ -99,6 +100,8 @@ Route::middleware(['web', 'auth:sanctum', 'verified'])->group(function () {
 
     Route::post('/notifications/{id}/mark-as-read', [ProfileController::class, 'markAsRead']);
     Route::post('/notifications/mark-all-as-read', [ProfileController::class, 'markAllAsRead']);
+
+    Route::post('/songs/remove-selected', [SongController::class, 'removeSelected'])->name('songs.removeSelected');
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
@@ -169,6 +172,7 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::get('/song-approval', [SongApprovalController::class, 'index'])->name('songApproval');
     Route::post('/song-approval/{id}/approve', [SongApprovalController::class, 'approve'])->name('songApproval.approve');
     Route::post('/song-approval/{id}/reject', [SongApprovalController::class, 'reject'])->name('songApproval.reject');
+    Route::post('/songs/async-lyrics', [AdminSongsController::class, 'asyncLyrics'])->name('asyncLyrics');
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -200,9 +204,6 @@ Route::get('/storage/dash/{file}', [AudioController::class, 'playAudio']);
 
 // Đường dẫn tới các segment .m4s
 Route::get('/storage/dash/segment/{file}', [AudioController::class, 'streamSegment']);
-
-//Uplaod nhạc bản quyền và sinh fingerprint
-Route::post('/upload/fingerprint', [SongController::class, 'uploadAndGenerateFingerprint'])->name('upload.fingerprint');
 
 Route::get('/layoutsetting', function () {
     return view('setting/layoutsetting');

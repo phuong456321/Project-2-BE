@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <link rel="icon" href="{{ asset('images/logo-home.webp') }}" type="image/webp">
   <title>Terms of Service - Nulltifly</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link
@@ -23,7 +24,7 @@
     <div
       class="container mx-auto px-4 py-4 flex flex-wrap justify-between items-center">
       <div class="flex items-center mb-4 sm:mb-0">
-        <img alt="" height="50" src="http://localhost:8000/images/profile/logo-home2.png" width="100" class="" />
+        <img alt="" height="50" src="{{ asset('images/logo-home2.webp') }}" width="100" class="" />
         <h1 class="text-2xl font-bold ml-2">Clause</h1>
       </div>
       <nav class="flex space-x-4 text-sm sm:text-base">

@@ -9,27 +9,6 @@
 
 <body class="bg-black text-white">
     <div class="container mx-auto p-4">
-        <!-- Navigation Tabs -->
-        <div class="flex space-x-4 mb-4 ">
-            <a class="text-white font-bold cursor-pointer no-underline hover:text-white hover:transition duration-100" href="#">
-                NULLTIFLY MUSIC
-            </a>
-            <a class="text-gray-400 no-underline hover:text-white hover:transition duration-100" href="/library">
-                LIBRARY
-            </a>
-        </div>
-        <!-- Filter Buttons -->
-        <div class="flex space-x-2 mb-4">
-            <button class="bg-gray-800 text-white px-4 py-2 rounded-full hover:text-blue-300 hover:transition duration-100">
-                Song
-            </button>
-            <button class="bg-gray-800 text-white px-4 py-2 rounded-full hover:text-blue-300 hover:transition duration-100">
-                Artist
-            </button>
-            <button class="bg-gray-800 text-white px-4 py-2 rounded-full hover:text-blue-300 hover:transition duration-100">
-                Profile
-            </button>
-        </div>
         <!-- Top Result -->
         <div class="mb-4">
             <h2 class="text-xl font-bold mb-2">
@@ -46,8 +25,8 @@
                         {{ $topSong->song_name }}
                     </h3>
                     <p class="text-gray-400 text-sm sm:text-base">
-                        {{ $topSong->author->author_name }} • {{ $topSong->likes }} lượt thích •
-                        {{ $topSong->play_count }} lượt phát
+                        {{ $topSong->author->author_name }} • {{ $topSong->likes }} likes •
+                        {{ $topSong->play_count }} plays
                     </p>
                     <audio src="{{ url('storage/' . $topSong->audio_path) }}" preload="auto"
                         style="display:none;" controls></audio>
@@ -58,9 +37,6 @@
                     <button class="bg-white text-black px-4 py-2 rounded-full text-sm sm:text-base">
                         Play 
                     </button>
-                    <button class="bg-gray-700 text-white px-4 py-2 rounded-full text-sm sm:text-base">
-                        Save 
-                    </button>
                 </div>
             </div>
             @else
@@ -70,7 +46,7 @@
         <!-- Songs List -->
         <div>
             <h2 class="text-xl font-bold mb-2">
-                Song 
+                Songs
             </h2>
             <!-- Display a message if no songs are found -->
             @if ($songs->isEmpty())
@@ -88,8 +64,7 @@
                         </h3>
                         <p class="text-gray-400">
                             {{ $song->author->author_name }} • {{ $song->song_name }} • {{ $song->likes }}
-                            lượt
-                            thích • {{ $song->play_count }} lượt phát
+                            likes • {{ $song->play_count }} plays
                         </p>
                         <audio src="{{ url('storage/' . $song->audio_path) }}" preload="auto"
                             style="display:none;" controls></audio>
