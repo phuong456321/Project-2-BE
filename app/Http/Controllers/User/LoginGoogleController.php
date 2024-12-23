@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Author;
 use App\Models\Image;
 use App\Models\User;
 use App\Models\GoogleAccount;  // Model GoogleAccount mới tạo
@@ -109,6 +110,12 @@ class LoginGoogleController extends Controller
                         'avatar_id' => $googleAccount->avatar_id, // Gán ảnh đại diện từ Google Account
                         'verified' => true,
                     ]);
+                    $author = Author::create([
+                        'author_name' => $user->name,
+                        'img_id' => $googleAccount->avatar_id,
+                        'area_id' => 1,
+                    ]);
+                    $newUser->update(['author_id' => $author->id]);
                     $newUser->markEmailAsVerified();
                     Auth::login($newUser);
                 } else {

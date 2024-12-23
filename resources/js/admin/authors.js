@@ -132,6 +132,7 @@ function loadAuthors() {
                 },
                 error: function(xhr, status, error) {
                     console.error('Error loading authors:', error);
+                    console.error('Status:', status);
                     console.error('Response Text:', xhr.responseText); // Hiển thị chi tiết nội dung response
                     loading = false;
                     $('#loading').hide(); // Ẩn thông báo tải

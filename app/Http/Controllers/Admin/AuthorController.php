@@ -77,4 +77,20 @@ class AuthorController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+    public function deleteAuthor(Request $request)
+    {
+        try {
+            $authorId = $request->input('author_id');
+            $author = Author::findOrFail($authorId);
+            $imagePath = $author->img->img_path;
+            // Xóa ảnh
+            Storage::disk('public')->delete($imagePath);
+            // Xóa tác giả
+            $author->delete();
+            flash()->success('Author deleted successfully');
+            return response()->json(['success' => true], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 }

@@ -144,7 +144,7 @@ Route::get('/forgot-password', [ResetPasswordController::class, 'showForgotForm'
 
 Route::delete('/admin/user/{id}', [AdminController::class, 'deleteUser'])->name('admin.deleteUser');
 Route::delete('/admin/song/{id}', [AdminController::class, 'deleteSong'])->name('admin.deleteSong');
-Route::patch('/admin/song/{id}/status', [AdminController::class, 'updateStatus'])->name('admin.updateStatus');
+
 Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/users', [AdminController::class, 'manageUsers'])->name('manageUsers');
@@ -173,6 +173,8 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::post('/song-approval/{id}/approve', [SongApprovalController::class, 'approve'])->name('songApproval.approve');
     Route::post('/song-approval/{id}/reject', [SongApprovalController::class, 'reject'])->name('songApproval.reject');
     Route::post('/songs/async-lyrics', [AdminSongsController::class, 'asyncLyrics'])->name('asyncLyrics');
+
+    Route::delete('/author/{id}', [AuthorController::class, 'deleteAuthor'])->name('deleteAuthor');
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
