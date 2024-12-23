@@ -10,7 +10,7 @@ $filledSongs = collect($songs)->take(4); //Lấy tối đa bài hát
 $remainingSlots = 4 - $filledSongs->count(); // Tính số ảnh trống cần thêm
 ?>
 @section('content')
-<div class="container relative top-0 flex flex-row p-5">
+<div class="container top-0 flex flex-row p-5">
     <div class="left-panel space-y-4 mt-1">
         <div class="album-cover grid grid-cols-2 gap-4">
             @foreach ($filledSongs as $song)

@@ -46,9 +46,9 @@ class AreaSeeder extends Seeder
         ];
         
 
-        // Tạo các khu vực cha cho từng châu lục
-        foreach ($countries as $continent) {
-            $continentArea = Area::create(['name' => $continent['name']]);
-        }
+        // Lặp qua danh sách quốc gia và thêm vào bảng Area
+    foreach ($countries as $country) {
+        Area::create(['name' => $country]);
+    }
     }
 }

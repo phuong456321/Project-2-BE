@@ -81,6 +81,11 @@ class LoginGoogleController extends Controller
             $findUser = User::where('google_id', $user->id)->first();
 
             if ($findUser) {
+                // Kiểm tra trạng thái trước khi đăng nhập
+            if ($findUser->status === 'inactive') {
+                flash()->option('timeout', 2000)->error('Your account is inactive. Please contact support.');
+                    return redirect()->route('home');
+            }
                 Auth::login($findUser);
             } else {
                 $checkUser = User::where('email', $user->email)->first();
@@ -115,14 +120,43 @@ class LoginGoogleController extends Controller
                         'img_id' => $googleAccount->avatar_id,
                         'area_id' => 1,
                     ]);
-                    $newUser->update(['author_id' => $author->id]);
+                    $newUser->author_id = $author->id;
                     $newUser->markEmailAsVerified();
+                    $newUser->save();
                     Auth::login($newUser);
                 } else {
                     if (is_null($checkUser->google_id)) {
-                        $checkUser->google_id = $user->id;
-                        $checkUser->save();
-                    }
+                        // Kiểm tra trạng thái trước khi đăng nhập
+                if ($checkUser->status === 'inactive') {
+                    flash()->option('timeout', 2000)->error('Your account is inactive. Please contact support.');
+                    return redirect()->route('home');
+                }
+        // Kiểm tra xem google_id đã có trong bảng google_accounts chưa
+        $googleAccount = GoogleAccount::where('google_id', $user->id)->first();
+
+        if (!$googleAccount) {
+            // Nếu chưa có GoogleAccount, tạo mới bản ghi GoogleAccount
+            $imageData = file_get_contents($user->avatar);
+            $imageName = Str::uuid() . '.webp';
+            Storage::disk('public')->put('images/' . $imageName, $imageData);
+            $newImage = Image::create([
+                'img_name' => $imageName,
+                'img_path' => 'images/' . $imageName,
+                'category' => 'avatar',
+            ]);
+
+            $googleAccount = GoogleAccount::create([
+                'google_id' => $user->id,
+                'email' => $user->email,
+                'name' => $user->name,
+                'avatar_id' => $newImage->id,
+            ]);
+        }
+
+        // Gán google_id vào bảng users
+        $checkUser->google_id = $user->id;
+        $checkUser->save();
+    }
                     Auth::login($checkUser);
                 }
             }

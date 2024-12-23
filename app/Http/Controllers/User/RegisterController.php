@@ -33,7 +33,8 @@ class RegisterController extends Controller
                 'img_id' => 1,
                 'area_id' => 1,
             ]);
-            $user->update(['author_id' => $author->id]);
+            $user->author_id = $author->id;
+            $user->save();
             $this->sendVerificationEmail($user);
             return redirect()->route('home')->with('success', 'User registered successfully');
         } catch (\Exception $e) {

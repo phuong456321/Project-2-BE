@@ -75,7 +75,7 @@
             </button>
             <div class="hidden sm:block text-white hover:text-green-500">
                 <i class="fa-solid fa-user"></i>
-                <a href="/Profileuser"> Profile </a>
+                <a href="/profile/{{Auth::user()->id}}"> Profile </a>
             </div>
         </div>
     </header>
@@ -89,10 +89,14 @@
             <li><a href="{{ route('profile', Auth::user()->id) }}" class="block py-2 px-4 rounded hover:bg-gray-700">Back to Profile</a></li>
         </ul>
         <div class="absolute bottom-8 left-6 w-100">
-            <a href="{{ route('logout') }}" class="text-base font-semibold block py-2 px-4 bg-red-600 text-white rounded text-center hover:bg-red-700">
-                <i class="fa-solid fa-right-from-bracket"></i> Logout
-            </a>
-        </div>
+    <form action="{{ route('logout') }}" method="POST">
+        @csrf
+        <button type="submit" class="text-base font-semibold py-2 px-4 bg-red-600 text-white rounded text-center hover:bg-red-700 w-full">
+            <i class="fa-solid fa-right-from-bracket mr-2"></i> Logout
+        </button>
+    </form>
+</div>
+
     </aside>
 
     <!-- Main Content -->

@@ -14,12 +14,12 @@ return [
     | To learn more: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
     |
     */
+    'allowed_origins' => ['http://nulltifly.online', '*'],
+'allowed_headers' => ['Content-Type', 'X-Requested-With', 'X-CSRF-TOKEN', '*'],
+'allowed_methods' => ['*'],
+
 
     'paths' => ['*', 'sanctum/csrf-cookie'],
-
-    'allowed_methods' => ['*'],
-
-    'allowed_origins' => ['http://localhost:8000', 'http://localhost:8000/admin'],
 
     'allowed_origins_patterns' => [],
 

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('author_id');
             $table->unsignedBigInteger('area_id');
             $table->unsignedBigInteger('genre_id');
+             $table->string('lyric_path')->nullable();
             $table->string('audio_path');
             $table->string('duration')->nullable();
             $table->unsignedBigInteger('img_id');

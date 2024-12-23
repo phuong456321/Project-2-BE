@@ -41,9 +41,6 @@ Route::get('/musicservice', function () {
 Route::get('/albums', function () {
     return view('user/albums'); // Trang album
 });
-Route::get('/Profileuser', function () {
-    return view('user/Profileuser'); // Trang profile
-});
 
 //Route Login
 Route::get('login', [LoginController::class, 'index'])->name('show.login');
@@ -173,7 +170,6 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::post('/song-approval/{id}/approve', [SongApprovalController::class, 'approve'])->name('songApproval.approve');
     Route::post('/song-approval/{id}/reject', [SongApprovalController::class, 'reject'])->name('songApproval.reject');
     Route::post('/songs/async-lyrics', [AdminSongsController::class, 'asyncLyrics'])->name('asyncLyrics');
-
     Route::delete('/author/{id}', [AuthorController::class, 'deleteAuthor'])->name('deleteAuthor');
 });
 
