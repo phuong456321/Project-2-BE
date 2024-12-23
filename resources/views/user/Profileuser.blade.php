@@ -89,7 +89,7 @@
     </header>
 
     <!-- Main -->
-    <main class="p-4 ml-auto ml-28 lg:ml-40 xl:ml-60 md:mx-auto max-w-4xl">
+    <main class="p-4 lg:ml-40 xl:ml-60 md:mx-auto max-w-4xl">
         <!-- Profile Info Section -->
         <section class="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-6">
             <img src="{{ url('image/' . $user->avatar_id) }}" alt="Profile picture"

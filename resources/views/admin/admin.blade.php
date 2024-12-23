@@ -10,6 +10,7 @@
     @vite('resources/css/app.css') <!-- Laravel Mix -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     @yield('head')
     <style>
         .sidebar {
@@ -139,10 +140,8 @@
             </div>
         </div>
     </div>
-</body>
-<script>
-    @yield('script')
-
+    @stack('scripts')
+    <script>
     function openLogoutModal() {
         // Hiển thị modal
         document.getElementById('logoutModal').classList.remove('hidden');
@@ -153,5 +152,7 @@
         document.getElementById('logoutModal').classList.add('hidden');
     }
 </script>
+</body>
+
 
 </html>

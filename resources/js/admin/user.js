@@ -31,14 +31,14 @@ function loadUsers() {
                 $('#loading').hide(); // Ẩn thông báo tải
                 $('#users-list').append(
                     '<tr><td colspan="9" class="text-center py-4">No users found</td></tr>');
-                loading = true;
+                loading = false;
                 $('#loading').hide(); // Ẩn thông báo tải
                 return;
             } else {
                 // Nếu không có tác giả nào trong dữ liệu trả về, dừng tải
                 if (data.length === 0) {
                     $('#loading').text('All users have been loaded!'); // Hiển thị thông báo
-                    loading = true;
+                    loading = false;
                     return;
                 }
             }
@@ -150,7 +150,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(response => {
                     if (response.ok) {
                         flash('User has been banned!', 'success');
-                    } else {
+                    } else if (response.status === 403) {
+                        // Nếu mã trạng thái là 403 (Forbidden), thông báo lỗi quyền truy cập
+                        flash('You cannot ban admin.', 'error');
+                    }
+                    else {
                         flash('Failed to ban user.', 'error');
                     }
                     currentPage = 1;
@@ -170,9 +174,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             })
                 .then(response => {
-                    if (response.ok) {
+                    if (response.status === 200) {
                         flash('User has been unbanned!', 'success');
-                    } else {
+                    }
+                    else {
                         flash('Failed to unban user.', 'error');
                     }
                     currentPage = 1;

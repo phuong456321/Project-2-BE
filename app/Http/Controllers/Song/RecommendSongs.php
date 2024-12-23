@@ -19,7 +19,7 @@ class RecommendSongs extends Controller
             $playlists = $user->playlists()->with('songs')->get();
         } else {
             $playlists = [];
-            return view('user.home')->with(['songs' => $songs, 'playlists' => $playlists, 'topSongs' => $topSongs]);
+            return view('user.home')->with(['randomsongs' => $songs, 'playlists' => $playlists, 'topSongs' => $topSongs]);
         }
 
         $userId = $request->user()->id;

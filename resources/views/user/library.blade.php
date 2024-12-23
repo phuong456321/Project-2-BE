@@ -1,7 +1,7 @@
 @extends('user.layout')
 
 @section('title', 'Library')
-@vite('resources/css/style.css')
+
 
 @section('content')
     <div class="p-4">
@@ -54,4 +54,4 @@
         </div>
     </div>
 @endsection
-@extends('components.footer')
+

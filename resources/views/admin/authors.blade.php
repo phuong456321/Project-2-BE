@@ -1,6 +1,20 @@
 @extends('admin.admin')
 @section('head')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+    .hidden {
+        display: none;
+    }
+
+    #flash-message {
+        transition: opacity 0.5s ease-in-out;
+        opacity: 1;
+    }
+
+    #flash-message.fade-out {
+        opacity: 0;
+    }
+</style>
 @endsection
 @section('content')
     <h1 class="text-2xl font-bold mb-4">Manage Authors</h1>
@@ -101,18 +115,6 @@
     <div id="flash-message" class="hidden fixed top-4 right-4 bg-blue-500 text-white py-2 px-4 rounded-lg shadow-lg z-50">
     </div>
 @endsection
+@push('scripts')
 @vite('resources/js/admin/authors.js')
-<style>
-    .hidden {
-        display: none;
-    }
-
-    #flash-message {
-        transition: opacity 0.5s ease-in-out;
-        opacity: 1;
-    }
-
-    #flash-message.fade-out {
-        opacity: 0;
-    }
-</style>
+@endpush

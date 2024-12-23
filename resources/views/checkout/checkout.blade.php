@@ -25,7 +25,7 @@
                 <p class="text-lg text-gray-300 mb-2">Price: 
                     <span class="font-bold text-green-400">${{ number_format($product->price, 2) }}</span>
                 </p>
-                <p class="text-sm text-gray-400">{{ $product->description }}</p>
+                <p class="text-sm text-gray-400">{!! nl2br(e($product->description)) !!}</p>
             </div>
 
             <!-- Payment Form -->
@@ -50,7 +50,7 @@
                         <label class="flex items-center bg-gray-700 p-3 rounded-lg cursor-pointer hover:bg-gray-600">
                             <input type="radio" name="payment_method" value="momo" class="mr-3" required>
                             <span class="mr-3">Pay with Momo</span>
-                            <img src="{{ asset('images/payment/momo.png') }}" alt="Momo" class="w-10 h-10 ml-auto">                         
+                            <img src="{{ asset('images/momo.webp') }}" alt="Momo" class="w-10 h-10 ml-auto">                         
                         </label>
                     </div>
                 </div>

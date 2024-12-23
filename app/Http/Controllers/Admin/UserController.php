@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Author;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use DB;
 use Illuminate\Http\Request;
 
@@ -46,17 +47,28 @@ class UserController extends Controller
     }
 
     public function banUser(Request $request, User $user)
-    {
-        try {
-            // Cập nhật trạng thái thành inactive
-            $user->status = 'inactive';
-            $user->save();
-
-            return response()->json(['message' => 'User has been banned successfully.'], 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Failed to ban user.'], 500);
+{
+    try {
+        // Ngăn không cho ban admin
+        if ($user->role === 'admin') {
+            return response()->json(['message' => 'You cannot ban an admin.'], 403);
         }
+
+        // Cập nhật trạng thái người dùng thành inactive (bị cấm)
+        $user->status = 'inactive';
+        $user->save();
+        // Đăng xuất tài khoản khỏi mọi thiết bị
+        $this->logoutUserFromAllDevices($user);
+
+        return response()->json(['message' => 'User has been banned successfully.'], 200);
+    } catch (\Exception $e) {
+        // Log lỗi để kiểm tra sau
+        \Log::error('Failed to ban user: ' . $e->getMessage());
+
+        return response()->json(['message' => 'Failed to ban user.'], 500);
     }
+}
+
     public function unbanUser(Request $request, User $user)
     {
         try {
@@ -69,5 +81,14 @@ class UserController extends Controller
             return response()->json(['message' => 'Failed to unban user.'], 500);
         }
     }
+    private function logoutUserFromAllDevices(User $user)
+{
+    // Xóa toàn bộ token của người dùng (sử dụng Laravel Passport hoặc Sanctum)
+    $user->tokens()->delete();
+
+    // Nếu bạn sử dụng session, có thể xóa session của người dùng khỏi database
+    $sessions = DB::table('sessions')->where('user_id', $user->id)->delete();
+    // Thực hiện xóa session tại đây nếu cần.
+}
 
 }

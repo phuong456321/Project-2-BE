@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Jobs\ProcessLyrics;
 use App\Jobs\ProcessUploadedSong;
+use App\Jobs\CheckSimilarSongName;
 use App\Jobs\UploadAndGenerateFingerprint;
 use App\Models\Area;
 use App\Models\Author;
@@ -26,7 +27,7 @@ class AdminSongsController extends Controller
         }
 
         if ($request->filled('genre')) {
-            $query->where('genre_id', $request->genre);
+            $query->where('genre_id', $request->genre)->get();
         }
 
         if ($request->filled('status')) {
@@ -34,7 +35,8 @@ class AdminSongsController extends Controller
         }
 
         // Get filtered songs
-        $songs = $query->with('author', 'genre')->paginate(10);
+        // Lấy tất cả các bài hát sau khi áp dụng bộ lọc
+        $songs = $query->with('author', 'genre')->get();
 
         // Fetch all genres for filter dropdown
         $genres = Genre::all();
@@ -118,23 +120,20 @@ class AdminSongsController extends Controller
                 'lyric',
             ]);
 
-            ProcessUploadedSong::dispatch($songData, $imagePath, $audioPath);
+            //ProcessUploadedSong::dispatch($songData, $imagePath, $audioPath);
             $absolutePath = storage_path("app/public/$audioPath");
-            UploadAndGenerateFingerprint::dispatch($audioPath, $absolutePath, $request->file('audio')->getClientOriginalName());
-            $this->isSimilarSongName($request->song_name);
+            //UploadAndGenerateFingerprint::dispatch($audioPath, $absolutePath, $request->file('audio')->getClientOriginalName());
+            //CheckSimilarSongName::dispatch($request->song_name);
+            // Dispatch các job qua queue theo chuỗi
+            ProcessUploadedSong::dispatch($songData, $imagePath, $audioPath)
+            ->chain([
+                new UploadAndGenerateFingerprint($audioPath, $absolutePath, $request->file('audio')->getClientOriginalName()),
+                new CheckSimilarSongName($request->song_name),
+            ]);
             return redirect()->back()->with('success', 'Bài hát đang được xử lý');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => $e->getMessage()])->withInput();
         }
-    }
-    private function isSimilarSongName(string $songName){
-        $songNames = Storage::disk('public')->get('copyrighted_song_names.json');
-        if($songNames){
-            $ArraySongNames = json_decode($songNames, true);
-            $ArraySongNames[] = $songName;
-            Storage::disk('public')->put('copyrighted_song_names.json', json_encode($ArraySongNames));
-        }
-        return;
     }
     public function asyncLyrics(Request $request)
     {

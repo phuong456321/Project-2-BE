@@ -97,7 +97,11 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             if (isRepeat) {
                 footerAudioElement.currentTime = 0;
-                footerAudioElement.play();
+                setTimeout(() => {
+    footerAudioElement.play().catch(error => {
+        console.error('Error playing previous song:', error);
+    });
+}, 100); // Trì hoãn 100ms trước khi phát lại
                 return;
             }
 

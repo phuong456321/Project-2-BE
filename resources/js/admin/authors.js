@@ -31,14 +31,14 @@ function loadAuthors() {
                     $('#loading').hide(); // Ẩn thông báo tải
                     $('#authors-list').append(
                         '<tr><td colspan="5" class="text-center py-4">No authors found</td></tr>');
-                    loading = true;
+                    loading = false;
                     $('#loading').hide(); // Ẩn thông báo tải
                     return;
                 } else {
                     // Nếu không có tác giả nào trong dữ liệu trả về, dừng tải
                     if (data.length === 0) {
                         $('#loading').text('All authors have been loaded!'); // Hiển thị thông báo
-                        loading = true;
+                        loading = false;
                         return;
                     }
                 }
@@ -53,8 +53,9 @@ function loadAuthors() {
                     <td class="px-4 py-2">${author.area.name}</td>
                     <td class="px-4 py-2">${author.songs_count}</td>
                     <td class="px-4 py-2">
-                        <a href="#" class="text-blue-500 hover:underline">Edit</a> | 
-                        <form action="/admin/user/${author.id}" method="DELETE" class="inline">
+                        <form action="/admin/author/${author.id}" method="POST" class="inline">
+                            <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').getAttribute('content')}">
+                    <input type="hidden" name="_method" value="DELETE">
                             <button type="submit" class="text-red-500 hover:underline">Delete</button>
                         </form>
                     </td>
@@ -131,7 +132,7 @@ function loadAuthors() {
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error('Error loading authors:', error);
+                    console.error('Error create authors:', error);
                     console.error('Response Text:', xhr.responseText); // Hiển thị chi tiết nội dung response
                     loading = false;
                     $('#loading').hide(); // Ẩn thông báo tải

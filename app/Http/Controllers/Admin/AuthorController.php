@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Area;
 use App\Models\Author;
+use App\Models\User;
 use App\Models\Image;
+use App\Models\Song;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -77,4 +79,44 @@ class AuthorController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+    public function deleteAuthor(Request $request, $id)
+{
+    try {
+        // Kiểm tra xem có user nào liên kết với author này không
+        $linkedUsersCount = User::where('author_id', $id)->count();
+
+        if ($linkedUsersCount > 0) {
+            return redirect()->back()->with('error', 'Cannot delete author as they are linked to one or more users.');
+        }
+        $songPublish = Song::where('author_id', $id)
+    ->whereIn('status', ['published', 'pending'])
+    ->count();
+
+if ($songPublish > 0) {
+    return redirect()->back()->with('error', 'Cannot delete author as they have published or pending songs.');
+}
+
+        // Tìm tác giả
+        $author = Author::findOrFail($id);
+
+        // Lấy đường dẫn ảnh
+        $imagePath = $author->image->img_path;
+        $imageId = $author->img_id; // Giả sử `image` là một quan hệ liên kết trong model Author
+
+        // Chỉ xóa ảnh nếu image_id khác 1
+        if ($imageId !== 1) {
+            Storage::disk('public')->delete($imagePath);
+        }
+
+        // Xóa tác giả
+        $author->delete();
+
+        flash()->success('Author deleted successfully');
+        return redirect()->back();
+
+    } catch (\Exception $e) {
+        Log::error('Delete author fails:' . $e->getMessage());
+    }
+}
+
 }

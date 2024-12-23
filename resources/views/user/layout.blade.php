@@ -109,7 +109,7 @@
         </div>
     </div>
 
-    <div class="main-content pb-[3rem] ml-[100px] p-5">
+    <div class="main-content pb-[5rem] ml-[100px] p-5">
         <div
             class="header w-full pb-3 flex justify-between items-center fixed top-0 left-0 right-0 pl-[250px] pt-[1rem] dark:bg-gray-800 bg-gray-600">
             <!-- Nút mở sidebar trên điện thoại -->
@@ -133,8 +133,8 @@
                     <!-- Nếu người dùng đã đăng nhập -->
                     <div id="avatar" class="user flex items-center relative">
                         <span
-                            class="nameavatar text-black text-sm md:text-base mr-3 dark:text-white transition-colors duration-300 ">{{ Auth::user()->name }}</span>
-                        <img alt="User Avatar" class="rounded-full border border-gray-500"
+                            class="nameavatar text-white text-sm md:text-base mr-3 dark:text-white transition-colors duration-300 ">{{ Auth::user()->name }}</span>
+                        <img alt="User Avatar" class="rounded-full border border-gray-500 w-[40px] h-[40px]"
                             src="{{ url('image/' . Auth::user()->avatar_id) }}" width="40" height="40" />
                     </div>
                     <!-- Popup Profile / Logout -->

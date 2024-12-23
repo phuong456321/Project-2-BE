@@ -28,6 +28,13 @@ class RegisterController extends Controller
                 'password' => Hash::make($request->password),
                 'avatar_id' => 1,
             ]);
+            $author = Author::create([
+                'author_name' => $request->name,
+                'img_id' => 1,
+                'area_id' => 1,
+            ]);
+            $user->author_id = $author->id;
+            $user->save();
             $this->sendVerificationEmail($user);
             return redirect()->route('home')->with('success', 'User registered successfully');
         } catch (\Exception $e) {

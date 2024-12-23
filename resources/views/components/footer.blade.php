@@ -106,18 +106,13 @@
 <div id="adPopup" class="hidden fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center">
     <div class="!bg-white !p-6 !rounded-lg !w-4/5 !max-w-md !text-center">
         <!-- Quảng cáo AdSense -->
-        <div class="popup-content">
-            <span id="closePopup" class="close-btn">&times;</span>
-            <h1 class="text-2xl font-bold mb-4">Quảng cáo</h1>
-            <!-- Chèn mã quảng cáo Google AdSense -->
-            {{-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4089886839959004"
-                crossorigin="anonymous"></script>
-            <!-- Nulltifly-home -->
-            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4089886839959004"
-                data-ad-slot="5674451393" data-ad-format="auto" data-full-width-responsive="true"></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script> --}}
+        <div class="popup-content text-black">
+             <h2>Quảng cáo!</h2>
+            <div id="adsense-ad">
+                <!-- Mã quảng cáo Google AdSense -->
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4089886839959004"
+     crossorigin="anonymous"></script>
+            </div>
         </div>
 
         <button onclick="closeAdPopup()"
@@ -133,7 +128,7 @@
                 url: '/get-queue',
                 type: 'GET',
                 success: function(data) {
-                    if(queueSongs === undefined || queueSongs.length === 0) {
+                    if(queueSongs === undefined || queueSongs === null || queueSongs == []) {
                         queueSongs = [];
                     }
                     if(queueSongs.length < 1) {                        
